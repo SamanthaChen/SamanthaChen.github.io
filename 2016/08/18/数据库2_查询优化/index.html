@@ -1,0 +1,642 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>数据库-第5章-查询优化-笔记 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="查询优化方法：当一个查询中具有选择和连接时，应当先执行选择后执行连接，尽量减少中间结果的大小，加快连接操作的处理。
+关系代数优化算法一个查询可以变换为一个等价的关系代数表达式。在很多数据库管理系统中，查询处理的第一步是把查询变换为与关系代数对应的内部表示，如查询树。在关系数据库管理系统中，关系代数表达式的优化是一个非常重要的问题。
+关系代数等价变换规律
+选择串接律$$\delta_{c_1 AND">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库-第5章-查询优化-笔记">
+<meta property="og:url" content="http://yoursite.com/2016/08/18/数据库2_查询优化/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="查询优化方法：当一个查询中具有选择和连接时，应当先执行选择后执行连接，尽量减少中间结果的大小，加快连接操作的处理。
+关系代数优化算法一个查询可以变换为一个等价的关系代数表达式。在很多数据库管理系统中，查询处理的第一步是把查询变换为与关系代数对应的内部表示，如查询树。在关系数据库管理系统中，关系代数表达式的优化是一个非常重要的问题。
+关系代数等价变换规律
+选择串接律$$\delta_{c_1 AND">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db9.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db10.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db11.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db12.png">
+<meta property="og:updated_time" content="2016-08-19T00:30:42.053Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据库-第5章-查询优化-笔记">
+<meta name="twitter:description" content="查询优化方法：当一个查询中具有选择和连接时，应当先执行选择后执行连接，尽量减少中间结果的大小，加快连接操作的处理。
+关系代数优化算法一个查询可以变换为一个等价的关系代数表达式。在很多数据库管理系统中，查询处理的第一步是把查询变换为与关系代数对应的内部表示，如查询树。在关系数据库管理系统中，关系代数表达式的优化是一个非常重要的问题。
+关系代数等价变换规律
+选择串接律$$\delta_{c_1 AND">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db9.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/18/数据库2_查询优化/" title="数据库-第5章-查询优化-笔记" itemprop="url">数据库-第5章-查询优化-笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-18T15:06:53.319Z" itemprop="datePublished"> Published 2016-08-18</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#关系代数优化算法"><span class="toc-number">1.</span> <span class="toc-text">关系代数优化算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#关系代数等价变换规律"><span class="toc-number">1.1.</span> <span class="toc-text">关系代数等价变换规律</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关系代数优化规则"><span class="toc-number">1.2.</span> <span class="toc-text">关系代数优化规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查询树"><span class="toc-number">1.3.</span> <span class="toc-text">查询树</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>查询优化方法：当一个查询中具有选择和连接时，应当先执行选择后执行连接，尽量减少中间结果的大小，加快连接操作的处理。</p>
+<h1 id="关系代数优化算法"><a href="#关系代数优化算法" class="headerlink" title="关系代数优化算法"></a>关系代数优化算法</h1><p>一个查询可以变换为一个等价的关系代数表达式。<br>在很多数据库管理系统中，查询处理的第一步是把查询变换为与关系代数对应的内部表示，如查询树。<br>在关系数据库管理系统中，关系代数表达式的优化是一个非常重要的问题。</p>
+<h2 id="关系代数等价变换规律"><a href="#关系代数等价变换规律" class="headerlink" title="关系代数等价变换规律"></a>关系代数等价变换规律</h2><ol>
+<li>选择串接律<br>$$\delta_{c_1 AND \ldots AND c_n (E) = \delta_{c_1} (\delta_{c_2} (…(\delta_{c_n}(E))))}$$</li>
+<li>选择交换律<br>$$\delta_{c_1} (\delta_{c_2}(E))= \delta_{c_2}(\delta_{c_1}(E))$$</li>
+<li>投影串接律</li>
+<li>投影交换律</li>
+<li>连接和笛卡儿乘积的交换律</li>
+<li>集合操作的交换律</li>
+<li>连接、笛卡儿乘积和集合操作的结合律</li>
+<li>选择、连接和笛卡儿乘积的分配律<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db9.png" alt=""></li>
+<li>投影、连接和笛卡尔乘积的分配律<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db10.png" alt=""></li>
+<li>选择与集合操作的分配律</li>
+<li>投影与集合操作的分配律</li>
+<li>其他等价变换律</li>
+</ol>
+<h2 id="关系代数优化规则"><a href="#关系代数优化规则" class="headerlink" title="关系代数优化规则"></a>关系代数优化规则</h2><ol>
+<li>规则1 选择和投影操作尽早执行。</li>
+<li>规则2 把某些选择操作与邻接笛卡尔乘积相结合，形成一个连接操作。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db11.png" alt=""></li>
+<li>规则3 同时执行相同关系上的多个选择和投影操作。</li>
+<li>规则4 把投影操作与连接操作结合起来执行。</li>
+<li>规则5  提取公共表达式。</li>
+</ol>
+<h2 id="查询树"><a href="#查询树" class="headerlink" title="查询树"></a>查询树</h2><ul>
+<li>查询的内容表现形式——查询树</li>
+<li>查询树是一种表示关系代数表达式的树形结构</li>
+<li>在一个查询树中，叶子节点表示关系，内结点表示关系代数操作。</li>
+<li>查询树以自底向上的方式执行：当一个内结点的操作分量可用时，这个内结点表示的操作启动执行，执行结束后，用结果关系代替这个内结点（转化为叶子结点）。</li>
+</ul>
+<p>构造查询树：</p>
+<ol>
+<li>把用高级语言定义的查询转换为关系代数表达式</li>
+<li>把关系代数表达式转换为查询树<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db12.png" alt=""></li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Database/">Database</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Interview/">Interview</a><a href="/tags/Database/">Database</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/18/数据库2_查询优化/" data-title="数据库-第5章-查询优化-笔记 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/19/数据库2_数据库系统/" title="数据库-第7章-数据库系统-笔记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  数据库-第7章-数据库系统-笔记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/16/数据库1_概述/"  title="数据库-第1-5章-概述SQL-笔记">
+ <strong>下一篇：</strong><br/> 
+ <span>数据库-第1-5章-概述SQL-笔记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/18/数据库2_查询优化/" data-title="数据库-第5章-查询优化-笔记" data-url="http://yoursite.com/2016/08/18/数据库2_查询优化/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#关系代数优化算法"><span class="toc-number">1.</span> <span class="toc-text">关系代数优化算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#关系代数等价变换规律"><span class="toc-number">1.1.</span> <span class="toc-text">关系代数等价变换规律</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关系代数优化规则"><span class="toc-number">1.2.</span> <span class="toc-text">关系代数优化规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查询树"><span class="toc-number">1.3.</span> <span class="toc-text">查询树</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

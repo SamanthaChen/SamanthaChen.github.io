@@ -1,0 +1,799 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>Java常考知识点 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="1. 什么是Java虚拟机？为什么Java被称作是“平台无关的编程语言”？Java虚拟机是一个可以执行Java字节码的虚拟机进程。Java源文件被编译成能被Java虚拟机执行的字节码文件。Java被设计成允许应用程序可以运行在任意的平台，而不需要程序员为每一个平台单独重写或者是重新编译。Java虚拟机让这个变为可能，因为它知道底层硬件平台的指令长度和其他特性。
+2.JDK和JRE的区别是什么？Ja">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java常考知识点">
+<meta property="og:url" content="http://yoursite.com/2016/08/01/Java常见知识点/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="1. 什么是Java虚拟机？为什么Java被称作是“平台无关的编程语言”？Java虚拟机是一个可以执行Java字节码的虚拟机进程。Java源文件被编译成能被Java虚拟机执行的字节码文件。Java被设计成允许应用程序可以运行在任意的平台，而不需要程序员为每一个平台单独重写或者是重新编译。Java虚拟机让这个变为可能，因为它知道底层硬件平台的指令长度和其他特性。
+2.JDK和JRE的区别是什么？Ja">
+<meta property="og:image" content="http://uploadfiles.nowcoder.com/images/20151217/149974_1450349079825_4697A22AC611680A692472687DEC1CFD">
+<meta property="og:updated_time" content="2016-08-03T00:28:23.012Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java常考知识点">
+<meta name="twitter:description" content="1. 什么是Java虚拟机？为什么Java被称作是“平台无关的编程语言”？Java虚拟机是一个可以执行Java字节码的虚拟机进程。Java源文件被编译成能被Java虚拟机执行的字节码文件。Java被设计成允许应用程序可以运行在任意的平台，而不需要程序员为每一个平台单独重写或者是重新编译。Java虚拟机让这个变为可能，因为它知道底层硬件平台的指令长度和其他特性。
+2.JDK和JRE的区别是什么？Ja">
+<meta name="twitter:image" content="http://uploadfiles.nowcoder.com/images/20151217/149974_1450349079825_4697A22AC611680A692472687DEC1CFD">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/01/Java常见知识点/" title="Java常考知识点" itemprop="url">Java常考知识点</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-01T15:01:22.501Z" itemprop="datePublished"> Published 2016-08-01</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-什么是Java虚拟机？为什么Java被称作是“平台无关的编程语言”？"><span class="toc-number">1.</span> <span class="toc-text">1. 什么是Java虚拟机？为什么Java被称作是“平台无关的编程语言”？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-JDK和JRE的区别是什么？"><span class="toc-number">2.</span> <span class="toc-text">2.JDK和JRE的区别是什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-”static”关键字是什么意思？Java中是否可以覆盖-override-一个private或者是static的方法？"><span class="toc-number">3.</span> <span class="toc-text">3. ”static”关键字是什么意思？Java中是否可以覆盖(override)一个private或者是static的方法？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-是否可以在static环境中访问非static变量？"><span class="toc-number">4.</span> <span class="toc-text">4. 是否可以在static环境中访问非static变量？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-Java支持的数据类型有哪些？什么是自动拆装箱？"><span class="toc-number">5.</span> <span class="toc-text">5. Java支持的数据类型有哪些？什么是自动拆装箱？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-Java中的方法覆盖-Overriding-和方法重载-Overloading-是什么意思？"><span class="toc-number">6.</span> <span class="toc-text">6. Java中的方法覆盖(Overriding)和方法重载(Overloading)是什么意思？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-Java中，什么是构造函数？什么是构造函数重载？什么是复制构造函数？"><span class="toc-number">7.</span> <span class="toc-text">7. Java中，什么是构造函数？什么是构造函数重载？什么是复制构造函数？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-Java支持多继承么？"><span class="toc-number">8.</span> <span class="toc-text">8. Java支持多继承么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-接口和抽象类的区别是什么？"><span class="toc-number">9.</span> <span class="toc-text">9. 接口和抽象类的区别是什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-什么是值传递和引用传递"><span class="toc-number">10.</span> <span class="toc-text">10. 什么是值传递和引用传递</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#11-进程和线程的区别"><span class="toc-number">11.</span> <span class="toc-text">11. 进程和线程的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#概述"><span class="toc-number">11.1.</span> <span class="toc-text">概述:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#区别"><span class="toc-number">11.2.</span> <span class="toc-text">区别:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优缺点"><span class="toc-number">11.3.</span> <span class="toc-text">优缺点:</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#12-创建线程有几种不同的方式？你喜欢哪一种？为什么？"><span class="toc-number">12.</span> <span class="toc-text">12. 创建线程有几种不同的方式？你喜欢哪一种？为什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#13-概括的解释下线程的几种可用状态。"><span class="toc-number">13.</span> <span class="toc-text">13. 概括的解释下线程的几种可用状态。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#14-同步方法和同步代码块的区别是什么？"><span class="toc-number">14.</span> <span class="toc-text">14. 同步方法和同步代码块的区别是什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#15-在监视器-Monitor-内部，是如何做线程同步的？程序应该做哪种级别的同步？"><span class="toc-number">15.</span> <span class="toc-text">15. 在监视器(Monitor)内部，是如何做线程同步的？程序应该做哪种级别的同步？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#16-什么是死锁-deadlock-？"><span class="toc-number">16.</span> <span class="toc-text">16. 什么是死锁(deadlock)？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#17-如何确保N个线程可以访问N个资源同时又不导致死锁？"><span class="toc-number">17.</span> <span class="toc-text">17. 如何确保N个线程可以访问N个资源同时又不导致死锁？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#18-为什么内部类访问外部变量需要用final修饰"><span class="toc-number">18.</span> <span class="toc-text">18. 为什么内部类访问外部变量需要用final修饰</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#19-Java集合类框架的基本接口有哪些？"><span class="toc-number">19.</span> <span class="toc-text">19. Java集合类框架的基本接口有哪些？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#20-为什么集合类没有实现Cloneable和Serializable接口？"><span class="toc-number">20.</span> <span class="toc-text">20. 为什么集合类没有实现Cloneable和Serializable接口？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#21-什么是迭代器-Iterator-？"><span class="toc-number">21.</span> <span class="toc-text">21. 什么是迭代器(Iterator)？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#22-Iterator和ListIterator的区别是什么？"><span class="toc-number">22.</span> <span class="toc-text">22. Iterator和ListIterator的区别是什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#23-快速失败-fail-fast-和安全失败-fail-safe-的区别是什么？"><span class="toc-number">23.</span> <span class="toc-text">23. 快速失败(fail-fast)和安全失败(fail-safe)的区别是什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#24-Java中的HashMap的工作原理是什么？"><span class="toc-number">24.</span> <span class="toc-text">24. Java中的HashMap的工作原理是什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#25-hashCode-和equals-方法的重要性体现在什么地方？"><span class="toc-number">25.</span> <span class="toc-text">25. hashCode()和equals()方法的重要性体现在什么地方？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#26-HashMap和Hashtable有什么区别？"><span class="toc-number">26.</span> <span class="toc-text">26. HashMap和Hashtable有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#27-数组-Array-和列表-ArrayList-有什么区别？什么时候应该使用Array而不是ArrayList？"><span class="toc-number">27.</span> <span class="toc-text">27. 数组(Array)和列表(ArrayList)有什么区别？什么时候应该使用Array而不是ArrayList？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#28-ArrayList和LinkedList有什么区别？"><span class="toc-number">28.</span> <span class="toc-text">28. ArrayList和LinkedList有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#29-Comparable和Comparator接口是干什么的？列出它们的区别。"><span class="toc-number">29.</span> <span class="toc-text">29. Comparable和Comparator接口是干什么的？列出它们的区别。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#30-什么是Java优先级队列-Priority-Queue-？"><span class="toc-number">30.</span> <span class="toc-text">30.什么是Java优先级队列(Priority Queue)？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#31-你了解大O符号-big-O-notation-么？你能给出不同数据结构的例子么？"><span class="toc-number">31.</span> <span class="toc-text">31. 你了解大O符号(big-O notation)么？你能给出不同数据结构的例子么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#32-Java集合类框架的最佳实践有哪些？"><span class="toc-number">32.</span> <span class="toc-text">32. Java集合类框架的最佳实践有哪些？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#33-Enumeration接口和Iterator接口的区别有哪些？"><span class="toc-number">33.</span> <span class="toc-text">33.Enumeration接口和Iterator接口的区别有哪些？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#34-HashSet和TreeSet有什么区别？"><span class="toc-number">34.</span> <span class="toc-text">34. HashSet和TreeSet有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#35-Java中垃圾回收有什么目的？什么时候进行垃圾回收？"><span class="toc-number">35.</span> <span class="toc-text">35.Java中垃圾回收有什么目的？什么时候进行垃圾回收？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#36-System-gc-和Runtime-gc-会做什么事情？"><span class="toc-number">36.</span> <span class="toc-text">36. System.gc()和Runtime.gc()会做什么事情？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#37-finalize-方法什么时候被调用？析构函数-finalization-的目的是什么？"><span class="toc-number">37.</span> <span class="toc-text">37. finalize()方法什么时候被调用？析构函数(finalization)的目的是什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#38-如果对象的引用被置为null，垃圾收集器是否会立即释放对象占用的内存？"><span class="toc-number">38.</span> <span class="toc-text">38. 如果对象的引用被置为null，垃圾收集器是否会立即释放对象占用的内存？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#39-Java堆的结构是什么样子的？什么是堆中的永久代-Perm-Gen-space"><span class="toc-number">39.</span> <span class="toc-text">39. Java堆的结构是什么样子的？什么是堆中的永久代(Perm Gen space)?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#40-串行-serial-收集器和吞吐量-throughput-收集器的区别是什么？"><span class="toc-number">40.</span> <span class="toc-text">40. 串行(serial)收集器和吞吐量(throughput)收集器的区别是什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#41-JVM的永久代中会发生垃圾回收么？"><span class="toc-number">41.</span> <span class="toc-text">41. JVM的永久代中会发生垃圾回收么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#42-Java中的两种异常类型是什么？他们有什么区别？"><span class="toc-number">42.</span> <span class="toc-text">42. Java中的两种异常类型是什么？他们有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#43-Java中的两种异常类型是什么？他们有什么区别？"><span class="toc-number">43.</span> <span class="toc-text">43. Java中的两种异常类型是什么？他们有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#44-Java中Exception和Error有什么区别？"><span class="toc-number">44.</span> <span class="toc-text">44. Java中Exception和Error有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#45-throw和throws有什么区别？"><span class="toc-number">45.</span> <span class="toc-text">45. throw和throws有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#46-异常处理完成以后，Exception对象会发生什么变化？"><span class="toc-number">46.</span> <span class="toc-text">46. 异常处理完成以后，Exception对象会发生什么变化？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#47-finally代码块和finalize-方法有什么区别？"><span class="toc-number">47.</span> <span class="toc-text">47. finally代码块和finalize()方法有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#48-什么是Applet？解释一下Applet的生命周期-当applet被载入的时候会发生什么？"><span class="toc-number">48.</span> <span class="toc-text">48. 什么是Applet？解释一下Applet的生命周期.当applet被载入的时候会发生什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#49-Applet和普通的Java应用程序有什么区别？"><span class="toc-number">49.</span> <span class="toc-text">49. Applet和普通的Java应用程序有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#50-Java-applet有哪些限制条件？"><span class="toc-number">50.</span> <span class="toc-text">50. Java applet有哪些限制条件？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#51-什么是不受信任的applet？"><span class="toc-number">51.</span> <span class="toc-text">51. 什么是不受信任的applet？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#52-从网络上加载的applet和从本地文件系统加载的applet有什么区别？"><span class="toc-number">52.</span> <span class="toc-text">52. 从网络上加载的applet和从本地文件系统加载的applet有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#53-applet类加载器是什么？它会做哪些工作？"><span class="toc-number">53.</span> <span class="toc-text">53.applet类加载器是什么？它会做哪些工作？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#54-applet安全管理器是什么？它会做哪些工作？"><span class="toc-number">54.</span> <span class="toc-text">54. applet安全管理器是什么？它会做哪些工作？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#77-数据库连接池是什么意思？"><span class="toc-number">55.</span> <span class="toc-text">77.数据库连接池是什么意思？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#90-解释下Serialization和Deserialization"><span class="toc-number">56.</span> <span class="toc-text">90. 解释下Serialization和Deserialization</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#91-什么是Servlet？说一下Servlet的体系结构。"><span class="toc-number">57.</span> <span class="toc-text">91. 什么是Servlet？说一下Servlet的体系结构。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#92-Applet和Servlet有什么区别？"><span class="toc-number">58.</span> <span class="toc-text">92. Applet和Servlet有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#93-HTTP响应的结构是怎么样的？"><span class="toc-number">59.</span> <span class="toc-text">93. HTTP响应的结构是怎么样的？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#102-什么是cookie？session和cookie有什么区别？"><span class="toc-number">60.</span> <span class="toc-text">102. 什么是cookie？session和cookie有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#117-封装的定义和好处有哪些？"><span class="toc-number">61.</span> <span class="toc-text">117. 封装的定义和好处有哪些？</span></a></li></ol>
+		
+		</div>
+		
+		<h1 id="1-什么是Java虚拟机？为什么Java被称作是“平台无关的编程语言”？"><a href="#1-什么是Java虚拟机？为什么Java被称作是“平台无关的编程语言”？" class="headerlink" title="1. 什么是Java虚拟机？为什么Java被称作是“平台无关的编程语言”？"></a>1. 什么是Java虚拟机？为什么Java被称作是“平台无关的编程语言”？</h1><p>Java虚拟机是一个可以执行Java字节码的虚拟机进程。Java源文件被编译成能被Java虚拟机执行的字节码文件。<br>Java被设计成允许应用程序可以运行在任意的平台，而不需要程序员为每一个平台单独重写或者是重新编译。Java虚拟机让这个变为可能，因为它知道底层硬件平台的指令长度和其他特性。</p>
+<h1 id="2-JDK和JRE的区别是什么？"><a href="#2-JDK和JRE的区别是什么？" class="headerlink" title="2.JDK和JRE的区别是什么？"></a>2.JDK和JRE的区别是什么？</h1><p>Java运行时环境(JRE)是将要执行Java程序的Java虚拟机。它同时也包含了执行applet需要的浏览器插件。Java开发工具包(JDK)是完整的Java软件开发包，包含了JRE，编译器和其他的工具(比如：JavaDoc，Java调试器)，可以让开发者开发、编译、执行Java应用程序。</p>
+<h1 id="3-”static”关键字是什么意思？Java中是否可以覆盖-override-一个private或者是static的方法？"><a href="#3-”static”关键字是什么意思？Java中是否可以覆盖-override-一个private或者是static的方法？" class="headerlink" title="3. ”static”关键字是什么意思？Java中是否可以覆盖(override)一个private或者是static的方法？"></a>3. ”static”关键字是什么意思？Java中是否可以覆盖(override)一个private或者是static的方法？</h1><p>“static”关键字表明一个成员变量或者是成员方法可以在没有所属的类的实例变量的情况下被访问。<br>Java中static方法不能被覆盖，因为方法覆盖是基于<strong>运行时动态绑定</strong>的，而static方法是<strong>编译时静态绑定</strong>的。static方法跟类的任何实例都不相关，所以概念上不适用。</p>
+<h1 id="4-是否可以在static环境中访问非static变量？"><a href="#4-是否可以在static环境中访问非static变量？" class="headerlink" title="4. 是否可以在static环境中访问非static变量？"></a>4. 是否可以在static环境中访问非static变量？</h1><p>非静态的既可以访问静态的，也可以访问非静态的，而静态的只能访问静态的。</p>
+<p>不可以在static环静中，不可以访问非static。因为静态的成员属于类，随着类的加载而加载到静态方法区内存，当类加载时，此时不一定有实例创建，没有实例，就不可以访问非静态的成员。类的加载先于实例的创建，因此静态环境中，不可以访问非静态！</p>
+<p>static变量在Java中是属于类的，它在所有的实例中的值是一样的。当类被Java虚拟机载入的时候，会对static变量进行初始化。如果你的代码尝试不用实例来访问非static的变量，编译器会报错，因为这些变量还没有被创建出来，还没有跟任何实例关联上。</p>
+<h1 id="5-Java支持的数据类型有哪些？什么是自动拆装箱？"><a href="#5-Java支持的数据类型有哪些？什么是自动拆装箱？" class="headerlink" title="5. Java支持的数据类型有哪些？什么是自动拆装箱？"></a>5. Java支持的数据类型有哪些？什么是自动拆装箱？</h1><p>Java语言支持的8种基本数据类型是：<br>byte<br>short<br>int<br>long<br>float<br>double<br>boolean<br>char<br>自动装箱是Java编译器在基本数据类型和对应的对象包装类型之间做的一个转化。比如：把int转化成Integer，double转化成Double，等等。反之就是自动拆箱。</p>
+<h1 id="6-Java中的方法覆盖-Overriding-和方法重载-Overloading-是什么意思？"><a href="#6-Java中的方法覆盖-Overriding-和方法重载-Overloading-是什么意思？" class="headerlink" title="6. Java中的方法覆盖(Overriding)和方法重载(Overloading)是什么意思？"></a>6. Java中的方法覆盖(Overriding)和方法重载(Overloading)是什么意思？</h1><p>Java中的方法重载发生在同一个类里面两个或者是多个方法的方法名相同但是参数不同的情况。与此相对，方法覆盖是说子类重新定义了父类的方法。方法覆盖必须有相同的方法名，参数列表和返回类型。覆盖者可能不会限制它所覆盖的方法的访问。</p>
+<h1 id="7-Java中，什么是构造函数？什么是构造函数重载？什么是复制构造函数？"><a href="#7-Java中，什么是构造函数？什么是构造函数重载？什么是复制构造函数？" class="headerlink" title="7. Java中，什么是构造函数？什么是构造函数重载？什么是复制构造函数？"></a>7. Java中，什么是构造函数？什么是构造函数重载？什么是复制构造函数？</h1><p>当新对象被创建的时候，构造函数会被调用。每一个类都有构造函数。在程序员没有给类提供构造函数的情况下，Java编译器会为这个类创建一个默认的构造函数。<br>Java中构造函数重载和方法重载很相似。可以为一个类创建多个构造函数。每一个构造函数必须有它自己唯一的参数列表。<br>Java不支持像C++中那样的复制构造函数，这个不同点是因为如果你不自己写构造函数的情况下，Java不会创建默认的复制构造函数.</p>
+<h1 id="8-Java支持多继承么？"><a href="#8-Java支持多继承么？" class="headerlink" title="8. Java支持多继承么？"></a>8. Java支持多继承么？</h1><p>Java中类不支持多继承，只支持单继承（即一个类只有一个父类）。 但是java中的接口支持多继承，，即一个子接口可以有多个父接口。（接口的作用是用来扩展对象的功能，一个子接口继承多个父接口，说明子接口扩展了多个功能，当类实现接口时，类就扩展了相应的功能）。</p>
+<h1 id="9-接口和抽象类的区别是什么？"><a href="#9-接口和抽象类的区别是什么？" class="headerlink" title="9. 接口和抽象类的区别是什么？"></a>9. 接口和抽象类的区别是什么？</h1><p>Java提供和支持创建抽象类和接口。它们的实现有共同点，不同点在于：</p>
+<ol>
+<li>接口中所有的方法隐含的都是抽象的。而抽象类则可以同时包含抽象和非抽象的方法。</li>
+<li>类可以实现很多个接口，但是只能继承一个抽象类<br>类可以不实现抽象类和接口声明的所有方法，当然，在这种情况下，类也必须得声明成是抽象的。</li>
+<li>抽象类可以在不提供接口方法实现的情况下实现接口。</li>
+<li>Java接口中声明的变量默认都是final的。抽象类可以包含非final的变量。</li>
+<li>Java接口中的成员函数默认是public的。抽象类的成员函数可以是private，protected或者是public。</li>
+<li>接口是绝对抽象的，不可以被实例化。抽象类也不可以被实例化，但是，如果它包含main方法的话是可以被调用的。<br>也可以参考JDK8中抽象类和接口的区别</li>
+</ol>
+<h1 id="10-什么是值传递和引用传递"><a href="#10-什么是值传递和引用传递" class="headerlink" title="10. 什么是值传递和引用传递"></a>10. 什么是值传递和引用传递</h1><p>值传递是对基本型变量而言的,传递的是该变量的一个副本,改变副本不影响原变量.<br>引用传递一般是对于对象型变量而言的,传递的是该对象地址的一个副本, 并不是原对象本身 。 所以对引用对象进行操作会同时改变原对象.<br>一般认为,java内的传递都是值传递.</p>
+<h1 id="11-进程和线程的区别"><a href="#11-进程和线程的区别" class="headerlink" title="11. 进程和线程的区别"></a>11. 进程和线程的区别</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述:"></a>概述:</h2><p>进程是具有一定独立功能的程序关于某个数据集合上的一次运行活动,进程是系统进行资源分配和调度的一个独立单位.<br>线程是进程的一个实体,是CPU调度和分派的基本单位,它是比进程更小的能独立运行的基本单位.线程自己基本上不拥有系统资源,只拥有一点在运行中必不可少的资源(如程序计数器,一组寄存器和栈),但是它可与同属一个进程的其他的线程共享进程所拥有的全部资源.<br>一个线程可以创建和撤销另一个线程;同一个进程中的多个线程之间可以并发执行.<br>相对进程而言，线程是一个更加接近于执行体的概念，它可以与同进程中的其他线程共享数据，但拥有自己的栈空间，拥有独立的执行序列。<br>在串行程序基础上引入线程和进程是为了提高程序的并发度，从而提高程序运行效率和响应时间。</p>
+<h2 id="区别"><a href="#区别" class="headerlink" title="区别:"></a>区别:</h2><p>进程和线程的主要差别在于它们是不同的操作系统资源管理方式。进程有独立的地址空间，一个进程崩溃后，在保护模式下不会对其它进程产生影响，而线程只是一个进程中的不同执行路径。线程有自己的堆栈和局部变量，但线程之间没有单独的地址空间，一个线程死掉就等于整个进程死掉，所以多进程的程序要比多线程的程序健壮，但在进程切换时，耗费资源较大，效率要差一些。但对于一些要求同时进行并且又要共享某些变量的并发操作，只能用线程，不能用进程。</p>
+<ol>
+<li>简而言之,一个程序至少有一个进程,一个进程至少有一个线程.</li>
+<li>线程的划分尺度小于进程，使得多线程程序的并发性高。</li>
+<li>另外，进程在执行过程中拥有独立的内存单元，而多个线程共享内存，从而极大地提高了程序的运行效率。</li>
+<li>线程在执行过程中与进程还是有区别的。每个独立的线程有一个程序运行的入口、顺序执行序列和程序的出口。但是线程不能够独立执行，必须依存在应用程序中，由应用程序提供多个线程执行控制。</li>
+<li>从逻辑角度来看，多线程的意义在于一个应用程序中，有多个执行部分可以同时执行。但操作系统并没有将多个线程看做多个独立的应用，来实现进程的调度和管理以及资源分配。这就是进程和线程的重要区别。<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点:"></a>优缺点:</h2>线程和进程在使用上各有优缺点：线程执行开销小，但不利于资源的管理和保护；而进程正相反。同时，线程适合于在SMP机器上运行，而进程则可以跨机器迁移。</li>
+</ol>
+<h1 id="12-创建线程有几种不同的方式？你喜欢哪一种？为什么？"><a href="#12-创建线程有几种不同的方式？你喜欢哪一种？为什么？" class="headerlink" title="12. 创建线程有几种不同的方式？你喜欢哪一种？为什么？"></a>12. 创建线程有几种不同的方式？你喜欢哪一种？为什么？</h1><p>有三种方式可以用来创建线程：<br>继承Thread类<br>实现Runnable接口<br>应用程序可以使用Executor框架来创建线程池<br>实现Runnable接口这种方式更受欢迎，因为这不需要继承Thread类。在应用设计中已经继承了别的对象的情况下，这需要多继承（而Java不支持多继承），只能实现接口。同时，线程池也是非常高效的，很容易实现和使用。</p>
+<h1 id="13-概括的解释下线程的几种可用状态。"><a href="#13-概括的解释下线程的几种可用状态。" class="headerlink" title="13. 概括的解释下线程的几种可用状态。"></a>13. 概括的解释下线程的几种可用状态。</h1><ol>
+<li>新建( new )：新创建了一个线程对象。</li>
+<li>可运行( runnable )：线程对象创建后，其他线程(比如 main 线程）调用了该对象 的 start ()方法。该状态的线程位于可运行线程池中，等待被线程调度选中，获 取 cpu 的使用权 。</li>
+<li>运行( running )：可运行状态( runnable )的线程获得了 cpu 时间片（ timeslice ） ，执行程序代码。</li>
+<li>阻塞( block )：阻塞状态是指线程因为某种原因放弃了 cpu 使用权，也即让出了 cpu timeslice ，暂时停止运行。直到线程进入可运行( runnable )状态，才有 机会再次获得 cpu timeslice 转到运行( running )状态。阻塞的情况分三种：<br>(一). 等待阻塞：运行( running )的线程执行 o . wait ()方法， JVM 会把该线程放 入等待队列( waitting queue )中。<br>(二). 同步阻塞：运行( running )的线程在获取对象的同步锁时，若该同步锁 被别的线程占用，则 JVM 会把该线程放入锁池( lock pool )中。<br>(三). 其他阻塞: 运行( running )的线程执行 Thread . sleep ( long ms )或 t . join ()方法，或者发出了 I / O 请求时， JVM 会把该线程置为阻塞状态。            当 sleep ()状态超时、 join ()等待线程终止或者超时、或者 I / O 处理完毕时，线程重新转入可运行( runnable )状态。</li>
+<li>死亡( dead )：线程 run ()、 main () 方法执行结束，或者因异常退出了 run ()方法，则该线程结束生命周期。死亡的线程不可再次复生</li>
+</ol>
+<p><img src="http://uploadfiles.nowcoder.com/images/20151217/149974_1450349079825_4697A22AC611680A692472687DEC1CFD" alt=""></p>
+<h1 id="14-同步方法和同步代码块的区别是什么？"><a href="#14-同步方法和同步代码块的区别是什么？" class="headerlink" title="14. 同步方法和同步代码块的区别是什么？"></a>14. 同步方法和同步代码块的区别是什么？</h1><p>同步方法默认用this或者当前类class对象作为锁；<br>同步代码块可以选择以什么来加锁，比同步方法要更细颗粒度，我们可以选择只同步会发生同步问题的部分代码而不是整个方法；</p>
+<h1 id="15-在监视器-Monitor-内部，是如何做线程同步的？程序应该做哪种级别的同步？"><a href="#15-在监视器-Monitor-内部，是如何做线程同步的？程序应该做哪种级别的同步？" class="headerlink" title="15. 在监视器(Monitor)内部，是如何做线程同步的？程序应该做哪种级别的同步？"></a>15. 在监视器(Monitor)内部，是如何做线程同步的？程序应该做哪种级别的同步？</h1><p>监视器和锁在Java虚拟机中是一块使用的。监视器监视一块同步代码块，确保一次只有一个线程执行同步代码块。每一个监视器都和一个对象引用相关联。线程在获取锁之前不允许执行同步代码。</p>
+<h1 id="16-什么是死锁-deadlock-？"><a href="#16-什么是死锁-deadlock-？" class="headerlink" title="16. 什么是死锁(deadlock)？"></a>16. 什么是死锁(deadlock)？</h1><p>两个线程或两个以上线程都在等待对方执行完毕才能继续往下执行的时候就发生了死锁。结果就是这些线程都陷入了无限的等待中。</p>
+<h1 id="17-如何确保N个线程可以访问N个资源同时又不导致死锁？"><a href="#17-如何确保N个线程可以访问N个资源同时又不导致死锁？" class="headerlink" title="17. 如何确保N个线程可以访问N个资源同时又不导致死锁？"></a>17. 如何确保N个线程可以访问N个资源同时又不导致死锁？</h1><p>使用多线程的时候，一种非常简单的避免死锁的方式就是：指定获取锁的顺序，并强制线程按照指定的顺序获取锁。因此，如果所有的线程都是以同样的顺序加锁和释放锁，就不会出现死锁了。</p>
+<h1 id="18-为什么内部类访问外部变量需要用final修饰"><a href="#18-为什么内部类访问外部变量需要用final修饰" class="headerlink" title="18. 为什么内部类访问外部变量需要用final修饰"></a>18. 为什么内部类访问外部变量需要用final修饰</h1><p>因为生命周期的原因。方法中的局部变量，方法结束后这个变量就要释放掉，final保证这个变量始终指向一个对象。</p>
+<p>首先，内部类和外部类其实是处于同一个级别，内部类不会因为定义在方法中就会随着方法的执行完毕而跟随者被销毁。问题就来了，如果外部类的方法中的变量不定义final，那么当外部类方法执行完毕的时候，这个局部变量肯定也就被GC了，然而内部类的某个方法还没有执行完，这个时候他所引用的外部变量已经找不到了。如果定义为final，java会将这个变量复制一份作为成员变量内置于内部类中，这样的话，由于final所修饰的值始终无法改变，所以这个变量所指向的内存区域就不会变。</p>
+<h1 id="19-Java集合类框架的基本接口有哪些？"><a href="#19-Java集合类框架的基本接口有哪些？" class="headerlink" title="19. Java集合类框架的基本接口有哪些？"></a>19. Java集合类框架的基本接口有哪些？</h1><p>集合类接口指定了一组叫做元素的对象。集合类接口的每一种具体的实现类都可以选择以它自己的方式对元素进行保存和排序。有的集合类允许重复的键，有些不允许。<br>Java集合类提供了一套设计良好的支持对一组对象进行操作的接口和类。Java集合类里面最基本的接口有：<br>Collection：代表一组对象，每一个对象都是它的子元素。<br>Set：不包含重复元素的Collection。<br>List：有顺序的collection，并且可以包含重复元素。<br>Map：可以把键(key)映射到值(value)的对象，键不能重复。</p>
+<h1 id="20-为什么集合类没有实现Cloneable和Serializable接口？"><a href="#20-为什么集合类没有实现Cloneable和Serializable接口？" class="headerlink" title="20. 为什么集合类没有实现Cloneable和Serializable接口？"></a>20. 为什么集合类没有实现Cloneable和Serializable接口？</h1><p>克隆(cloning)或者是序列化(serialization)的语义和含义是跟具体的实现相关的。因此，应该由集合类的具体实现来决定如何被克隆或者是序列化</p>
+<h1 id="21-什么是迭代器-Iterator-？"><a href="#21-什么是迭代器-Iterator-？" class="headerlink" title="21. 什么是迭代器(Iterator)？"></a>21. 什么是迭代器(Iterator)？</h1><p>Iterator接口提供了很多对集合元素进行迭代的方法。每一个集合类都包含了可以返回迭代器实例的<br>迭代方法。迭代器可以在迭代的过程中删除底层集合的元素,但是不可以直接调用集合的<br>remove(Object Obj)删除，可以通过迭代器的remove()方法删除。</p>
+<h1 id="22-Iterator和ListIterator的区别是什么？"><a href="#22-Iterator和ListIterator的区别是什么？" class="headerlink" title="22. Iterator和ListIterator的区别是什么？"></a>22. Iterator和ListIterator的区别是什么？</h1><p>Iterator可用来遍历Set和List集合，但是ListIterator只能用来遍历List。<br>Iterator对集合只能是前向遍历，ListIterator既可以前向也可以后向。<br>ListIterator实现了Iterator接口，并包含其他的功能，比如：增加元素，替换元素，获取前一个和后一个元素的索引，等等。</p>
+<h1 id="23-快速失败-fail-fast-和安全失败-fail-safe-的区别是什么？"><a href="#23-快速失败-fail-fast-和安全失败-fail-safe-的区别是什么？" class="headerlink" title="23. 快速失败(fail-fast)和安全失败(fail-safe)的区别是什么？"></a>23. 快速失败(fail-fast)和安全失败(fail-safe)的区别是什么？</h1><p>Iterator的安全失败是基于对底层集合做拷贝，因此，它不受源集合上修改的影响。java.util包下面的所有的集合类都是快速失败的，而java.util.concurrent包下面的所有的类都是安全失败的。快速失败的迭代器会抛出ConcurrentModificationException异常，而安全失败的迭代器永远不会抛出这样的异常。</p>
+<h1 id="24-Java中的HashMap的工作原理是什么？"><a href="#24-Java中的HashMap的工作原理是什么？" class="headerlink" title="24. Java中的HashMap的工作原理是什么？"></a>24. Java中的HashMap的工作原理是什么？</h1><p>Java中的HashMap是以键值对(key-value)的形式存储元素的。HashMap需要一个hash函数，它使用hashCode()和equals()方法来向集合/从集合添加和检索元素。当调用put()方法的时候，HashMap会计算key的hash值，然后把键值对存储在集合中合适的索引上。如果key已经存在了，value会被更新成新值。HashMap的一些重要的特性是它的容量(capacity)，负载因子(load factor)和扩容极限(threshold resizing)。</p>
+<h1 id="25-hashCode-和equals-方法的重要性体现在什么地方？"><a href="#25-hashCode-和equals-方法的重要性体现在什么地方？" class="headerlink" title="25. hashCode()和equals()方法的重要性体现在什么地方？"></a>25. hashCode()和equals()方法的重要性体现在什么地方？</h1><p>Java中的HashMap使用hashCode()和equals()方法来确定键值对的索引，当根据键获取值的时候也会用到这两个方法。如果没有正确的实现这两个方法，两个不同的键可能会有相同的hash值，因此，可能会被集合认为是相等的。而且，这两个方法也用来发现重复元素。所以这两个方法的实现对HashMap的精确性和正确性是至关重要的。</p>
+<h1 id="26-HashMap和Hashtable有什么区别？"><a href="#26-HashMap和Hashtable有什么区别？" class="headerlink" title="26. HashMap和Hashtable有什么区别？"></a>26. HashMap和Hashtable有什么区别？</h1><table>
+<thead>
+<tr>
+<th>HashTable</th>
+<th>HashMap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>线程同步</td>
+<td>非线程同步</td>
+</tr>
+<tr>
+<td>更适合于多线程</td>
+<td>更适合于单线程</td>
+</tr>
+<tr>
+<td>不允许null值</td>
+<td>允许null值（key和value都可以）</td>
+</tr>
+<tr>
+<td>使用Enumeration</td>
+<td>使用Iterator</td>
+</tr>
+<tr>
+<td>hash数组默认大小11，增加old*2+1</td>
+<td>hash数组默认大小16，是2的指数</td>
+</tr>
+<tr>
+<td>哈希值直接用对象的hashcode</td>
+<td>重新计算hash值，并且用与代替求模</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>线程安全与线程同步：<br>感觉就是一个意思，线程安全依靠的就是同步机制。<br>线程安全就是说多线程访问同一代码，不会产生不确定的结果。编写线程安全的代码是低依靠线程同步。<br>首先来看看线程安全的实现原理：<br>jvm有一个main memory，而每个线程有自己的working  memory，一个线程对一个变量进行操作时，都要在自己的working   memory里面建立一个copy，操作完之后再写入main  memory。多个线程同时操作同一个变量，就可能会出现不可预知的结果。用<strong>synchronized</strong>的关键是建立一个镜像，这个镜像可以是要修改的变量也可以其他你认为合适的对象比如方法和类，然后通过给这个镜像<strong>加锁</strong>来实现线程安全，每个线程在获得这个锁之后，要执行完才会释放它得到的锁。这样就实现了所谓的线程安全。</p>
+</blockquote>
+<p>在JDK的集合框架中，有一些是线程安全的，比如：Hashtable、Vector等，这些接口由于本身的代码中就实现了同步，所以效率比较低，已经被取代，实际中也使用的比较少。</p>
+<h1 id="27-数组-Array-和列表-ArrayList-有什么区别？什么时候应该使用Array而不是ArrayList？"><a href="#27-数组-Array-和列表-ArrayList-有什么区别？什么时候应该使用Array而不是ArrayList？" class="headerlink" title="27. 数组(Array)和列表(ArrayList)有什么区别？什么时候应该使用Array而不是ArrayList？"></a>27. 数组(Array)和列表(ArrayList)有什么区别？什么时候应该使用Array而不是ArrayList？</h1><ol>
+<li>Array可以包含基本类型和对象类型，ArrayList只能包含对象类型。</li>
+<li>Array大小是固定的，ArrayList的大小是动态变化的。</li>
+<li>ArrayList提供了更多的方法和特性，比如：addAll()，removeAll()，iterator()等等。</li>
+<li>ArrayList可以存任何Object，如String等。</li>
+</ol>
+<p>ArrayList与数组的区别主要就是由于动态增容的效率问题了。<br>对于基本类型数据，集合使用自动装箱来减少编码工作量。但是，当处理固定大小的基本数据类型的时候，这种方式相对比较慢。因此基本类型用Array，动态变化用ArrayList。</p>
+<h1 id="28-ArrayList和LinkedList有什么区别？"><a href="#28-ArrayList和LinkedList有什么区别？" class="headerlink" title="28. ArrayList和LinkedList有什么区别？"></a>28. ArrayList和LinkedList有什么区别？</h1><p>总的来说一个数数组一个是链表。<br>ArrayList和LinkedList都实现了List接口，他们有以下的不同点：<br>ArrayList是基于索引的数据接口，它的底层是数组。它可以以O(1)时间复杂度对元素进行随机访问。与此对应，LinkedList是以元素列表的形式存储它的数据，每一个元素都和它的前一个和后一个元素链接在一起，在这种情况下，查找某个元素的时间复杂度是O(n)。<br>相对于ArrayList，LinkedList的插入，添加，删除操作速度更快，因为当元素被添加到集合任意位置的时候，不需要像数组那样重新计算大小或者是更新索引。<br>LinkedList比ArrayList更占内存，因为LinkedList为每一个节点存储了两个引用，一个指向前一个元素，一个指向下一个元素。</p>
+<h1 id="29-Comparable和Comparator接口是干什么的？列出它们的区别。"><a href="#29-Comparable和Comparator接口是干什么的？列出它们的区别。" class="headerlink" title="29. Comparable和Comparator接口是干什么的？列出它们的区别。"></a>29. Comparable和Comparator接口是干什么的？列出它们的区别。</h1><p>Comparable &amp; Comparator 都是用来实现集合中元素的比较、排序的，</p>
+<ol>
+<li>Comparable 是在<strong>集合内部</strong>定义的方法实现的排序，Comparator 是在<strong>集合外部</strong>实现的排序，所以，如想实现排序，就需要在集合外定义 Comparator 接口的方法或在集合内实现 Comparable 接口的方法。</li>
+<li>Comparator位于包java.util下，而Comparable位于包   java.lang下</li>
+<li>Comparable只包含一个compareTo()方法。Comparator 包含compare()和equals()两个方法。<br>compare()方法用来给两个输入参数排序，返回负数，0，正数表明第一个参数是小于，等于，大于第二个参数。equals()方法需要一个对象作为参数，它用来决定输入参数是否和comparator相等。只有当输入参数也是一个comparator并且输入参数和当前comparator的排序结果是相同的时候，这个方法才返回true。</li>
+<li>Comparable 是一个对象本身就已经支持自比较所需要实现的接口（如 String、Integer 自己就可以完成比较大小操作，已经实现了Comparable接口）   自定义的类要在加入list容器中后能够排序，可以实现Comparable接口，在用Collections类的sort方法排序时，如果不指定Comparator，那么就以自然顺序排序，如API所说：<br>Sorts the specified list into ascending order, according to the natural ordering of its elements. All elements in the list must implement the Comparable interface<br>这里的自然顺序就是实现Comparable接口设定的排序方式。</li>
+</ol>
+<p>而 Comparator 是一个专用的比较器，当这个对象不支持自比较或者自比较函数不能满足你的要求时，你可以写一个比较器来完成两个对象之间大小的比较。</p>
+<p>可以说一个是自已完成比较，一个是外部程序实现比较的差别而已。</p>
+<blockquote>
+<p>Comparable接口只提供了    compareTo(T o)方法，也就是说假如我定义了一个Person类，这个类实现了 Comparable接口，那么当我实例化Person类的person1后，我想比较person1和一个现有的Person对象person2的大小时，我就可以这样来调用：person1.comparTo(person2),通过返回值就可以判断了；而此时如果你定义了一个 PersonComparator（实现了Comparator接口）的话，那你就可以这样：PersonComparator   comparator=   new   PersonComparator();<br>comparator.compare(person1,person2);。</p>
+</blockquote>
+<h1 id="30-什么是Java优先级队列-Priority-Queue-？"><a href="#30-什么是Java优先级队列-Priority-Queue-？" class="headerlink" title="30.什么是Java优先级队列(Priority Queue)？"></a>30.什么是Java优先级队列(Priority Queue)？</h1><ol>
+<li>PriorityQueue是一个基于<strong>优先级堆</strong>的无界队列（大小是不受限制的，但在创建时可以指定初始大小。当我们向优先队列增加元素的时候，队列大小会自动增加）.</li>
+<li>它的元素是按照自然顺序(natural order)排序的。在创建的时候，我们可以给它提供一个负责给元素排序的比较器(Comparator 和Comparable)。</li>
+<li>PriorityQueue不允许null值，因为他们没有自然顺序，或者说他们没有任何的相关联的比较器。</li>
+<li>最后，PriorityQueue<strong>不是线程安全</strong>的，所以Java提供了PriorityBlockingQueue（实现BlockingQueue接口）用于Java多线程环境。</li>
+<li>入队和出队的时间复杂度是O(log(n))（基于堆的操作都是O(lgn)）。</li>
+</ol>
+<p>使用优先队列示例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.journaldev.collections;</div><div class="line"> </div><div class="line"><span class="keyword">import</span> java.util.Comparator;</div><div class="line"><span class="keyword">import</span> java.util.PriorityQueue;</div><div class="line"><span class="keyword">import</span> java.util.Queue;</div><div class="line"><span class="keyword">import</span> java.util.Random;</div><div class="line"> </div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PriorityQueueExample</span> </span>&#123;</div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">//优先队列自然排序示例</span></div><div class="line">        Queue&lt;Integer&gt; integerPriorityQueue = <span class="keyword">new</span> PriorityQueue&lt;&gt;(<span class="number">7</span>);</div><div class="line">        Random rand = <span class="keyword">new</span> Random();</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">7</span>;i++)&#123;</div><div class="line">            integerPriorityQueue.add(<span class="keyword">new</span> Integer(rand.nextInt(<span class="number">100</span>)));</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">7</span>;i++)&#123;</div><div class="line">            Integer in = integerPriorityQueue.poll();</div><div class="line">            System.out.println(<span class="string">"Processing Integer:"</span>+in);</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//优先队列使用示例</span></div><div class="line">        Queue&lt;Customer&gt; customerPriorityQueue = <span class="keyword">new</span> PriorityQueue&lt;&gt;(<span class="number">7</span>, idComparator);</div><div class="line">        addDataToQueue(customerPriorityQueue);</div><div class="line"> </div><div class="line">        pollDataFromQueue(customerPriorityQueue);</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">//Comparator实现(也可以使用匿名类)</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Comparator&lt;Customer&gt; idComparator = <span class="keyword">new</span> Comparator&lt;Customer&gt;()&#123;</div><div class="line"> </div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Customer c1, Customer c2)</span> </span>&#123;</div><div class="line">            <span class="keyword">return</span> (<span class="keyword">int</span>) (c1.getId() - c2.getId());</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">//用于往队列增加数据的通用方法</span></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">addDataToQueue</span><span class="params">(Queue&lt;Customer&gt; customerPriorityQueue)</span> </span>&#123;</div><div class="line">        Random rand = <span class="keyword">new</span> Random();</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">7</span>; i++)&#123;</div><div class="line">            <span class="keyword">int</span> id = rand.nextInt(<span class="number">100</span>);</div><div class="line">            customerPriorityQueue.add(<span class="keyword">new</span> Customer(id, <span class="string">"Pankaj "</span>+id));</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">//用于从队列取数据的通用方法</span></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">pollDataFromQueue</span><span class="params">(Queue&lt;Customer&gt; customerPriorityQueue)</span> </span>&#123;</div><div class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</div><div class="line">            Customer cust = customerPriorityQueue.poll();</div><div class="line">            <span class="keyword">if</span>(cust == <span class="keyword">null</span>) <span class="keyword">break</span>;</div><div class="line">            System.out.println(<span class="string">"Processing Customer with ID="</span>+cust.getId());</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">&#125;</div><div class="line">注意我用实现了Comparator接口的</div></pre></td></tr></table></figure></p>
+<h1 id="31-你了解大O符号-big-O-notation-么？你能给出不同数据结构的例子么？"><a href="#31-你了解大O符号-big-O-notation-么？你能给出不同数据结构的例子么？" class="headerlink" title="31. 你了解大O符号(big-O notation)么？你能给出不同数据结构的例子么？"></a>31. 你了解大O符号(big-O notation)么？你能给出不同数据结构的例子么？</h1><p>大O符号表示一个程序运行时所需要的渐进时间复杂度上界。<br>其函数表示是：<br>对于函数f(n),g(n),如果存在一个常数c，使得f(n)&lt;=c*g(n),则f(n)=O(g(n));<br>大O描述当数据结构中的元素增加时，算法的规模和性能在最坏情景下有多好。<br>大O还可以描述其它行为，比如内存消耗。因为集合类实际上是数据结构，因此我们一般使用大O符号基于时间，内存，性能选择最好的实现。大O符号可以对大量数据性能给予一个很好的说明。</p>
+<h1 id="32-Java集合类框架的最佳实践有哪些？"><a href="#32-Java集合类框架的最佳实践有哪些？" class="headerlink" title="32. Java集合类框架的最佳实践有哪些？"></a>32. Java集合类框架的最佳实践有哪些？</h1><ol>
+<li>根据应用的需要正确选择要使用的集合的类型对性能非常重要，比如：假如元素的大小是固定的，而且能事先知道，我们就应该用Array而不是ArrayList。</li>
+<li>有些集合类允许指定初始容量。因此，如果我们能估计出存储的元素的数目，我们可以设置初始容量来避免重新计算hash值或者是扩容。</li>
+<li>为了类型安全，可读性和健壮性的原因总是要使用泛型。同时，使用泛型还可以避免运行时的ClassCastException。</li>
+<li>使用JDK提供的不变类(immutable class)作为Map的键可以避免为我们自己的类实现hashCode()和equals()方法。</li>
+<li>编程的时候接口优于实现。</li>
+<li><strong>底层的集合实际上是空的情况下，返回长度是0的集合或者是数组，不要返回null。</strong>（来源Effective Java第43条）<blockquote>
+<p>如果一个方法的返回值类型是集合或者数组 ，如果在方法内部需要返回的集合或者数组是零长度的，也就是没有实际对象在里面，<br>我们也应该放回一个零长度的数组或者集合，而不是返回null。如果返回了null，客户端程序员就要检测返回的是不是null，然后才能<br>进行下一步操作，否则就会引发NullPointException。但是如果是返回的的是空数组或者集合，就不会再后续的使用这个对象上，引发<br>空指针异常，我们可以根据代码的行为和表现，来判断数组和集合是不是为空。</p>
+</blockquote>
+</li>
+</ol>
+<h1 id="33-Enumeration接口和Iterator接口的区别有哪些？"><a href="#33-Enumeration接口和Iterator接口的区别有哪些？" class="headerlink" title="33.Enumeration接口和Iterator接口的区别有哪些？"></a>33.Enumeration接口和Iterator接口的区别有哪些？</h1><ol>
+<li>Enumeration 接口的作用与 Iterator 接口类似，但只提供了遍历 Vector 和 Hashtable 类型集合元素的功能，不支持元素的移除操作。 Iterator 接口添加了一个可选的移除操作，并使用较短的方法名。新的实现应该优先考虑使用 Iterator 接口而不是 Enumeration 接口。</li>
+<li>Enumeration速度是Iterator的2倍，同时占用更少的内存。</li>
+<li>Iterator远远比Enumeration安全，因为其他线程不能够修改正在被iterator遍历的集合里面的对象。</li>
+<li>同时，Iterator允许调用者删除底层集合里面的元素，这对Enumeration来说是不可能的。</li>
+</ol>
+<h1 id="34-HashSet和TreeSet有什么区别？"><a href="#34-HashSet和TreeSet有什么区别？" class="headerlink" title="34. HashSet和TreeSet有什么区别？"></a>34. HashSet和TreeSet有什么区别？</h1><ol>
+<li>Hashset 的底层是由hashTable实现的，add()，remove()，contains()方法的时间复杂度是O(1).可以放入null，但只能放入一个null。<br>Treeset 底层是由红黑树实现的,add()，remove()，contains()方法的时间复杂度是O(logn)。不允许放入null值</li>
+<li></li>
+</ol>
+<p>如果需要在Treeset 中插入对象，需要实现Comparable 接口，为其指定比较策略<br>源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">   <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeSet</span>&lt;<span class="title">E</span>&gt;</span></div><div class="line">   <span class="keyword">extends</span> <span class="title">AbstractSet</span>&lt;<span class="title">E</span>&gt;</div><div class="line">   <span class="keyword">implements</span> <span class="title">SortedSet</span>&lt;<span class="title">E</span>&gt;, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></div><div class="line"></div><div class="line"><span class="title">public</span> <span class="title">class</span> <span class="title">HashSet</span>&lt;<span class="title">E</span>&gt;</div><div class="line">   <span class="keyword">extends</span> <span class="title">AbstractSet</span>&lt;<span class="title">E</span>&gt;</div><div class="line">   <span class="keyword">implements</span> <span class="title">Set</span>&lt;<span class="title">E</span>&gt;, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></div></pre></td></tr></table></figure>
+<pre><code>其中SortedSet中组合了一个：Comparator&lt;? super E&gt; comparator();
+</code></pre><ol>
+<li>总结 ：HashSet是基于Hash算法实现的,其性能通常优于TreeSet,我们通常都应该使用HashSet,在我们需要排序的功能时,我门才使用TreeSet</li>
+</ol>
+<h1 id="35-Java中垃圾回收有什么目的？什么时候进行垃圾回收？"><a href="#35-Java中垃圾回收有什么目的？什么时候进行垃圾回收？" class="headerlink" title="35.Java中垃圾回收有什么目的？什么时候进行垃圾回收？"></a>35.Java中垃圾回收有什么目的？什么时候进行垃圾回收？</h1><p>这个是重点，详解<strong>《深入理解Java虚拟机*》</strong>。<br>目的：回收堆内存中不再使用的对象，释放资源和重用资源。<br>回收时间：当对象永久地失去引用后，系统会在合适的时候回收它所占的内存</p>
+<h1 id="36-System-gc-和Runtime-gc-会做什么事情？"><a href="#36-System-gc-和Runtime-gc-会做什么事情？" class="headerlink" title="36. System.gc()和Runtime.gc()会做什么事情？"></a>36. System.gc()和Runtime.gc()会做什么事情？</h1><p>这两个方法用来提示JVM要进行垃圾回收。但是，立即开始还是延迟进行垃圾回收是取决于JVM的。<br>Java.lang.System.gc()只是java.lang.Runtime.getRuntime().gc()的简写，两者的行为没有任何不同。唯一要能说有什么不同那就是在字节码层面上调用前者比调用后者短一点点，前者是1条字节码而后者是2条</p>
+<h1 id="37-finalize-方法什么时候被调用？析构函数-finalization-的目的是什么？"><a href="#37-finalize-方法什么时候被调用？析构函数-finalization-的目的是什么？" class="headerlink" title="37. finalize()方法什么时候被调用？析构函数(finalization)的目的是什么？"></a>37. finalize()方法什么时候被调用？析构函数(finalization)的目的是什么？</h1><p>垃圾回收器(garbage colector)决定回收某对象时，就会运行该对象的finalize()方法 但是在Java中很不幸，如果内存总是充足的，那么垃圾回收可能永远不会进行，也就是说filalize()可能永远不被执行，显然指望它做收尾工作是靠不住的。 那么finalize()究竟是做什么的呢？它最主要的用途是回收特殊渠道申请的内存。Java程序有垃圾回收器，所以一般情况下内存问题不用程序员操心。但有一种JNI(Java Native Interface)调用non-Java程序（C或C++），finalize()的工作就是回收这部分的内存。</p>
+<h1 id="38-如果对象的引用被置为null，垃圾收集器是否会立即释放对象占用的内存？"><a href="#38-如果对象的引用被置为null，垃圾收集器是否会立即释放对象占用的内存？" class="headerlink" title="38. 如果对象的引用被置为null，垃圾收集器是否会立即释放对象占用的内存？"></a>38. 如果对象的引用被置为null，垃圾收集器是否会立即释放对象占用的内存？</h1><p>不会，在下一个垃圾回收周期中，这个对象将是可被回收的。<br>对象的引用被置为null，只是断开了当前线程栈帧中对该对象的引用关系，而 垃圾收集器是运行在后台的线程，只有当用户线程运行到安全点(safe point)或者安全区域才会扫描对象引用关系，扫描到对象没有被引用则会标记对象，这时候仍然不会立即释放该对象内存，因为有些对象是可恢复的（在 finalize方法中恢复引用 ）。只有确定了对象无法恢复引用的时候才会清除对象内存。</p>
+<h1 id="39-Java堆的结构是什么样子的？什么是堆中的永久代-Perm-Gen-space"><a href="#39-Java堆的结构是什么样子的？什么是堆中的永久代-Perm-Gen-space" class="headerlink" title="39. Java堆的结构是什么样子的？什么是堆中的永久代(Perm Gen space)?"></a>39. Java堆的结构是什么样子的？什么是堆中的永久代(Perm Gen space)?</h1><p>1、在函数中定义的<strong>一些基本类型的变量和对象的引用变量都是在函数的栈内存中分配</strong>。当在一段代码块中定义一个变量时，java就在栈中为这个变量分配内存空间，当超过变量的作用域后，java会自动释放掉为该变量分配的内存空间，该内存空间可以立刻被另作他用。<br><strong>堆内存用于存放由new创建的对象和数组</strong> 。在堆中分配的内存，由java虚拟机自动垃圾回收器来管理。在堆中产生了一个数组或者对象后，还可以在栈中定义一个特殊的变量，这个变量的取值等于数组或者对象在堆内存中的首地址，在栈中的这个特殊的变量就变成了数组或者对象的引用变量，以后就可以在程序中使用栈内存中的引用变量来访问堆中的数组或者对象，引用变量相当于为数组或者对象起的一个别名，或者代号<br>JVM的堆是运行时数据区，所有类的实例和数组都是在堆上分配内存。它在JVM启动的时候被创建。对象所占的堆内存是由自动内存管理系统也就是垃圾收集器回收。<br>堆内存是由存活和死亡的对象组成的。存活的对象是应用可以访问的，不会被垃圾回收。死亡的对象是应用不可访问尚且还没有被垃圾收集器回收掉的对象。一直到垃圾收集器把这些对象回收掉之前，他们会一直占据堆内存空间。<br>2、虚拟机中的共划分为三个代：<br>  年轻代（Young Generation）、年老代（Old Generation）和持久代（Permanent Generation）。其中持久代主要存放的是Java类的类信息，与垃圾收集要收集的Java对象关系不大。年轻代和年老代的划分是对垃 圾收集影响比较大的。</p>
+<ul>
+<li><p>年轻代:<br> <strong>所有新生成的对象首先都是放在年轻代的。年轻代的目标就是尽可能快速的收集掉那些生命周期短的对象</strong>。年轻代分三个区。一个Eden区，两个 Survivor区(一般而言)。大部分对象在Eden区中生成。当Eden区满时，还存活的对象将被复制到Survivor区（两个中的一个），当这个Survivor区满时，此区的存活对象将被复制到另外一个Survivor区，当这个Survivor去也满了的时候，从第一个Survivor区复制过来的并且此时还存活的对象，将被复制“年老区(Tenured)”。需要注意，Survivor的两个区是对称的，没先后关系，所以同一个区中可能同时存在从Eden复制过来对象，和从前一个Survivor复制过来的对象，而复制到年老区的只有从第一个Survivor去过来的对象。而且，Survivor区总有一个是空的。同时，根据程序需要，Survivor区是可以配置为多个的（多于两个），这样可以增加对象在年轻代中的存在时间，减少被放到年老代的可能。</p>
+</li>
+<li><p>年老代:<br> 在年轻代中经历了N次垃圾回收后仍然存活的对象，就会被放到年老代中。因此，可以认为年老代中存放的都是一些生命周期较长的对象。</p>
+</li>
+<li><p>持久代:<br> 用于存放静态文件，如今Java类、方法等。持久代对垃圾回收没有显著影响，但是有些应用可能动态生成或者调用一些class，例如Hibernate 等，在这种时候需要设置一个比较大的持久代空间来存放这些运行过程中新增的类。持久代大小通过-XX:MaxPermSize=<n>进行设置。</n></p>
+</li>
+</ul>
+<h1 id="40-串行-serial-收集器和吞吐量-throughput-收集器的区别是什么？"><a href="#40-串行-serial-收集器和吞吐量-throughput-收集器的区别是什么？" class="headerlink" title="40. 串行(serial)收集器和吞吐量(throughput)收集器的区别是什么？"></a>40. 串行(serial)收集器和吞吐量(throughput)收集器的区别是什么？</h1><p>吞吐量收集器使用并行版本的新生代垃圾收集器，它用于中等规模和大规模数据的应用程序。而串行收集器对大多数的小应用(在现代处理器上需要大概100M左右的内存)就足够了。</p>
+<h1 id="41-JVM的永久代中会发生垃圾回收么？"><a href="#41-JVM的永久代中会发生垃圾回收么？" class="headerlink" title="41. JVM的永久代中会发生垃圾回收么？"></a>41. JVM的永久代中会发生垃圾回收么？</h1><p>吞吐量收集器使用并行版本的新生代垃圾收集器，它用于中等规模和大规模数据的应用程序。而串行收集器对大多数的小应用(在现代处理器上需要大概100M左右的内存)就足够了。</p>
+<h1 id="42-Java中的两种异常类型是什么？他们有什么区别？"><a href="#42-Java中的两种异常类型是什么？他们有什么区别？" class="headerlink" title="42. Java中的两种异常类型是什么？他们有什么区别？"></a>42. Java中的两种异常类型是什么？他们有什么区别？</h1><p>Java中有两种异常：受检查的(checked)异常和不受检查的(unchecked)异常。不受检查的异常不需要在方法或者是构造函数上声明，就算方法或者是构造函数的执行可能会抛出这样的异常，并且不受检查的异常可以传播到方法或者是构造函数的外面。相反，受检查的异常必须要用throws语句在方法或者是构造函数上声明。这里有Java异常处理的一些小建议。</p>
+<h1 id="43-Java中的两种异常类型是什么？他们有什么区别？"><a href="#43-Java中的两种异常类型是什么？他们有什么区别？" class="headerlink" title="43. Java中的两种异常类型是什么？他们有什么区别？"></a>43. Java中的两种异常类型是什么？他们有什么区别？</h1><p>Java中有两种异常：受检查的(checked)异常和不受检查的(unchecked)异常。</p>
+<ul>
+<li>不受检查的异常不需要在方法或者是构造函数上声明，就算方法或者是构造函数的执行可能会抛出这样的异常，并且不受检查的异常可以传播到方法或者是构造函数的外面。</li>
+<li>相反，受检查的异常必须要用throws语句在方法或者是构造函数上声明。这里有Java异常处理的一些小建议。</li>
+</ul>
+<h1 id="44-Java中Exception和Error有什么区别？"><a href="#44-Java中Exception和Error有什么区别？" class="headerlink" title="44. Java中Exception和Error有什么区别？"></a>44. Java中Exception和Error有什么区别？</h1><p>Exception和Error都是Throwable的子类。Exception用于用户程序可以捕获的异常情况。Error定义了不期望被用户程序捕获的异常。</p>
+<h1 id="45-throw和throws有什么区别？"><a href="#45-throw和throws有什么区别？" class="headerlink" title="45. throw和throws有什么区别？"></a>45. throw和throws有什么区别？</h1><ol>
+<li>Throw 用于抛出异常对象，后面跟的是异常对象，throw多用在<strong>函数内</strong>。<br>Throws 用于抛出异常类，后面跟的是异常类名，可以跟多个，用逗号隔开，throws多用在<strong>函数上</strong>。</li>
+<li>throws主要是声明这个方法会抛出这种类型的异常，使它的调用者知道要捕获这个异常。<br>throw是具体向外抛异常的动作，所以它是抛出一个异常实例。</li>
+<li>throws表示出现异常的一种可能性，并不一定会发生这些异常；throw则是抛出了异常，执行throw则一定抛出了某种异常</li>
+<li>两者都是消极处理异常的方式（这里的消极并不是说这种方式不好），只是抛出或者可能抛出异常，但是不会由函数去处理异常，真正的处理异常由函数的上层调用处理。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">throws</span> E1,E2,E3只是告诉程序这个方法可能会抛出这些异常，方法的调用者可能要处理这些异常，而这些异常E1，E2，E3可能是该函数体产生的。</div><div class="line"><span class="keyword">throw</span>则是明确了这个地方要抛出这个异常。</div><div class="line">如： <span class="function"><span class="keyword">void</span> <span class="title">doA</span><span class="params">(<span class="keyword">int</span> a)</span> <span class="keyword">throws</span> Exception1,Exception3</span>&#123;</div><div class="line">           <span class="keyword">try</span>&#123;</div><div class="line">                 ......</div><div class="line">           &#125;<span class="keyword">catch</span>(Exception1 e)&#123;</div><div class="line">              <span class="keyword">throw</span> e;</div><div class="line">           &#125;<span class="keyword">catch</span>(Exception2 e)&#123;</div><div class="line">              System.out.println(<span class="string">"出错了！"</span>);</div><div class="line">           &#125;</div><div class="line">           <span class="keyword">if</span>(a!=b)</div><div class="line">              <span class="keyword">throw</span> <span class="keyword">new</span>  Exception3(<span class="string">"自定义异常"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="46-异常处理完成以后，Exception对象会发生什么变化？"><a href="#46-异常处理完成以后，Exception对象会发生什么变化？" class="headerlink" title="46. 异常处理完成以后，Exception对象会发生什么变化？"></a>46. 异常处理完成以后，Exception对象会发生什么变化？</h1><p>Exception对象会在下一个垃圾回收过程中被回收掉。</p>
+<h1 id="47-finally代码块和finalize-方法有什么区别？"><a href="#47-finally代码块和finalize-方法有什么区别？" class="headerlink" title="47. finally代码块和finalize()方法有什么区别？"></a>47. finally代码块和finalize()方法有什么区别？</h1><p>无论是否抛出异常，finally代码块都会执行，它主要是用来释放应用占用的资源。<br>finalize()方法是Object类的一个protected方法，它是在对象被垃圾回收之前由Java虚拟机来调用的。</p>
+<h1 id="48-什么是Applet？解释一下Applet的生命周期-当applet被载入的时候会发生什么？"><a href="#48-什么是Applet？解释一下Applet的生命周期-当applet被载入的时候会发生什么？" class="headerlink" title="48. 什么是Applet？解释一下Applet的生命周期.当applet被载入的时候会发生什么？"></a>48. 什么是Applet？解释一下Applet的生命周期.当applet被载入的时候会发生什么？</h1><ol>
+<li>java applet是能够被包含在HTML页面中并且能被启用了java的客户端浏览器执行的程序。Applet主要用来创建动态交互的web应用程序。</li>
+<li>applet可以经历下面的状态：<br> Init：每次被载入的时候都会被初始化。<br> Start：开始执行applet。<br> Stop：结束执行applet。<br> Destroy：卸载applet之前，做最后的清理工作。</li>
+<li>首先，创建applet控制类的实例，然后初始化applet，最后开始运行</li>
+</ol>
+<h1 id="49-Applet和普通的Java应用程序有什么区别？"><a href="#49-Applet和普通的Java应用程序有什么区别？" class="headerlink" title="49. Applet和普通的Java应用程序有什么区别？"></a>49. Applet和普通的Java应用程序有什么区别？</h1><ol>
+<li>applet是运行在启用了java的浏览器中，Java应用程序是可以在浏览器之外运行的独立的Java程序。但是，它们都需要有Java虚拟机。</li>
+<li>进一步来说，Java应用程序需要一个有特定方法签名的main函数来开始执行。Java applet不需要这样的函数来开始执行。</li>
+<li>最后，Java applet一般会使用很严格的安全策略，Java应用一般使用比较宽松的安全策略。</li>
+</ol>
+<h1 id="50-Java-applet有哪些限制条件？"><a href="#50-Java-applet有哪些限制条件？" class="headerlink" title="50. Java applet有哪些限制条件？"></a>50. Java applet有哪些限制条件？</h1><p>主要是由于安全的原因，给applet施加了以下的限制：<br>applet不能够载入类库或者定义本地方法。<br>applet不能在宿主机上读写文件。<br>applet不能读取特定的系统属性。<br>applet不能发起网络连接，除非是跟宿主机。<br>applet不能够开启宿主机上其他任何的程序。</p>
+<h1 id="51-什么是不受信任的applet？"><a href="#51-什么是不受信任的applet？" class="headerlink" title="51. 什么是不受信任的applet？"></a>51. 什么是不受信任的applet？</h1><p>不受信任的applet是不能访问或是执行本地系统文件的Java applet，默认情况下，所有下载的applet都是不受信任的。</p>
+<h1 id="52-从网络上加载的applet和从本地文件系统加载的applet有什么区别？"><a href="#52-从网络上加载的applet和从本地文件系统加载的applet有什么区别？" class="headerlink" title="52. 从网络上加载的applet和从本地文件系统加载的applet有什么区别？"></a>52. 从网络上加载的applet和从本地文件系统加载的applet有什么区别？</h1><p>当applet是从网络上加载的时候，applet是由applet类加载器载入的，它受applet安全管理器的限制。<br>当applet是从客户端的本地磁盘载入的时候，applet是由文件系统加载器载入的。<br>从文件系统载入的applet允许在客户端读文件，写文件，加载类库，并且也允许执行其他程序，但是，却通不过字节码校验。</p>
+<h1 id="53-applet类加载器是什么？它会做哪些工作？"><a href="#53-applet类加载器是什么？它会做哪些工作？" class="headerlink" title="53.applet类加载器是什么？它会做哪些工作？"></a>53.applet类加载器是什么？它会做哪些工作？</h1><p>当applet是从网络上加载的时候，它是由applet类加载器载入的。类加载器有自己的java名称空间等级结构。类加载器会保证来自文件系统的类有唯一的名称空间，来自网络资源的类有唯一的名称空间。<br>当浏览器通过网络载入applet的时候，applet的类被放置于和applet的源相关联的私有的名称空间中。然后，那些被类加载器载入进来的类都是通过了验证器验证的。验证器会检查类文件格式是否遵守Java语言规范，确保不会出现堆栈溢出(stack overflow)或者下溢(underflow)，传递给字节码指令的参数是正确的。</p>
+<h1 id="54-applet安全管理器是什么？它会做哪些工作？"><a href="#54-applet安全管理器是什么？它会做哪些工作？" class="headerlink" title="54. applet安全管理器是什么？它会做哪些工作？"></a>54. applet安全管理器是什么？它会做哪些工作？</h1><p>applet安全管理器是给applet施加限制条件的一种机制。浏览器可以只有一个安全管理器。安全管理器在启动的时候被创建，之后不能被替换覆盖或者是扩展。</p>
+<h1 id="77-数据库连接池是什么意思？"><a href="#77-数据库连接池是什么意思？" class="headerlink" title="77.数据库连接池是什么意思？"></a>77.数据库连接池是什么意思？</h1><p>像打开关闭数据库连接这种和数据库的交互可能是很费时的，尤其是当客户端数量增加的时候，会消耗大量的资源，成本是非常高的。可以在应用服务器启动的时候建立很多个数据库连接并维护在一个池中。连接请求由池中的连接提供。在连接使用完毕以后，把连接归还到池中，以用于满足将来更多的请求。</p>
+<h1 id="90-解释下Serialization和Deserialization"><a href="#90-解释下Serialization和Deserialization" class="headerlink" title="90. 解释下Serialization和Deserialization"></a>90. 解释下Serialization和Deserialization</h1><p>Java提供了一种叫做对象序列化的机制，他把对象表示成一连串的字节，里面包含了对象的数据，对象的类型信息，对象内部的数据的类型信息等等。因此，序列化可以看成是为了把对象存储在磁盘上或者是从磁盘上读出来并重建对象而把对象扁平化的一种方式。反序列化是把对象从扁平状态转化成活动对象的相反的步骤。<br>Servlet</p>
+<h1 id="91-什么是Servlet？说一下Servlet的体系结构。"><a href="#91-什么是Servlet？说一下Servlet的体系结构。" class="headerlink" title="91. 什么是Servlet？说一下Servlet的体系结构。"></a>91. 什么是Servlet？说一下Servlet的体系结构。</h1><ol>
+<li>Servlet是用来处理客户端请求并产生动态网页内容的Java类。Servlet主要是用来处理或者是存储HTML表单提交的数据，产生动态内容，在无状态的HTTP协议下管理状态信息。</li>
+<li>所有的Servlet都必须要实现的核心的接口是javax.servlet.Servlet。每一个Servlet都必须要直接或者是间接实现这个接口，或者是继承javax.servlet.GenericServlet或者javax.servlet.http.HTTPServlet。最后，Servlet使用多线程可以并行的为多个请求服务。</li>
+</ol>
+<h1 id="92-Applet和Servlet有什么区别？"><a href="#92-Applet和Servlet有什么区别？" class="headerlink" title="92. Applet和Servlet有什么区别？"></a>92. Applet和Servlet有什么区别？</h1><p>Applet是运行在客户端主机的浏览器上的客户端Java程序。而Servlet是运行在web服务器上的服务端的组件。applet可以使用用户界面类，而Servlet没有用户界面，相反，Servlet是等待客户端的HTTP请求，然后为请求产生响应。</p>
+<h1 id="93-HTTP响应的结构是怎么样的？"><a href="#93-HTTP响应的结构是怎么样的？" class="headerlink" title="93. HTTP响应的结构是怎么样的？"></a>93. HTTP响应的结构是怎么样的？</h1><p>HTTP响应由三个部分组成：<br>状态码(Status Code)：描述了响应的状态。可以用来检查是否成功的完成了请求。请求失败的情况下，状态码可用来找出失败的原因。如果Servlet没有返回状态码，默认会返回成功的状态码HttpServletResponse.SC_OK。<br>HTTP头部(HTTP Header)：它们包含了更多关于响应的信息。比如：头部可以指定认为响应过期的过期日期，或者是指定用来给用户安全的传输实体内容的编码格式。如何在Serlet中检索HTTP的头部看这里。<br>主体(Body)：它包含了响应的内容。它可以包含HTML代码，图片，等等。主体是由传输在HTTP消息中紧跟在头部后面的数据字节组成的。</p>
+<h1 id="102-什么是cookie？session和cookie有什么区别？"><a href="#102-什么是cookie？session和cookie有什么区别？" class="headerlink" title="102. 什么是cookie？session和cookie有什么区别？"></a>102. 什么是cookie？session和cookie有什么区别？</h1><p>cookie是Web服务器发送给浏览器的一块信息。浏览器会在本地文件中给每一个Web服务器存储cookie。以后浏览器在给特定的Web服务器发请求的时候，同时会发送所有为该服务器存储的cookie。下面列出了session和cookie的区别：<br>无论客户端浏览器做怎么样的设置，session都应该能正常工作。客户端可以选择禁用cookie，但是，session仍然是能够工作的，因为客户端无法禁用服务端的session。<br>在存储的数据量方面session和cookies也是不一样的。session能够存储任意的Java对象，cookie只能存储String类型的对象。</p>
+<h1 id="117-封装的定义和好处有哪些？"><a href="#117-封装的定义和好处有哪些？" class="headerlink" title="117. 封装的定义和好处有哪些？"></a>117. 封装的定义和好处有哪些？</h1>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Interview/">Interview</a><a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/01/Java常见知识点/" data-title="Java常考知识点 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/02/SimHash/" title="Simhash算法">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Simhash算法</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/01/第k个数/"  title="第k个数与合并数组问题">
+ <strong>下一篇：</strong><br/> 
+ <span>第k个数与合并数组问题
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/01/Java常见知识点/" data-title="Java常考知识点" data-url="http://yoursite.com/2016/08/01/Java常见知识点/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-什么是Java虚拟机？为什么Java被称作是“平台无关的编程语言”？"><span class="toc-number">1.</span> <span class="toc-text">1. 什么是Java虚拟机？为什么Java被称作是“平台无关的编程语言”？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-JDK和JRE的区别是什么？"><span class="toc-number">2.</span> <span class="toc-text">2.JDK和JRE的区别是什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-”static”关键字是什么意思？Java中是否可以覆盖-override-一个private或者是static的方法？"><span class="toc-number">3.</span> <span class="toc-text">3. ”static”关键字是什么意思？Java中是否可以覆盖(override)一个private或者是static的方法？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-是否可以在static环境中访问非static变量？"><span class="toc-number">4.</span> <span class="toc-text">4. 是否可以在static环境中访问非static变量？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-Java支持的数据类型有哪些？什么是自动拆装箱？"><span class="toc-number">5.</span> <span class="toc-text">5. Java支持的数据类型有哪些？什么是自动拆装箱？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-Java中的方法覆盖-Overriding-和方法重载-Overloading-是什么意思？"><span class="toc-number">6.</span> <span class="toc-text">6. Java中的方法覆盖(Overriding)和方法重载(Overloading)是什么意思？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-Java中，什么是构造函数？什么是构造函数重载？什么是复制构造函数？"><span class="toc-number">7.</span> <span class="toc-text">7. Java中，什么是构造函数？什么是构造函数重载？什么是复制构造函数？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-Java支持多继承么？"><span class="toc-number">8.</span> <span class="toc-text">8. Java支持多继承么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-接口和抽象类的区别是什么？"><span class="toc-number">9.</span> <span class="toc-text">9. 接口和抽象类的区别是什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-什么是值传递和引用传递"><span class="toc-number">10.</span> <span class="toc-text">10. 什么是值传递和引用传递</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#11-进程和线程的区别"><span class="toc-number">11.</span> <span class="toc-text">11. 进程和线程的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#概述"><span class="toc-number">11.1.</span> <span class="toc-text">概述:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#区别"><span class="toc-number">11.2.</span> <span class="toc-text">区别:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优缺点"><span class="toc-number">11.3.</span> <span class="toc-text">优缺点:</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#12-创建线程有几种不同的方式？你喜欢哪一种？为什么？"><span class="toc-number">12.</span> <span class="toc-text">12. 创建线程有几种不同的方式？你喜欢哪一种？为什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#13-概括的解释下线程的几种可用状态。"><span class="toc-number">13.</span> <span class="toc-text">13. 概括的解释下线程的几种可用状态。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#14-同步方法和同步代码块的区别是什么？"><span class="toc-number">14.</span> <span class="toc-text">14. 同步方法和同步代码块的区别是什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#15-在监视器-Monitor-内部，是如何做线程同步的？程序应该做哪种级别的同步？"><span class="toc-number">15.</span> <span class="toc-text">15. 在监视器(Monitor)内部，是如何做线程同步的？程序应该做哪种级别的同步？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#16-什么是死锁-deadlock-？"><span class="toc-number">16.</span> <span class="toc-text">16. 什么是死锁(deadlock)？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#17-如何确保N个线程可以访问N个资源同时又不导致死锁？"><span class="toc-number">17.</span> <span class="toc-text">17. 如何确保N个线程可以访问N个资源同时又不导致死锁？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#18-为什么内部类访问外部变量需要用final修饰"><span class="toc-number">18.</span> <span class="toc-text">18. 为什么内部类访问外部变量需要用final修饰</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#19-Java集合类框架的基本接口有哪些？"><span class="toc-number">19.</span> <span class="toc-text">19. Java集合类框架的基本接口有哪些？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#20-为什么集合类没有实现Cloneable和Serializable接口？"><span class="toc-number">20.</span> <span class="toc-text">20. 为什么集合类没有实现Cloneable和Serializable接口？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#21-什么是迭代器-Iterator-？"><span class="toc-number">21.</span> <span class="toc-text">21. 什么是迭代器(Iterator)？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#22-Iterator和ListIterator的区别是什么？"><span class="toc-number">22.</span> <span class="toc-text">22. Iterator和ListIterator的区别是什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#23-快速失败-fail-fast-和安全失败-fail-safe-的区别是什么？"><span class="toc-number">23.</span> <span class="toc-text">23. 快速失败(fail-fast)和安全失败(fail-safe)的区别是什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#24-Java中的HashMap的工作原理是什么？"><span class="toc-number">24.</span> <span class="toc-text">24. Java中的HashMap的工作原理是什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#25-hashCode-和equals-方法的重要性体现在什么地方？"><span class="toc-number">25.</span> <span class="toc-text">25. hashCode()和equals()方法的重要性体现在什么地方？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#26-HashMap和Hashtable有什么区别？"><span class="toc-number">26.</span> <span class="toc-text">26. HashMap和Hashtable有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#27-数组-Array-和列表-ArrayList-有什么区别？什么时候应该使用Array而不是ArrayList？"><span class="toc-number">27.</span> <span class="toc-text">27. 数组(Array)和列表(ArrayList)有什么区别？什么时候应该使用Array而不是ArrayList？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#28-ArrayList和LinkedList有什么区别？"><span class="toc-number">28.</span> <span class="toc-text">28. ArrayList和LinkedList有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#29-Comparable和Comparator接口是干什么的？列出它们的区别。"><span class="toc-number">29.</span> <span class="toc-text">29. Comparable和Comparator接口是干什么的？列出它们的区别。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#30-什么是Java优先级队列-Priority-Queue-？"><span class="toc-number">30.</span> <span class="toc-text">30.什么是Java优先级队列(Priority Queue)？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#31-你了解大O符号-big-O-notation-么？你能给出不同数据结构的例子么？"><span class="toc-number">31.</span> <span class="toc-text">31. 你了解大O符号(big-O notation)么？你能给出不同数据结构的例子么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#32-Java集合类框架的最佳实践有哪些？"><span class="toc-number">32.</span> <span class="toc-text">32. Java集合类框架的最佳实践有哪些？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#33-Enumeration接口和Iterator接口的区别有哪些？"><span class="toc-number">33.</span> <span class="toc-text">33.Enumeration接口和Iterator接口的区别有哪些？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#34-HashSet和TreeSet有什么区别？"><span class="toc-number">34.</span> <span class="toc-text">34. HashSet和TreeSet有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#35-Java中垃圾回收有什么目的？什么时候进行垃圾回收？"><span class="toc-number">35.</span> <span class="toc-text">35.Java中垃圾回收有什么目的？什么时候进行垃圾回收？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#36-System-gc-和Runtime-gc-会做什么事情？"><span class="toc-number">36.</span> <span class="toc-text">36. System.gc()和Runtime.gc()会做什么事情？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#37-finalize-方法什么时候被调用？析构函数-finalization-的目的是什么？"><span class="toc-number">37.</span> <span class="toc-text">37. finalize()方法什么时候被调用？析构函数(finalization)的目的是什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#38-如果对象的引用被置为null，垃圾收集器是否会立即释放对象占用的内存？"><span class="toc-number">38.</span> <span class="toc-text">38. 如果对象的引用被置为null，垃圾收集器是否会立即释放对象占用的内存？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#39-Java堆的结构是什么样子的？什么是堆中的永久代-Perm-Gen-space"><span class="toc-number">39.</span> <span class="toc-text">39. Java堆的结构是什么样子的？什么是堆中的永久代(Perm Gen space)?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#40-串行-serial-收集器和吞吐量-throughput-收集器的区别是什么？"><span class="toc-number">40.</span> <span class="toc-text">40. 串行(serial)收集器和吞吐量(throughput)收集器的区别是什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#41-JVM的永久代中会发生垃圾回收么？"><span class="toc-number">41.</span> <span class="toc-text">41. JVM的永久代中会发生垃圾回收么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#42-Java中的两种异常类型是什么？他们有什么区别？"><span class="toc-number">42.</span> <span class="toc-text">42. Java中的两种异常类型是什么？他们有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#43-Java中的两种异常类型是什么？他们有什么区别？"><span class="toc-number">43.</span> <span class="toc-text">43. Java中的两种异常类型是什么？他们有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#44-Java中Exception和Error有什么区别？"><span class="toc-number">44.</span> <span class="toc-text">44. Java中Exception和Error有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#45-throw和throws有什么区别？"><span class="toc-number">45.</span> <span class="toc-text">45. throw和throws有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#46-异常处理完成以后，Exception对象会发生什么变化？"><span class="toc-number">46.</span> <span class="toc-text">46. 异常处理完成以后，Exception对象会发生什么变化？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#47-finally代码块和finalize-方法有什么区别？"><span class="toc-number">47.</span> <span class="toc-text">47. finally代码块和finalize()方法有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#48-什么是Applet？解释一下Applet的生命周期-当applet被载入的时候会发生什么？"><span class="toc-number">48.</span> <span class="toc-text">48. 什么是Applet？解释一下Applet的生命周期.当applet被载入的时候会发生什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#49-Applet和普通的Java应用程序有什么区别？"><span class="toc-number">49.</span> <span class="toc-text">49. Applet和普通的Java应用程序有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#50-Java-applet有哪些限制条件？"><span class="toc-number">50.</span> <span class="toc-text">50. Java applet有哪些限制条件？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#51-什么是不受信任的applet？"><span class="toc-number">51.</span> <span class="toc-text">51. 什么是不受信任的applet？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#52-从网络上加载的applet和从本地文件系统加载的applet有什么区别？"><span class="toc-number">52.</span> <span class="toc-text">52. 从网络上加载的applet和从本地文件系统加载的applet有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#53-applet类加载器是什么？它会做哪些工作？"><span class="toc-number">53.</span> <span class="toc-text">53.applet类加载器是什么？它会做哪些工作？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#54-applet安全管理器是什么？它会做哪些工作？"><span class="toc-number">54.</span> <span class="toc-text">54. applet安全管理器是什么？它会做哪些工作？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#77-数据库连接池是什么意思？"><span class="toc-number">55.</span> <span class="toc-text">77.数据库连接池是什么意思？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#90-解释下Serialization和Deserialization"><span class="toc-number">56.</span> <span class="toc-text">90. 解释下Serialization和Deserialization</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#91-什么是Servlet？说一下Servlet的体系结构。"><span class="toc-number">57.</span> <span class="toc-text">91. 什么是Servlet？说一下Servlet的体系结构。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#92-Applet和Servlet有什么区别？"><span class="toc-number">58.</span> <span class="toc-text">92. Applet和Servlet有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#93-HTTP响应的结构是怎么样的？"><span class="toc-number">59.</span> <span class="toc-text">93. HTTP响应的结构是怎么样的？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#102-什么是cookie？session和cookie有什么区别？"><span class="toc-number">60.</span> <span class="toc-text">102. 什么是cookie？session和cookie有什么区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#117-封装的定义和好处有哪些？"><span class="toc-number">61.</span> <span class="toc-text">117. 封装的定义和好处有哪些？</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

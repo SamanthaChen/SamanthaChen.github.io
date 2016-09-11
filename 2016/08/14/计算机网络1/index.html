@@ -1,0 +1,655 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>计算机网络-概述-笔记 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="OSI七层模型
+
+物理层（Physical） 实现在物理媒体上透明地传送原始比特流。
+数据链路层（Data Link） 在物理线路上提供可靠的数据传输，使之对网络层呈现为一条无错的线路。 主要功能服务有：物理地址、成帧、定界与同步、差错恢复法、流量控制和信道的访问控制等。
+网络层（Network） 在源结点与目的结点之间建立、维护、终止网络连接。 主要功能服务有：路由选择、数据分组转发、流量控制与">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络-概述-笔记">
+<meta property="og:url" content="http://yoursite.com/2016/08/14/计算机网络1/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="OSI七层模型
+
+物理层（Physical） 实现在物理媒体上透明地传送原始比特流。
+数据链路层（Data Link） 在物理线路上提供可靠的数据传输，使之对网络层呈现为一条无错的线路。 主要功能服务有：物理地址、成帧、定界与同步、差错恢复法、流量控制和信道的访问控制等。
+网络层（Network） 在源结点与目的结点之间建立、维护、终止网络连接。 主要功能服务有：路由选择、数据分组转发、流量控制与">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network5.png">
+<meta property="og:updated_time" content="2016-08-16T08:33:44.860Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计算机网络-概述-笔记">
+<meta name="twitter:description" content="OSI七层模型
+
+物理层（Physical） 实现在物理媒体上透明地传送原始比特流。
+数据链路层（Data Link） 在物理线路上提供可靠的数据传输，使之对网络层呈现为一条无错的线路。 主要功能服务有：物理地址、成帧、定界与同步、差错恢复法、流量控制和信道的访问控制等。
+网络层（Network） 在源结点与目的结点之间建立、维护、终止网络连接。 主要功能服务有：路由选择、数据分组转发、流量控制与">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network1.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/14/计算机网络1/" title="计算机网络-概述-笔记" itemprop="url">计算机网络-概述-笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-14T09:03:51.007Z" itemprop="datePublished"> Published 2016-08-14</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#OSI七层模型"><span class="toc-number">1.</span> <span class="toc-text">OSI七层模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#五层协议"><span class="toc-number">2.</span> <span class="toc-text">五层协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#数据链路层"><span class="toc-number">3.</span> <span class="toc-text">数据链路层</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要设计数据链路层"><span class="toc-number">3.1.</span> <span class="toc-text">为什么要设计数据链路层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#简单模型"><span class="toc-number">3.2.</span> <span class="toc-text">简单模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三个基本问题"><span class="toc-number">3.3.</span> <span class="toc-text">三个基本问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MAC地址"><span class="toc-number">3.4.</span> <span class="toc-text">MAC地址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#集线器和交换机"><span class="toc-number">3.5.</span> <span class="toc-text">集线器和交换机</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="OSI七层模型"><a href="#OSI七层模型" class="headerlink" title="OSI七层模型"></a>OSI七层模型</h1><p><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network1.png" alt=""></p>
+<ol>
+<li>物理层（Physical）<br> 实现在物理媒体上透明地传送原始比特流。</li>
+<li>数据链路层（Data Link）<br> 在物理线路上提供可靠的数据传输，使之对网络层呈现为一条无错的线路。<br> 主要功能服务有：物理地址、成帧、定界与同步、差错恢复法、流量控制和信道的访问控制等。</li>
+<li>网络层（Network）<br> 在源结点与目的结点之间建立、维护、终止网络连接。<br> 主要功能服务有：路由选择、数据分组转发、流量控制与拥塞控制、差错检测与灰度、流量统计与记账</li>
+<li>传输层 (Transport)<br> 为源端主机到目的端主机提供可靠的、满足服务质量要求的数据传输服务。<br> 主要功能和服务：<pre><code>屏蔽各类通信子网的差异，使上层不受通信子网技术变化的影响；
+弥补应用层和通信子网间差异；提供进程级通信能力。
+</code></pre></li>
+<li>会话层（Session）<br> 建立、管理和中止不同机器上的应用程序之间的会话。<br> 会话：完成一项任务而进行的一系列相关的信息交换。</li>
+<li>表示层（Presentation）<br> 处理被传送数据的表示问题，即信息的语法和语义。</li>
+<li>应用层(Application)<br> 为用户的应用程序提供网络通信服务<br> 主要功能包括：<pre><code>识别并证实目的通信方的可用性
+使协同工作的应用程序之间进行同步
+判断是否为通信过程申请了足够的资源
+</code></pre></li>
+</ol>
+<p>应用层（报文）<br>    负责用户信息的语义表示，即：做什么？<br>表示层（报文）<br>    解决用户信息的语法表示，即：任务怎么描述？<br>会话层（报文）<br>    会话的管理与数据的同步，即：从何时、何处开始？<br>传输层（报文）<br>    建立一条传输的连接，即：对方在何处？<br>网络层（分组或包）<br>    选择合适的路由，即：走哪条路可到达该处？<br>数据链路层（帧）<br>    在链路上无差错地传送帧，即：每一步应该怎样走？<br>物理层（比特）<br>    将比特流送到物理媒体上传送，即：怎样利用物理媒体？</p>
+<h1 id="五层协议"><a href="#五层协议" class="headerlink" title="五层协议"></a>五层协议</h1><p><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network2.png" alt=""><br>TCP/IP 是四层的体系结构：应用层、运输层、网际层和网络接口层。<br>但最下面的网络接口层并没有具体内容。<br>因此往往采取折中的办法，即综合 OSI 和 TCP/IP 的优点，采用一种只有五层协议的体系结构 。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network3.png" alt=""></p>
+<h1 id="数据链路层"><a href="#数据链路层" class="headerlink" title="数据链路层"></a>数据链路层</h1><h2 id="为什么要设计数据链路层"><a href="#为什么要设计数据链路层" class="headerlink" title="为什么要设计数据链路层"></a>为什么要设计数据链路层</h2><ul>
+<li>在原始的物理传输线路上传输数据信号是有差错的，存在一定的误码率；</li>
+<li>设计数据链路层的目的就是如何在有差错的线路上，进行无差错传输。向网络层提供高质量的服务。</li>
+<li>从网络参考来看，物理层之上的各层都有改善数据传输质量的要求，数据链路层是重要的一层。</li>
+</ul>
+<h2 id="简单模型"><a href="#简单模型" class="headerlink" title="简单模型"></a>简单模型</h2><p><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network4.png" alt=""><br>数据链路层传送的是帧<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network5.png" alt=""></p>
+<h2 id="三个基本问题"><a href="#三个基本问题" class="headerlink" title="三个基本问题"></a>三个基本问题</h2><ol>
+<li>封装成帧<br>封装成帧(framing)就是在一段数据的前后分别添加首部和尾部，然后就构成了一个帧。确定帧的界限。<br>首部和尾部的一个重要作用就是进行帧定界。  </li>
+<li>透明传输<br>发送端的数据链路层在数据中出现控制字符“SOH”或“EOT”的前面插入一个转义字符“ESC”(其十六进制编码是 1B)。<br>字节填充(byte stuffing)或字符填充(character stuffing)——接收端的数据链路层在将数据送往网络层之前删除插入的转义字符。<br>如果转义字符也出现数据当中，那么应在转义字符前面插入一个转义字符。当接收端收到连续的两个转义字符时，就删除其中前面的一个。 </li>
+<li>差错控制<br>在一段时间内，传输错误的比特占所传输比特总数的比率称为误码率 BER (Bit Error Rate)。<br>误码率与信噪比有很大的关系</li>
+</ol>
+<h2 id="MAC地址"><a href="#MAC地址" class="headerlink" title="MAC地址"></a>MAC地址</h2><p>在局域网中，硬件地址又称为物理地址，或 MAC 地址（48位）。  </p>
+<h2 id="集线器和交换机"><a href="#集线器和交换机" class="headerlink" title="集线器和交换机"></a>集线器和交换机</h2><ul>
+<li><p>集线器：集线器（HUB），它是工作在物理层的设备， 由于它只是工作在物理层的设备，所以它并不关心也不可能关心OSI上面几层所涉及的。Hub是一个共享设备，主要提供信号放大和中转的功能，它把一个端口接收的所有信号向所有端口分发出去。</p>
+</li>
+<li><p>网桥：网桥又称桥接器，英文名Network Bridge，数据链路层设备。它也是转发数据包的设备，但和HUB不一样的是，它工作在数据链路层，HUB只能看懂物理层上的东西（比如一段物理信号），网桥却能看懂一些帧的信息。在以太网构造的局域网上，最终的寻址是以数据链路层的MAC地址作为标识的(就是用MAC地址可以在局域网上找到一台唯一的机器)，网桥能从发来的数据包中提取MAC信息，并且根据MAC信息对帧进行有目的的转发，而不采用广播的方式，这样就能减少广播风暴的出现，提升整个网络的效率</p>
+</li>
+</ul>
+<ul>
+<li>交换机(Switch)是一种基于MAC（网卡的硬件地址）识别，能完成封装转发数据包功能的网络设备。交换机可以“学习”MAC地址，并把其存放在内部地址表中，通过在数据帧的始发者和目标接收者之间建立临时的交换路径，使数据帧直接由源地址到达目的地址。</li>
+</ul>
+<p>网桥和集线器的不同：<br>集线器在转发帧时，不对传输媒体进行检测。<br>网桥在转发帧之前必须执行 CSMA/CD 算法。<br>若在发送过程中出现碰撞，就必须停止发送和进行退避。</p>
+<p>集线器属于一层设备，数据进来以后广播形式发送，对应OSI物理层</p>
+<p>网桥属于二层设备，根据MAC地址进行帧转发，可以看做是2层路由，对应OSI数据链路层</p>
+<p>交换机属于二层设备，根据MAC地址进行数据转发，他跟集线器不同于他每一个端口属于一个冲突域，而集线器所有端口属于一个冲突域，对应OSI的数据链路层。以太网交换机实质上就是一个多接口的网桥。</p>
+<p>路由器是三层设备，根据IP进行寻址转发数据包，对应OSI网络层 </p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Network/">Network</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Interview/">Interview</a><a href="/tags/Network/">Network</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/14/计算机网络1/" data-title="计算机网络-概述-笔记 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/15/计算机网络2/" title="计算机网络-网络层-笔记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  计算机网络-网络层-笔记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/14/计算机操作系统_汤小丹_笔记7/"  title="计算机操作系统--I/O管理-笔记">
+ <strong>下一篇：</strong><br/> 
+ <span>计算机操作系统--I/O管理-笔记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/14/计算机网络1/" data-title="计算机网络-概述-笔记" data-url="http://yoursite.com/2016/08/14/计算机网络1/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#OSI七层模型"><span class="toc-number">1.</span> <span class="toc-text">OSI七层模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#五层协议"><span class="toc-number">2.</span> <span class="toc-text">五层协议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#数据链路层"><span class="toc-number">3.</span> <span class="toc-text">数据链路层</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要设计数据链路层"><span class="toc-number">3.1.</span> <span class="toc-text">为什么要设计数据链路层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#简单模型"><span class="toc-number">3.2.</span> <span class="toc-text">简单模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三个基本问题"><span class="toc-number">3.3.</span> <span class="toc-text">三个基本问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MAC地址"><span class="toc-number">3.4.</span> <span class="toc-text">MAC地址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#集线器和交换机"><span class="toc-number">3.5.</span> <span class="toc-text">集线器和交换机</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

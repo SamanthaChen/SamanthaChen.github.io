@@ -1,0 +1,757 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>数据库-第7章-数据库系统-笔记 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="事务模型事务的概念：
+- 一个存取或改变数据库内容的程序的运行称为一个数据库事务，简称事务。
+- 事务是数据库应用程序的基本逻辑单位。 
+多个事务可同时运行并同时要求存取或修改同一个数据库记录。如果不对并发运行的事务加以适当的控制，则会引起很多问题。
+
+事务是数据库系统中故障恢复和并发控制的基本单位
+事务管理主要包括数据库恢复和并发控制
+前者在系统发生故障后，将数据库恢复为某个正确或一致状态
+后者">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库-第7章-数据库系统-笔记">
+<meta property="og:url" content="http://yoursite.com/2016/08/19/数据库2_数据库系统/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="事务模型事务的概念：
+- 一个存取或改变数据库内容的程序的运行称为一个数据库事务，简称事务。
+- 事务是数据库应用程序的基本逻辑单位。 
+多个事务可同时运行并同时要求存取或修改同一个数据库记录。如果不对并发运行的事务加以适当的控制，则会引起很多问题。
+
+事务是数据库系统中故障恢复和并发控制的基本单位
+事务管理主要包括数据库恢复和并发控制
+前者在系统发生故障后，将数据库恢复为某个正确或一致状态
+后者">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db13.png">
+<meta property="og:updated_time" content="2016-08-19T07:55:54.757Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据库-第7章-数据库系统-笔记">
+<meta name="twitter:description" content="事务模型事务的概念：
+- 一个存取或改变数据库内容的程序的运行称为一个数据库事务，简称事务。
+- 事务是数据库应用程序的基本逻辑单位。 
+多个事务可同时运行并同时要求存取或修改同一个数据库记录。如果不对并发运行的事务加以适当的控制，则会引起很多问题。
+
+事务是数据库系统中故障恢复和并发控制的基本单位
+事务管理主要包括数据库恢复和并发控制
+前者在系统发生故障后，将数据库恢复为某个正确或一致状态
+后者">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db13.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/19/数据库2_数据库系统/" title="数据库-第7章-数据库系统-笔记" itemprop="url">数据库-第7章-数据库系统-笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-19T00:43:04.107Z" itemprop="datePublished"> Published 2016-08-19</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#事务模型"><span class="toc-number">1.</span> <span class="toc-text">事务模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#事务的性质"><span class="toc-number">1.1.</span> <span class="toc-text">事务的性质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL的事务管理"><span class="toc-number">1.2.</span> <span class="toc-text">SQL的事务管理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#故障分类"><span class="toc-number">2.</span> <span class="toc-text">故障分类</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#数据库恢复技术"><span class="toc-number">3.</span> <span class="toc-text">数据库恢复技术</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#数据库备份"><span class="toc-number">3.1.</span> <span class="toc-text">数据库备份</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据库日志"><span class="toc-number">3.2.</span> <span class="toc-text">数据库日志</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#恢复的策略"><span class="toc-number">3.3.</span> <span class="toc-text">恢复的策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#事务故障的恢复"><span class="toc-number">3.3.1.</span> <span class="toc-text">事务故障的恢复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#系统故障的恢复"><span class="toc-number">3.3.2.</span> <span class="toc-text">系统故障的恢复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#介质故障的恢复"><span class="toc-number">3.3.3.</span> <span class="toc-text">介质故障的恢复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#采用检查点的恢复"><span class="toc-number">3.3.4.</span> <span class="toc-text">采用检查点的恢复</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#数据库并发控制"><span class="toc-number">4.</span> <span class="toc-text">数据库并发控制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#可串行性的判定方法"><span class="toc-number">4.1.</span> <span class="toc-text">可串行性的判定方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基于锁的并发控制"><span class="toc-number">5.</span> <span class="toc-text">基于锁的并发控制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#加锁协议"><span class="toc-number">5.1.</span> <span class="toc-text">加锁协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一级加锁协议"><span class="toc-number">5.1.1.</span> <span class="toc-text">一级加锁协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二级加锁协议"><span class="toc-number">5.1.2.</span> <span class="toc-text">二级加锁协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三级加锁协议"><span class="toc-number">5.1.3.</span> <span class="toc-text">三级加锁协议</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#两段锁协议-2PL"><span class="toc-number">5.2.</span> <span class="toc-text">两段锁协议(2PL)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#活锁"><span class="toc-number">5.3.</span> <span class="toc-text">活锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#死锁"><span class="toc-number">5.4.</span> <span class="toc-text">死锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#死锁预防"><span class="toc-number">5.4.1.</span> <span class="toc-text">死锁预防</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#死锁的检测处理和预防"><span class="toc-number">5.4.2.</span> <span class="toc-text">死锁的检测处理和预防</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他并发控制技术"><span class="toc-number">6.</span> <span class="toc-text">其他并发控制技术</span></a></li></ol>
+		
+		</div>
+		
+		<h1 id="事务模型"><a href="#事务模型" class="headerlink" title="事务模型"></a>事务模型</h1><p>事务的概念：</p>
+<pre><code>- 一个存取或改变数据库内容的程序的运行称为一个数据库事务，简称事务。
+- 事务是数据库应用程序的基本逻辑单位。 
+</code></pre><p>多个事务可同时运行并同时要求存取或修改同一个数据库记录。如果不对并发运行的事务加以适当的控制，则会引起很多问题。</p>
+<ul>
+<li>事务是数据库系统中故障恢复和并发控制的基本单位</li>
+<li>事务管理主要包括数据库恢复和并发控制<ul>
+<li>前者在系统发生故障后，将数据库恢复为某个正确或一致状态</li>
+<li>后者在多个事务并发访问数据库时，避免访问冲突所引起的数据不一致。</li>
+<li>这两种基本措施保证了事务正确执行，是数据库管理系统的重要组成部分</li>
+</ul>
+</li>
+</ul>
+<p>事务通常是以BEGIN TRANSACTION开始，以COMMIT或ROLLBACK结束。</p>
+<h2 id="事务的性质"><a href="#事务的性质" class="headerlink" title="事务的性质"></a>事务的性质</h2><ol>
+<li>原子性（Atomicity）</li>
+<li>一致性（Consistency）</li>
+<li>隔离性（Isolation）</li>
+<li>持续性（Durablility）<br>这个四个特性也简称为事务的ACID特性</li>
+</ol>
+<p>1．原子性<br>    事务是数据库的逻辑工作单位，事务中包括的诸操作要么都做，要么都不做。<br>2．一致性<br>    事务执行的结果必须是使数据库从一个一致性状态变到另一个一致性状态。因此当数据库只包含成功事务提交的结果时，就说数据库处于一致性状态。如果数据库系统运行中发生故障，有些事务尚未完成就被迫中断，系统将事务中对数据库的所有已完成的操作全部撤消，回滚到事务开始时的一致状态。<br>3．隔离性<br>    一个事务的执行不能被其他事务干扰。即一个事务内部的操作及使用的数据对其他并发事务是隔离的，并发执行的各个事务之间不能互相干扰。<br>4．持续性<br>    持续性也称永久性（Permanence），指一个事务一旦提交，它对数据库中数据的改变就应该是永久性的。接下来的其他操作或故障不应该对其执行结果有任何影响。 </p>
+<p>保证事务在故障发生时满足ACID性质的措施称为<strong>恢复技术</strong><br>保证多个事务在并行执行时满足ACID性质的措施称为<strong>并发控制技术</strong><br>恢复和并发控制是保证事务正确运行的两项基本技术，它们被合称为<strong>事务管理</strong></p>
+<p>基于简化的表达方式，可把事务涉及的基本存取操作分为以下两种：<br> -read（X）：从数据库中将数据对象X读入到执行read操作的事务的一个局部缓冲区中。<br> -write（X）：从执行write的事务的局部缓冲区把数据对象X写入数据库。<br>write操作的结果可以暂时存储在内存中，DBMS的恢复子系统和底层操作系统协同控制，以决定写回磁盘的时机</p>
+<p>为了在发生故障时方便恢复，系统需要对事务所处的状态进行跟踪记录，包括事务的起始、提交、撤销或终止等信息。</p>
+<h2 id="SQL的事务管理"><a href="#SQL的事务管理" class="headerlink" title="SQL的事务管理"></a>SQL的事务管理</h2><p>在SQL中，事务的定义和前面提到的事务的概念类似，即它是一个逻辑工作单元，并且保持原子性<br>事务显式的结束语句可以是COMMIT或ROLLBACK，书写形式如下列SQL语句：<br>    COMMIT [WORK]：提交当前事务，开始执行一个新事务。<br>    ROLLBACK [WORK]：中止当前事务，撤销事务的影响。</p>
+<h1 id="故障分类"><a href="#故障分类" class="headerlink" title="故障分类"></a>故障分类</h1><p>我们可以将使得数据库系统无法正常运行的任何事件都称为故障<br>根据故障的影响范围，我们可以将故障分为以下类型:</p>
+<pre><code>- 事务故障：逻辑错误、系统错误
+- 系统故障：
+- 介质故障
+</code></pre><h1 id="数据库恢复技术"><a href="#数据库恢复技术" class="headerlink" title="数据库恢复技术"></a>数据库恢复技术</h1><p>故障恢复机制涉及两个关键问题是：</p>
+<ul>
+<li>第一，如何建立冗余数据</li>
+<li>第二，如何利用这些冗余数据实施数据库恢复<br>建立冗余数据最常用的技术是建立数据<strong>备份</strong>和事务<strong>日志</strong>文件<br>在数据库系统中，这两种方法通常是一起使用的</li>
+</ul>
+<h2 id="数据库备份"><a href="#数据库备份" class="headerlink" title="数据库备份"></a>数据库备份</h2><p>所谓备份即DBA定期地将整个数据库复制到磁带或另一个磁盘上保存起来的过程。这些备用的数据文本称为后备副本(backup)或后援副本<br>当数据库遭到破坏后可以将后备副本重新装入，但重装后备副本只能将数据库恢复到备份时的状态，要想恢复到故障发生时的状态，必须重新运行自备份以后的所有更新事务</p>
+<p>备份又可以分增量备份和海量备份两种方式<br>增量备份是指每次只备份上一次备份后更新过的数据，海量备份每次备份全部数据<br>从恢复角度看，使用全备份得到的后备副本进行恢复一般说来会更方便些<br>但是，如果数据库很大，事务处理又十分频繁，则增量备份方式更实用更有效 </p>
+<h2 id="数据库日志"><a href="#数据库日志" class="headerlink" title="数据库日志"></a>数据库日志</h2><p>具体地讲：事务故障恢复和系统故障必须用日志文件 </p>
+<p>对于以记录为单位的日志文件，日志文件中需要登记的内容包括： </p>
+<ul>
+<li>各个事务的开始(BEGIN TRANSACTION)标记 </li>
+<li>各个事务的结束(COMMIT或ROLL BACK)标记 </li>
+<li>各个事务的所有更新操作<br>这里每个事务开始的标记、每个事务的结束标记和每个更新操作均作为日志文件中的一个日志记录(log record) </li>
+</ul>
+<h2 id="恢复的策略"><a href="#恢复的策略" class="headerlink" title="恢复的策略"></a>恢复的策略</h2><h3 id="事务故障的恢复"><a href="#事务故障的恢复" class="headerlink" title="事务故障的恢复"></a>事务故障的恢复</h3><p>事务故障是指事务在运行至正常终止点前被中止，这时恢复子系统应利用日志文件撤消（Undo）此事务已对数据库进行的修改<br>事务故障的恢复是由系统自动完成的，对用户是透明的。系统的恢复步骤是： </p>
+<pre><code>- 反向扫描文件日志（即从最后向前扫描日志文件），查找该事务的更新操作
+- 对该事务的更新操作执行逆操作。即将日志记录中“更新前的值”写入数据库。这样，如果记录中是插入操作，则相当于做删除操作（因此时“更新前的值”为空）。若记录中是删除操作，则做插入操作，若是修改操作，则相当于用修改前值代替修改后值
+- 继续反向扫描日志文件，查找该事务的其他更新操作，并做同样处理
+- 如此处理下去，直至读到此事务的开始标记，事务故障恢复就完成了
+</code></pre><h3 id="系统故障的恢复"><a href="#系统故障的恢复" class="headerlink" title="系统故障的恢复"></a>系统故障的恢复</h3><ul>
+<li>前面已讲过，系统故障造成数据库不一致状态的原因有两个，一是未完成事务对数据库的更新可能已写入数据库；二是已提交事务对数据库的更新可能还留在缓冲区没来得及写入数据库</li>
+<li>因此恢复操作就是要撤消故障发生时未完成的事务，并且重做已完成的事务<br>系统故障的恢复是由系统在重新启动时自动完成的，一般不需要用户干预 </li>
+</ul>
+<h3 id="介质故障的恢复"><a href="#介质故障的恢复" class="headerlink" title="介质故障的恢复"></a>介质故障的恢复</h3><h3 id="采用检查点的恢复"><a href="#采用检查点的恢复" class="headerlink" title="采用检查点的恢复"></a>采用检查点的恢复</h3><h1 id="数据库并发控制"><a href="#数据库并发控制" class="headerlink" title="数据库并发控制"></a>数据库并发控制</h1><p>事务并发执行可能引起的问题（破坏了隔离性）：</p>
+<ol>
+<li>丢失修改<br> 两个事务T1和T2读入同一数据并修改，T2提交的结果破坏了T1提交的结果，导致T1的修改被丢失。</li>
+<li>读脏数据<br> 读“脏”数据是指事务T1修改某一数据，并将其写回磁盘，事务T2读取同一数据后，T1由于某种原因被撤消，这时T1已修改过的数据恢复原值，T2读到的数据就与数据库中的数据不一致，则T2读到的数据就为“脏”数据，即不正确的数据</li>
+<li>不可重复读<br> 不可重复读是指事务T1读取数据后，事务T2执行更新操作，使T1无法再现前一次读取结果。具体地讲，不可重复读包括三种情况:<pre><code>- 事务T1读取某一数据后，事务T2对其做了修改，当事务T1再次读该数据时，得到与前一次不同的值。例如T1读取B=100进行运算，T2读取同一数据B，对其进行修改后将B=200写回数据库。T1为了对读取值校对重读B，B已为200，与第一次读取值不一致
+- 事务T1按一定条件从数据库中读取了某些数据记录后，事务T2删除了其中部分记录，当T1再次按相同条件读取数据时，发现某些记录神密地消失了
+- 事务T1按一定条件从数据库中读取某些数据记录后，事务T2插入了一些记录，当T1再次按相同条件读取数据时，发现多了一些记录
+</code></pre></li>
+</ol>
+<p>因此将所有事务串行起来的调度策略一定是正确的调度策略<br>在一个调度中，不同事务的操作可以交叉执行，但必须保持同一个事务中各个操作的次序</p>
+<p>多个事务的并发执行是正确的，当且仅当其结果与按某一次序串行地执行它们时的结果相同。我们称这种调度策略为可串行化（Serializable）的调度<br>可串行性（Serializability）是并发事务调度正确性的准则<br>按这个准则规定，一个给定的并发调度，当且仅当它是可串行化的，才认为是正确的调度</p>
+<h2 id="可串行性的判定方法"><a href="#可串行性的判定方法" class="headerlink" title="可串行性的判定方法"></a>可串行性的判定方法</h2><p>前趋图是一个有向图G=(V,E)，其中V是顶点的集合，E是边的集合。V包含所有参与调度事务。边可以通过分析事务之间的冲突操作获得，其规则如下:<br>如果2个事务Ti和Tj之间有一对冲突操作op1和op2，在S中op1被安排在op2之前，则在E中加入边：Ti → Tj。<br>可以证明:<br>① 如果前趋图中存在回路，则S不可能冲突等价于任何串行调度<br>② 如果前趋图中不存在回路，则可以用拓扑排序得到S的一个等价的串行调度</p>
+<p>目前DBMS普遍采用加锁方法实现并发操作调度的可串行性，从而保证调度的正确性。<br>两段锁（Two-Phase Locking，简称2PL）协议就是保证并发调度可串行性的加锁协议<br>除此之外还有其他一些方法，如时标方法、乐观方法等来保证调度的正确性</p>
+<h1 id="基于锁的并发控制"><a href="#基于锁的并发控制" class="headerlink" title="基于锁的并发控制"></a>基于锁的并发控制</h1><p>所谓加锁就是事务T在对某个数据对象例如表、记录等操作之前，先向系统发出请求，对其加锁<br>加锁后事务T对该数据对象有了一定的控制，在事务T释放它的锁之前，其它的事务不能更新此数据对象</p>
+<p>基本的加锁类型有3种: </p>
+<ul>
+<li>排它锁(Exclusive locks 简记为X锁)</li>
+<li>共享锁(Share locks 简记为S锁)</li>
+<li>U锁</li>
+</ul>
+<ol>
+<li><p>排它锁(X锁)</p>
+<ul>
+<li>排它锁(X锁)又称为写锁。若事务T对数据对象A加上X锁，则只允许T读取和修改A，其它任何事务都不能再对A加任何类型的锁，直到T释放A上的锁。这就保证了其它事务在T释放A上的锁之前不能再读取和修改A</li>
+</ul>
+</li>
+<li><p>共享锁(S锁)</p>
+<ul>
+<li>共享锁(S锁)又称为读锁。若事务T对数据对象A加上S锁，则事务可以T读A但不能修改A，其它事务只能再对A加S锁，而不能加X锁，直到T释放A上的S锁。这就保证了其它事务可以读A，但在T释放A上的S锁之前不能对A做任何修改</li>
+</ul>
+</li>
+<li><p>U锁</p>
+<ul>
+<li>除X锁、S锁两种所之外，又增加了U锁。事务在进行更新时，一般都需要先读出旧的内容，在内存中修改后，再将修改后的内容写回。在此过程中，除了最后写回阶段，被更新的数据对象仍然可被其他事务访问。U锁就是为此目的设置的</li>
+<li>事务在需要(或有可能)更新一个数据对象时，首先申请对它的U锁，数据对象加了U锁后，仍允许其他事务对其加S锁</li>
+<li>待最后需要写入时，事务再申请将U锁升级为X锁。由于不必在事务执行的全过程中加X锁，所以进一步提高了系统的并发度 </li>
+</ul>
+</li>
+</ol>
+<p>锁的相容性：<br>||S|U|X|<br>|—|—|—|—|<br>|S|Y|Y|N|<br>|U|Y|N|N|<br>|X|N|N|N|</p>
+<h2 id="加锁协议"><a href="#加锁协议" class="headerlink" title="加锁协议"></a>加锁协议</h2><p>不同级别的加锁协议达到的系统一致性级别是不同的</p>
+<h3 id="一级加锁协议"><a href="#一级加锁协议" class="headerlink" title="一级加锁协议"></a>一级加锁协议</h3><ul>
+<li>1级加锁协议：事务T在修改数据R之前必须先对其加X锁，直到事务结束(EOT)才释放, 事务结束包括正常结束（COMMIT）和非正常结束（ROLLBACK）</li>
+<li>1级加锁协议可防止丢失修改，并保证事务T是可恢复的</li>
+<li>在1级加锁协议中，如果仅仅是读数据而不对其进行修改，则不需要加锁，所以它不能保证可重复读及不读“脏”数据</li>
+</ul>
+<h3 id="二级加锁协议"><a href="#二级加锁协议" class="headerlink" title="二级加锁协议"></a>二级加锁协议</h3><ul>
+<li>2级加锁协议：1级加锁协议加上事务T在读取数据A之前必须先对其加S锁，读完后即可释放S锁</li>
+<li>2级加锁协议除了可以防止了丢失修改，还可进一步防止读“脏”数据</li>
+</ul>
+<h3 id="三级加锁协议"><a href="#三级加锁协议" class="headerlink" title="三级加锁协议"></a>三级加锁协议</h3><ul>
+<li>3级加锁协议：2级加锁协议加上事务T在读取数据A之前必须先对其加S锁，直到事务结束才释放</li>
+<li>3级加锁协议除防止了丢失修改和不读‘脏’数据外，还进一步防止了不可重复读<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db13.png" alt=""></li>
+</ul>
+<h2 id="两段锁协议-2PL"><a href="#两段锁协议-2PL" class="headerlink" title="两段锁协议(2PL)"></a>两段锁协议(2PL)</h2><p>所谓“两段”锁的含义是，事务分为两个阶段</p>
+<ul>
+<li>第一阶段是<strong>获得封锁</strong>，也称为扩展阶段。这在阶段，事务可以申请获得任何数据项上的任何类型的锁，但是不能释放任何锁</li>
+<li>第二阶段是<strong>释放封锁</strong>，也称为收缩阶段。在这阶段，事务可以释放任何数据项上的任何类型的锁，但是不能再申请任何锁</li>
+</ul>
+<p>可以证明，若所有并发执行的事务均遵守两段锁协议，则对这些事务的任何并发调度都是可串行化的</p>
+<p>另外要注意两段锁协议和防止死锁的一次封锁法的异同<br>一次封锁法要求每个事务必须一次将所有要使用的数据全部加锁，否则就不能继续执行，因此一次封锁法遵守两段锁协议<br>但是两段锁协议并不要求事务必须一次将所有要使用的数据全部加锁，因此遵守两段锁协议的事务可能发生死锁</p>
+<h2 id="活锁"><a href="#活锁" class="headerlink" title="活锁"></a>活锁</h2><p>如果事务T1封锁了数据R，事务T2又请求封锁R，于是T2等待；T3也请求封锁R，当T1释放了R上的封锁之后系统首先批准了T3的请求，T2仍然等待；然后T4又请求封锁R，当T3释放了R上的封锁之后系统又批准了T4的请求，…，T2有可能永远等待，这就是活锁<br>避免活锁的简单方法是采用“先来先服务”的策略</p>
+<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><p>死锁概念：<br>和操作系统一样，基于封锁的并发控制方法可能引起死锁<br>一个事务如果申请锁而没有获准，则其必须等待其他事务释放锁。这就形成事务间的等待关系<br>当事务中出现循环等待时，如果不加干涉，则会一直等待下去，这就是死锁(dead lock)</p>
+<p>对于死锁有两种方法：一是防止死锁的出现；二是由系统检测死锁，一旦发现则对其处理</p>
+<h3 id="死锁预防"><a href="#死锁预防" class="headerlink" title="死锁预防"></a>死锁预防</h3><p>在数据库中，产生死锁的原因是两个或多个事务都已封锁了一些数据对象，然后又都请求对已为其他事务封锁的数据对象加锁，从而出现死等待</p>
+<p>防止死锁的发生其实就是要破坏产生死锁的条件。预防死锁通常有以下几种方法：</p>
+<ol>
+<li><p>一次封锁法<br>一次封锁法要求每个事务必须一次将所有要使用的数据全部加锁，否则就不能继续执行<br>一次封锁法虽然可以有效地防止死锁的发生，但也存在问题，一次就将以后要用到的全部数据加锁，势必扩大了封锁的范围，从而降低了系统的并发度</p>
+</li>
+<li><p>顺序封锁法<br>顺序封锁法是预先对数据对象规定一个封锁顺序，所有事务都按这个顺序实行封锁<br>顺序封锁法可以有效地防止死锁，但也同样存在问题<br>事务的封锁请求往往随着事务的执行而动态地决定，很难事先确定每一个事务要封锁哪些对象，因此也就很难按规定的顺序对数据对象加封</p>
+</li>
+<li><p>一种比较实用的死锁预防方法<br>不难看出，在操作系统中广为采用的预防死锁的策略并不很适合数据库的特点，因此下面介绍一种在DBMS中比较实用的死锁的预防方法<br>在这种方法中，当事务申请锁而未获准时，不是一律等待，而是让某些事务卷回重执(retry)，以避免循环等待</p>
+</li>
+</ol>
+<h3 id="死锁的检测处理和预防"><a href="#死锁的检测处理和预防" class="headerlink" title="死锁的检测处理和预防"></a>死锁的检测处理和预防</h3><ol>
+<li>超时法<br>如果一个事务的等待时间超过了规定的时限，就认为发生了死锁。<br>超时法实现简单，但其不足也很明显。<br>一是有可能误判死锁，事务因为其他原因使等待时间超过时限，系统会误认为发生了死锁。<br>二是时限若设置得太长，死锁发生后不能及时发现</li>
+<li>等待图法<br>事务等待图是一个有向图G=(T,U)。 T为结点的集合，每个结点表示正运行的事务；<br>U为边的集合，每条边表示事务等待的情况。若T1等待T2,则T1、T2之间划一条有向边，从T1指向T2。<br>事务等待图动态地反映了所有事务的等待情况。并发控制子系统周期性地（比如每隔1分钟）检测事务等待图，如果发现图中存在回路，则表示系统中出现了死锁</li>
+</ol>
+<p>死锁的解除<br>死锁发生后，靠事务自身无法解除，必须由DBMS干预<br>通常采用的方法是选择一个处理死锁代价最小的事务，将其撤消，释放此事务持有的所有的锁，使其它事务得以继续运行下去<br>当然，对撤消的事务所执行的数据修改操作必须加以恢复</p>
+<h1 id="其他并发控制技术"><a href="#其他并发控制技术" class="headerlink" title="其他并发控制技术"></a>其他并发控制技术</h1><ol>
+<li><p>基于时间标记的并发控制<br>时间标记协议规定事务的时间标记决定事务的执行次序，如果调度是可串行化的，那么等价的串行调度顺序就是按事务时间标记顺序的串行执行。</p>
+</li>
+<li><p>乐观并发控制<br>在乐观并发控制技术中，事务执行时不做任何检查，直到事务执行结束时，才检查某个事务的修改操作是否违反了可串行性。<br>当使用乐观的并发控制策略时，事务对数据对象的修改不直接写入数据库，而是在内存中保存修改的复本。事务的修改操作经过检查，若不违反可串行性，则将内存中修改复本写入数据库中，并提交事务；否则，撤消该事务，并且稍后重新交付</p>
+</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Database/">Database</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Interview/">Interview</a><a href="/tags/Database/">Database</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/19/数据库2_数据库系统/" data-title="数据库-第7章-数据库系统-笔记 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/19/ThinkingInJava笔记1/" title="Java编程思想概述-笔记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Java编程思想概述-笔记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/18/数据库2_查询优化/"  title="数据库-第5章-查询优化-笔记">
+ <strong>下一篇：</strong><br/> 
+ <span>数据库-第5章-查询优化-笔记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/19/数据库2_数据库系统/" data-title="数据库-第7章-数据库系统-笔记" data-url="http://yoursite.com/2016/08/19/数据库2_数据库系统/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#事务模型"><span class="toc-number">1.</span> <span class="toc-text">事务模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#事务的性质"><span class="toc-number">1.1.</span> <span class="toc-text">事务的性质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL的事务管理"><span class="toc-number">1.2.</span> <span class="toc-text">SQL的事务管理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#故障分类"><span class="toc-number">2.</span> <span class="toc-text">故障分类</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#数据库恢复技术"><span class="toc-number">3.</span> <span class="toc-text">数据库恢复技术</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#数据库备份"><span class="toc-number">3.1.</span> <span class="toc-text">数据库备份</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据库日志"><span class="toc-number">3.2.</span> <span class="toc-text">数据库日志</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#恢复的策略"><span class="toc-number">3.3.</span> <span class="toc-text">恢复的策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#事务故障的恢复"><span class="toc-number">3.3.1.</span> <span class="toc-text">事务故障的恢复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#系统故障的恢复"><span class="toc-number">3.3.2.</span> <span class="toc-text">系统故障的恢复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#介质故障的恢复"><span class="toc-number">3.3.3.</span> <span class="toc-text">介质故障的恢复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#采用检查点的恢复"><span class="toc-number">3.3.4.</span> <span class="toc-text">采用检查点的恢复</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#数据库并发控制"><span class="toc-number">4.</span> <span class="toc-text">数据库并发控制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#可串行性的判定方法"><span class="toc-number">4.1.</span> <span class="toc-text">可串行性的判定方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基于锁的并发控制"><span class="toc-number">5.</span> <span class="toc-text">基于锁的并发控制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#加锁协议"><span class="toc-number">5.1.</span> <span class="toc-text">加锁协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一级加锁协议"><span class="toc-number">5.1.1.</span> <span class="toc-text">一级加锁协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二级加锁协议"><span class="toc-number">5.1.2.</span> <span class="toc-text">二级加锁协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三级加锁协议"><span class="toc-number">5.1.3.</span> <span class="toc-text">三级加锁协议</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#两段锁协议-2PL"><span class="toc-number">5.2.</span> <span class="toc-text">两段锁协议(2PL)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#活锁"><span class="toc-number">5.3.</span> <span class="toc-text">活锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#死锁"><span class="toc-number">5.4.</span> <span class="toc-text">死锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#死锁预防"><span class="toc-number">5.4.1.</span> <span class="toc-text">死锁预防</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#死锁的检测处理和预防"><span class="toc-number">5.4.2.</span> <span class="toc-text">死锁的检测处理和预防</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他并发控制技术"><span class="toc-number">6.</span> <span class="toc-text">其他并发控制技术</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

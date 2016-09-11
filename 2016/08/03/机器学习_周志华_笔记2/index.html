@@ -1,0 +1,728 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>机器学习（周志华）- 第2章模型评估与选择笔记 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="经验误差与过拟合错误率： 分类错误样本数占样本总数精度： 1 - 错误率
+误差：学习器事假预测输出样本与样本真实输出之间的差异
+在训练集上的误差————“训练误差”（“经验误差”）
+在新样本上的误差————“泛化误差”
+我们希望泛化误差小，但是实际无法预知新样本只能采用“经验误差”最小化。
+过拟合：把训练样本自身的一些特点当成所有潜在样本的“普遍规律”，导致泛化性能下降。欠拟合：对训练样本的一般性">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习（周志华）- 第2章模型评估与选择笔记">
+<meta property="og:url" content="http://yoursite.com/2016/08/03/机器学习_周志华_笔记2/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="经验误差与过拟合错误率： 分类错误样本数占样本总数精度： 1 - 错误率
+误差：学习器事假预测输出样本与样本真实输出之间的差异
+在训练集上的误差————“训练误差”（“经验误差”）
+在新样本上的误差————“泛化误差”
+我们希望泛化误差小，但是实际无法预知新样本只能采用“经验误差”最小化。
+过拟合：把训练样本自身的一些特点当成所有潜在样本的“普遍规律”，导致泛化性能下降。欠拟合：对训练样本的一般性">
+<meta property="og:image" content="http://www.fullstackdevel.com/wp-content/uploads/2015/09/53451443447279.png">
+<meta property="og:image" content="http://www.fullstackdevel.com/wp-content/uploads/2015/09/18801443447279.jpg">
+<meta property="og:updated_time" content="2016-08-04T00:26:59.753Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习（周志华）- 第2章模型评估与选择笔记">
+<meta name="twitter:description" content="经验误差与过拟合错误率： 分类错误样本数占样本总数精度： 1 - 错误率
+误差：学习器事假预测输出样本与样本真实输出之间的差异
+在训练集上的误差————“训练误差”（“经验误差”）
+在新样本上的误差————“泛化误差”
+我们希望泛化误差小，但是实际无法预知新样本只能采用“经验误差”最小化。
+过拟合：把训练样本自身的一些特点当成所有潜在样本的“普遍规律”，导致泛化性能下降。欠拟合：对训练样本的一般性">
+<meta name="twitter:image" content="http://www.fullstackdevel.com/wp-content/uploads/2015/09/53451443447279.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/03/机器学习_周志华_笔记2/" title="机器学习（周志华）- 第2章模型评估与选择笔记" itemprop="url">机器学习（周志华）- 第2章模型评估与选择笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-03T04:18:17.509Z" itemprop="datePublished"> Published 2016-08-03</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#经验误差与过拟合"><span class="toc-number">1.</span> <span class="toc-text">经验误差与过拟合</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#评估方法"><span class="toc-number">2.</span> <span class="toc-text">评估方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#留出法"><span class="toc-number">2.1.</span> <span class="toc-text">留出法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#交叉验证"><span class="toc-number">2.2.</span> <span class="toc-text">交叉验证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自助法（bootstrapping）"><span class="toc-number">2.3.</span> <span class="toc-text">自助法（bootstrapping）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#具体步骤如下："><span class="toc-number">2.3.1.</span> <span class="toc-text">具体步骤如下：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优缺点"><span class="toc-number">2.3.2.</span> <span class="toc-text">优缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#调参与最终模型"><span class="toc-number">2.4.</span> <span class="toc-text">调参与最终模型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#性能度量"><span class="toc-number">3.</span> <span class="toc-text">性能度量</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#错误率与精度"><span class="toc-number">3.1.</span> <span class="toc-text">错误率与精度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查准率、查全率与F1"><span class="toc-number">3.2.</span> <span class="toc-text">查准率、查全率与F1</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#平衡点（Break-Even-Point-BEP）"><span class="toc-number">3.2.1.</span> <span class="toc-text">平衡点（Break-Even Point, BEP）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#F1度量"><span class="toc-number">3.2.2.</span> <span class="toc-text">F1度量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#更一般的-F-beta"><span class="toc-number">3.2.3.</span> <span class="toc-text">更一般的$F_{\beta}$</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多次训练、测试产生多个混淆矩阵时"><span class="toc-number">3.2.4.</span> <span class="toc-text">多次训练、测试产生多个混淆矩阵时</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ROC与AUC"><span class="toc-number">3.3.</span> <span class="toc-text">ROC与AUC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#排序损失-mathbf-l-rank"><span class="toc-number">3.4.</span> <span class="toc-text">排序损失 $\mathbf{l}_{rank}$</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PR与ROC"><span class="toc-number">3.5.</span> <span class="toc-text">PR与ROC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代价敏感错误率与代价曲线"><span class="toc-number">3.6.</span> <span class="toc-text">代价敏感错误率与代价曲线</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#比较检验"><span class="toc-number">4.</span> <span class="toc-text">比较检验</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#假设检验"><span class="toc-number">4.1.</span> <span class="toc-text">假设检验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#二项检验"><span class="toc-number">4.1.1.</span> <span class="toc-text">二项检验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#t检验"><span class="toc-number">4.1.2.</span> <span class="toc-text">t检验</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#交叉验证t检验"><span class="toc-number">4.2.</span> <span class="toc-text">交叉验证t检验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#McNemar检验"><span class="toc-number">4.3.</span> <span class="toc-text">McNemar检验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Fridman检验与Nemenyi检验"><span class="toc-number">4.4.</span> <span class="toc-text">Fridman检验与Nemenyi检验</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#偏差与方差"><span class="toc-number">5.</span> <span class="toc-text">偏差与方差</span></a></li></ol>
+		
+		</div>
+		
+		<h1 id="经验误差与过拟合"><a href="#经验误差与过拟合" class="headerlink" title="经验误差与过拟合"></a>经验误差与过拟合</h1><p>错误率： 分类错误样本数占样本总数<br>精度： 1 - 错误率</p>
+<p>误差：学习器事假预测输出样本与样本真实输出之间的差异</p>
+<pre><code>在训练集上的误差————“训练误差”（“经验误差”）
+在新样本上的误差————“泛化误差”
+</code></pre><p>我们希望泛化误差小，但是实际无法预知新样本只能采用“经验误差”最小化。</p>
+<p>过拟合：把训练样本自身的一些特点当成所有潜在样本的“普遍规律”，导致泛化性能下降。<br>欠拟合：对训练样本的一般性质尚未学好。</p>
+<p>模型选择问题：理想方案是对候选模型的泛化误差进行评估，选择最小的。但是无法直接获得泛化误差，而训练误差又容易导致过拟合。如何进行模型评估与选择？看下一节。</p>
+<h1 id="评估方法"><a href="#评估方法" class="headerlink" title="评估方法"></a>评估方法</h1><p>以测试集来测试学习器对新样本的判别能力，以测试误差作为泛化误差的近似。通常假设测试样本也是从样本真实分布的独立同分布采样获得。<br>需要注意测试集应该尽可能与训练集互斥，即测试样本尽量不在训练集中出现、未在训练过程中使用过。<br>于是需要对数据D进行划分出训练集S和测试集T。</p>
+<h2 id="留出法"><a href="#留出法" class="headerlink" title="留出法"></a>留出法</h2><p>直接将数据集D划分为两个互斥的集合S和T。在S训练出模型，用T评估测试误差。<br>需要注意，训练/测试集应该尽可能保持数据的一致性，避免由于数据划分过程引入产生额外的偏差而对最终结果产生影响。</p>
+<p>单次留出法往往结果不够准确，一般采用若干次随机划分、重复实验评估取平局值。但是S与T的取值一般是2/3~4/5用于S，剩余用于测试.</p>
+<h2 id="交叉验证"><a href="#交叉验证" class="headerlink" title="交叉验证"></a>交叉验证</h2><p>将D划分为k个大小相似的互斥子集（分层采样）。每次取k-1个子集做训练集，剩下1个做测试集，进行k次训练和测试，最终返回均值，也称作“k折交叉验证”。交叉验证的稳定和保真性取决于k，k一般取值为10，其他的有5,20等。</p>
+<p>将数据进行划分通常要随机使用不同的划分p次，取p次k折交叉验证均值，如“10次10折交叉验证”。</p>
+<p>若D包含m个样本，k=m称作“留一法”，该方法不收样本划分方式的影响。往往认为比较准确，但是数据集交大时候开销过大。另外NFL表明未必比其他评估算法准确。</p>
+<h2 id="自助法（bootstrapping）"><a href="#自助法（bootstrapping）" class="headerlink" title="自助法（bootstrapping）"></a>自助法（bootstrapping）</h2><p>减少样本S和T规模不同造成的影响。</p>
+<h3 id="具体步骤如下："><a href="#具体步骤如下：" class="headerlink" title="具体步骤如下："></a>具体步骤如下：</h3><p>给定包含m个样本的数据集D，我们对他进行采样产生数据集D’:每次随机从D中挑选一个样本个样本，将其拷贝放到D’中，然后再将该样本重新放回初始数据集D，使得该样本在下次采样时候仍有可能被采到；这个过程重复m次以后就得到包含m个样本的D’。显然D中有一部分样本会在D‘中重复出现多次，而一些则不会出现，不会出现的概率是：<br>$$\lim_{m\to{\infty}}  (1-\frac{1}{m} ) \to \frac{1}{e}\approx 0.368$$<br>即原始数据集中有36.8%不会出现在D’中。</p>
+<p>于是我们可以用D’做训练集，D/D’做测试集，这样实际评估的模型与期望评估的模型都是用m个样本。而仍有1/3没在训练集中的样本用于测试。这样的测试结果称作“包外估计”。</p>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><p>优点：</p>
+<ul>
+<li>数据集较小，难以划分训练、测试集时很有用</li>
+<li>能从原始数据集产生多个不同训练集，对集成学习等有很大好处<br>缺点：</li>
+<li>改变了原始数据集分布，会引入估计误差。<br>因此，在初始数据量足够时，留出法和交叉验证使用更多。</li>
+</ul>
+<h2 id="调参与最终模型"><a href="#调参与最终模型" class="headerlink" title="调参与最终模型"></a>调参与最终模型</h2><p>由于大多数算法有参数设置，需要根据范围和步长进行实验，对模型进行评估。<br>模型评估中选做评估测试的数据集称为“验证集”。<br>例如，在研究对比不同算法的泛化性能时候，我们用测试集上的判别效果来估计模型在实际使用时的泛化能力，而把训练数据另外划分为训练集和测试集，基于验证集上的性能来进行模型选择和调参。（这样训练数据不会变少了？）</p>
+<h1 id="性能度量"><a href="#性能度量" class="headerlink" title="性能度量"></a>性能度量</h1><p>回归任务中常用的度量是均分误差。<br>下面介绍分类任务中常用的性能度量。</p>
+<h2 id="错误率与精度"><a href="#错误率与精度" class="headerlink" title="错误率与精度"></a>错误率与精度</h2><h2 id="查准率、查全率与F1"><a href="#查准率、查全率与F1" class="headerlink" title="查准率、查全率与F1"></a>查准率、查全率与F1</h2><p>对于二分类问题，可以根据真实类别与预测列别组合成下表：</p>
+<table>
+<thead>
+<tr>
+<th>真实情况</th>
+<th>预测</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>正例</td>
+<td>反例</td>
+</tr>
+<tr>
+<td>正例</td>
+<td>TP(真正例)</td>
+<td>FN(假反例)</td>
+</tr>
+<tr>
+<td>反例</td>
+<td>FP(假正例)</td>
+<td>TN（真反例）</td>
+</tr>
+</tbody>
+</table>
+<p>查全率P（Precision）查准率R（Recall）如下：<br>$ P = \frac{TP}{TP+FP}$ (预测为正例的结果中真正例的比例)（包含反例预测为正例）<br>$ R = \frac{TP}{TP+FN}$ （所有正例中真正例的比例）（包含正例预测为反例）</p>
+<p>查准率和查全率是一对矛盾的度量。</p>
+<blockquote>
+<p>例如，希望尽可能多的好瓜被选出来，就加大选瓜数量，将所有西瓜都选上，这样好瓜数量也能增大，但是查准率就比较低；希望选出来瓜好瓜比率尽可能高，可以只挑选有把握的瓜，这样查全率就比较低。</p>
+</blockquote>
+<p>我们可以根据学习器的预测结果对样例进行排序，排在前面的额事学习器认为“最可能是”正例的样本，排在后面的是“最不可能”是正例的样本。按此顺序逐个把样本进行预测，每次可以计算出当前的查全率、查准率。以Precision为纵轴，Recall为横轴可以画出“PR曲线”。</p>
+<p>通常一个学习器PR曲线被另一个包围，认为后者优于前者。<br>但交叉的时候就难以断言。合理判断是根据PR下面积，但是面积难以判断<br>因此设计综合考虑度量：</p>
+<h3 id="平衡点（Break-Even-Point-BEP）"><a href="#平衡点（Break-Even-Point-BEP）" class="headerlink" title="平衡点（Break-Even Point, BEP）"></a>平衡点（Break-Even Point, BEP）</h3><p>查准率=查全率时的取值。</p>
+<h3 id="F1度量"><a href="#F1度量" class="headerlink" title="F1度量"></a>F1度量</h3><p>$$F1 = \frac{2<em>P</em>R}{P+R} = \frac{2*TP}{样例总数+TP-TN}$$</p>
+<h3 id="更一般的-F-beta"><a href="#更一般的-F-beta" class="headerlink" title="更一般的$F_{\beta}$"></a>更一般的$F_{\beta}$</h3><p>$$F_{\beta} = \frac{(1+\beta^2)<em>P</em>R}{\beta^2 * P+R}$$</p>
+<h3 id="多次训练、测试产生多个混淆矩阵时"><a href="#多次训练、测试产生多个混淆矩阵时" class="headerlink" title="多次训练、测试产生多个混淆矩阵时"></a>多次训练、测试产生多个混淆矩阵时</h3><ol>
+<li><p>宏查全率、宏查准率、宏F1<br> 分别计算Precision和 Recall，然后求平均再计算F1</p>
+</li>
+<li><p>宏查全率、宏查准率、宏F1<br> 平均对应TP，FP…加起来平均，再计算F1</p>
+</li>
+</ol>
+<h2 id="ROC与AUC"><a href="#ROC与AUC" class="headerlink" title="ROC与AUC"></a>ROC与AUC</h2><p>很多学习器是为测试样本产生一个实值或者概率预测，然后将预测值与分类阈值进行比较，若大于阈值判定为正，否则为反。这个实值决定了学习器泛化能力。<br><strong>注意ROC与PR的不同</strong><br>ROC纵轴是真正例率，横轴是假正例率。<br>$ TPR = \frac{TP}{TP+FN}$ (实际正例的结果中真正例的比例)<br>$ FPR = \frac{FP}{TN+FP}$ （实际反例中假正例的比例）</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>真实情况</th>
+<th>预测</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>正例</td>
+<td>反例</td>
+</tr>
+<tr>
+<td>正例</td>
+<td>TP(真正例)</td>
+<td>FN(假反例)</td>
+</tr>
+<tr>
+<td>反例</td>
+<td>FP(假正例)</td>
+<td>TN（真反例）</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><img src="http://www.fullstackdevel.com/wp-content/uploads/2015/09/53451443447279.png" alt=""></p>
+<blockquote>
+<p>   真正例率是所有真实正例中真正例的比例；<br>   假正例率是所有真实反例中假正例的比例；<br>   查准率是所有预测正例中真正例的比例；<br>   查全率是所有真实正例中真正例的比例；<br>   所以查全率与真正例率相等 ， R=TPR</p>
+</blockquote>
+<p>通常一个学习器ROC曲线被另一个包围，认为后者优于前者。<br>但交叉的时候就难以断言。合理判断是根据ROC下面积–AUC。<br>形式化的看AUC考虑的是<strong>样本预测的排序质量</strong>，与排序误差有紧密联系。</p>
+<h2 id="排序损失-mathbf-l-rank"><a href="#排序损失-mathbf-l-rank" class="headerlink" title="排序损失 $\mathbf{l}_{rank}$"></a>排序损失 $\mathbf{l}_{rank}$</h2><p>$$AUC = 1- \mathbf{l}_{rank}$$</p>
+<h2 id="PR与ROC"><a href="#PR与ROC" class="headerlink" title="PR与ROC"></a>PR与ROC</h2><p><a href="http://www.fullstackdevel.com/computer-tec/data-mining-machine-learning/501.html" target="_blank" rel="external">ROC与PR区别,分析来源</a><br>在ROC空间，ROC曲线越凸向左上方向效果越好。与ROC曲线左上凸不同的是，PR曲线是右上凸效果越好。</p>
+<p>ROC和PR曲线都被用于评估机器学习算法对一个给定数据集的分类性能，每个数据集都包含固定数目的正样本和负样本。而ROC曲线和PR曲线之间有着很深的关系。</p>
+<pre><code>定理1：对于一个给定的包含正负样本的数据集，ROC空间和PR空间存在一一对应的关系，也就是说，如果recall不等于0，二者包含完全一致的混淆矩阵。我们可以将ROC曲线转化为PR曲线，反之亦然。
+
+定理2：对于一个给定数目的正负样本数据集，一条曲线在ROC空间中比另一条曲线有优势，当且仅当第一条曲线在PR空间中也比第二条曲线有优势。（这里的“一条曲线比其他曲线有优势”是指其他曲线的所有部分与这条曲线重合或在这条曲线之下。）
+</code></pre><p>证明过程见文章<a href="http://pages.cs.wisc.edu/~jdavis/davisgoadrichcamera2.pdf" target="_blank" rel="external">《The Relationship Between Precision-Recall and ROC Curves》</a></p>
+<p>当正负样本差距不大的情况下，ROC和PR的趋势是差不多的，但是当负样本很多的时候，两者就截然不同了，ROC效果依然看似很好，但是PR上反映效果一般。解释起来也简单，假设就1个正例，100个负例，那么基本上TPR可能一直维持在100左右，然后突然降到0.如图，(a)(b)分别为正负样本1:1时的ROC曲线和PR曲线，二者比较接近。而(c)(d)的正负样本比例为1:1，这时ROC曲线效果依然很好，但是PR曲线则表现的比较差。这就说明PR曲线在正负样本比例悬殊较大时更能反映分类的性能。<br><img src="http://www.fullstackdevel.com/wp-content/uploads/2015/09/18801443447279.jpg" alt=""></p>
+<h2 id="代价敏感错误率与代价曲线"><a href="#代价敏感错误率与代价曲线" class="headerlink" title="代价敏感错误率与代价曲线"></a>代价敏感错误率与代价曲线</h2><p>根据任务的领域知识设定代价矩阵。（可以认为前面的度量默认各项代价均等）<br>对应的ROC曲线叫代价曲线。</p>
+<h1 id="比较检验"><a href="#比较检验" class="headerlink" title="比较检验"></a>比较检验</h1><p>性能比较影响因素：1、泛化性能VS测试集性能 2、测试集选择 3、算法随机性。<br>采用<strong>统计假设检验</strong>推断学习器A泛化性能是否在统计意义上优于B，并且把握多大。</p>
+<h2 id="假设检验"><a href="#假设检验" class="headerlink" title="假设检验"></a>假设检验</h2><p>下面的是针对单个学习器泛化性能的假设进行检验。</p>
+<h3 id="二项检验"><a href="#二项检验" class="headerlink" title="二项检验"></a>二项检验</h3><p>一个测试错误率推测泛化错误率分布。</p>
+<h3 id="t检验"><a href="#t检验" class="headerlink" title="t检验"></a>t检验</h3><p>多个测试错误率。</p>
+<p>针对多个学习器采用下文：</p>
+<h2 id="交叉验证t检验"><a href="#交叉验证t检验" class="headerlink" title="交叉验证t检验"></a>交叉验证t检验</h2><h2 id="McNemar检验"><a href="#McNemar检验" class="headerlink" title="McNemar检验"></a>McNemar检验</h2><h2 id="Fridman检验与Nemenyi检验"><a href="#Fridman检验与Nemenyi检验" class="headerlink" title="Fridman检验与Nemenyi检验"></a>Fridman检验与Nemenyi检验</h2><h1 id="偏差与方差"><a href="#偏差与方差" class="headerlink" title="偏差与方差"></a>偏差与方差</h1><p>“偏差方差分解”是解释学习算法泛化性能的重要工具，可以对期望泛化误差率进行拆解。<br>泛化误差可以分解为偏差、方差和噪声之和。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/MachineLearning/">MachineLearning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/MachineLearning/">MachineLearning</a><a href="/tags/Notes/">Notes</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/03/机器学习_周志华_笔记2/" data-title="机器学习（周志华）- 第2章模型评估与选择笔记 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/03/test2/" title="">
+  <strong>上一篇：</strong><br/>
+  <span>
+  (no title)</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/03/机器学习_周志华_笔记1/"  title="机器学习（周志华）- 第1章绪论笔记">
+ <strong>下一篇：</strong><br/> 
+ <span>机器学习（周志华）- 第1章绪论笔记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/03/机器学习_周志华_笔记2/" data-title="机器学习（周志华）- 第2章模型评估与选择笔记" data-url="http://yoursite.com/2016/08/03/机器学习_周志华_笔记2/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#经验误差与过拟合"><span class="toc-number">1.</span> <span class="toc-text">经验误差与过拟合</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#评估方法"><span class="toc-number">2.</span> <span class="toc-text">评估方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#留出法"><span class="toc-number">2.1.</span> <span class="toc-text">留出法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#交叉验证"><span class="toc-number">2.2.</span> <span class="toc-text">交叉验证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自助法（bootstrapping）"><span class="toc-number">2.3.</span> <span class="toc-text">自助法（bootstrapping）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#具体步骤如下："><span class="toc-number">2.3.1.</span> <span class="toc-text">具体步骤如下：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优缺点"><span class="toc-number">2.3.2.</span> <span class="toc-text">优缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#调参与最终模型"><span class="toc-number">2.4.</span> <span class="toc-text">调参与最终模型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#性能度量"><span class="toc-number">3.</span> <span class="toc-text">性能度量</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#错误率与精度"><span class="toc-number">3.1.</span> <span class="toc-text">错误率与精度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查准率、查全率与F1"><span class="toc-number">3.2.</span> <span class="toc-text">查准率、查全率与F1</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#平衡点（Break-Even-Point-BEP）"><span class="toc-number">3.2.1.</span> <span class="toc-text">平衡点（Break-Even Point, BEP）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#F1度量"><span class="toc-number">3.2.2.</span> <span class="toc-text">F1度量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#更一般的-F-beta"><span class="toc-number">3.2.3.</span> <span class="toc-text">更一般的$F_{\beta}$</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多次训练、测试产生多个混淆矩阵时"><span class="toc-number">3.2.4.</span> <span class="toc-text">多次训练、测试产生多个混淆矩阵时</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ROC与AUC"><span class="toc-number">3.3.</span> <span class="toc-text">ROC与AUC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#排序损失-mathbf-l-rank"><span class="toc-number">3.4.</span> <span class="toc-text">排序损失 $\mathbf{l}_{rank}$</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PR与ROC"><span class="toc-number">3.5.</span> <span class="toc-text">PR与ROC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代价敏感错误率与代价曲线"><span class="toc-number">3.6.</span> <span class="toc-text">代价敏感错误率与代价曲线</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#比较检验"><span class="toc-number">4.</span> <span class="toc-text">比较检验</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#假设检验"><span class="toc-number">4.1.</span> <span class="toc-text">假设检验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#二项检验"><span class="toc-number">4.1.1.</span> <span class="toc-text">二项检验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#t检验"><span class="toc-number">4.1.2.</span> <span class="toc-text">t检验</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#交叉验证t检验"><span class="toc-number">4.2.</span> <span class="toc-text">交叉验证t检验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#McNemar检验"><span class="toc-number">4.3.</span> <span class="toc-text">McNemar检验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Fridman检验与Nemenyi检验"><span class="toc-number">4.4.</span> <span class="toc-text">Fridman检验与Nemenyi检验</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#偏差与方差"><span class="toc-number">5.</span> <span class="toc-text">偏差与方差</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

@@ -1,0 +1,706 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>Simhash算法 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="来源：https://wizardforcel.gitbooks.io/the-art-of-programming-by-july/content/06.03.html
+背景如果某一天，面试官问你如何设计一个比较两篇文章相似度的算法？可能你会回答几个比较传统点的思路：
+
+一种方案是先将两篇文章分别进行分词，得到一系列特征向量，然后计算特征向量之间的距离（可以计算它们之间的欧氏距离、海明距离或者夹">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Simhash算法">
+<meta property="og:url" content="http://yoursite.com/2016/08/02/SimHash/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="来源：https://wizardforcel.gitbooks.io/the-art-of-programming-by-july/content/06.03.html
+背景如果某一天，面试官问你如何设计一个比较两篇文章相似度的算法？可能你会回答几个比较传统点的思路：
+
+一种方案是先将两篇文章分别进行分词，得到一系列特征向量，然后计算特征向量之间的距离（可以计算它们之间的欧氏距离、海明距离或者夹">
+<meta property="og:image" content="http://dl.iteye.com/upload/attachment/437426/baf42378-e625-35d2-9a89-471524a355d8.jpg">
+<meta property="og:image" content="http://dl.iteye.com/upload/attachment/437559/689719df-54b7-318c-bc90-e289f84344b9.jpg">
+<meta property="og:image" content="http://dl.iteye.com/upload/attachment/437586/b72b8dc2-9139-3078-ad24-b689f64fd71a.jpg">
+<meta property="og:updated_time" content="2016-08-03T00:28:23.059Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Simhash算法">
+<meta name="twitter:description" content="来源：https://wizardforcel.gitbooks.io/the-art-of-programming-by-july/content/06.03.html
+背景如果某一天，面试官问你如何设计一个比较两篇文章相似度的算法？可能你会回答几个比较传统点的思路：
+
+一种方案是先将两篇文章分别进行分词，得到一系列特征向量，然后计算特征向量之间的距离（可以计算它们之间的欧氏距离、海明距离或者夹">
+<meta name="twitter:image" content="http://dl.iteye.com/upload/attachment/437426/baf42378-e625-35d2-9a89-471524a355d8.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/02/SimHash/" title="Simhash算法" itemprop="url">Simhash算法</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-02T06:08:47.388Z" itemprop="datePublished"> Published 2016-08-02</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#简介"><span class="toc-number">2.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流程"><span class="toc-number">3.</span> <span class="toc-text">流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用"><span class="toc-number">4.</span> <span class="toc-text">应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实际应用-不适用与短文本"><span class="toc-number">5.</span> <span class="toc-text">实际应用-不适用与短文本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#示例代码（Java）"><span class="toc-number">6.</span> <span class="toc-text">示例代码（Java）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他去重算法"><span class="toc-number">7.</span> <span class="toc-text">其他去重算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#百度"><span class="toc-number">7.1.</span> <span class="toc-text">百度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shingle算法"><span class="toc-number">7.2.</span> <span class="toc-text">shingle算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自己的疑问"><span class="toc-number">8.</span> <span class="toc-text">自己的疑问</span></a></li></ol>
+		
+		</div>
+		
+		<p>来源：<a href="https://wizardforcel.gitbooks.io/the-art-of-programming-by-july/content/06.03.html" target="_blank" rel="external">https://wizardforcel.gitbooks.io/the-art-of-programming-by-july/content/06.03.html</a></p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>如果某一天，面试官问你如何设计一个比较两篇文章相似度的算法？可能你会回答几个比较传统点的思路：</p>
+<ul>
+<li>一种方案是先将两篇文章分别进行分词，得到一系列特征向量，然后计算特征向量之间的距离（可以计算它们之间的欧氏距离、海明距离或者夹角余弦等等），从而通过距离的大小来判断两篇文章的相似度。</li>
+<li>另外一种方案是传统hash，我们考虑为每一个web文档通过hash的方式生成一个指纹（finger print）。</li>
+</ul>
+<p>下面，我们来分析下这两种方法。</p>
+<ul>
+<li>采取第一种方法，若是只比较两篇文章的相似性还好，但如果是海量数据呢，有着数以百万甚至亿万的网页，要求你计算这些网页的相似度。你还会去计算任意两个网页之间的距离或夹角余弦么？想必你不会了。<ul>
+<li>余弦定理：通过对两个文本分词，TF-IDF算法向量化，对比两者的余弦夹角，夹角越小相似度越高，但由于有可能一个文章的特征向量词特别多导致整个向量维度很高，使得计算的代价太大不适合大数据量的计算。</li>
+</ul>
+</li>
+<li>而第二种方案中所说的传统加密方式<a href="http://baike.baidu.com/link?url=MwWj4DKX3yzX3mZ75m-dXdWmC0kuhUZaWefQI5SJUBxWJjoSCY6NNVyciTncURLL" target="_blank" rel="external">md5</a>(Message Digest Algorithm MD5（中文名为消息摘要算法第五版）为计算机安全领域广泛使用的一种散列函数，用以提供消息的完整性保护。，其设计的目的是为了让整个分布尽可能地均匀，但如果输入内容一旦出现哪怕轻微的变化，hash值就会发生很大的变化。理想当中的hash函数，需要对几乎相同的输入内容，产生相同或者相近的hash值，换言之，hash值的相似程度要能直接反映输入内容的相似程度，故md5等传统hash方法也无法满足我们的需求。</li>
+</ul>
+<p>我们假设有以下三段文本： </p>
+<blockquote>
+<p>the cat sat on the mat<br>the cat sat on a mat<br>we all scream for ice cream</p>
+</blockquote>
+<p>使用传统hash可能会产生如下的结果： </p>
+<blockquote>
+<p>irb(main):006:0&gt; p1 = ‘the cat sat on the mat’<br>irb(main):005:0&gt; p2 = ‘the cat sat on a mat’<br>irb(main):007:0&gt; p3 = ‘we all scream for ice cream’<br>irb(main):007:0&gt; p1.hash =&gt; 415542861<br>irb(main):007:0&gt; p2.hash =&gt; 668720516<br>irb(main):007:0&gt; p3.hash =&gt; 767429688</p>
+</blockquote>
+<p>使用simhash会应该产生类似如下的结果： </p>
+<blockquote>
+<p>irb(main):003:0&gt; p1.simhash =&gt; 851459198 00110010110000000011110001111110<br>irb(main):004:0&gt; p2.simhash =&gt; 847263864<br>00110010100000000011100001111000<br>irb(main):002:0&gt; p3.simhash =&gt; 984968088<br>00111010101101010110101110011000</p>
+</blockquote>
+<p>海明距离的定义，为两个二进制串中不同位的数量。上述三个文本的simhash结果，其两两之间的海明距离为(p1,p2)=4，(p1,p3)=16以及(p2,p3)=12。事实上，这正好符合文本之间的相似度，p1和p2间的相似度要远大于与p3的。</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>simhash是locality sensitive hash（局部敏感哈希）的一种，最早由Moses Charikar在《similarity estimation techniques from rounding algorithms》一文中提出。Google就是基于此算法实现网页文件查重的。</p>
+<p>simhash作为locality sensitive hash（局部敏感哈希）的一种（这段的局部敏感性指的是非常相似的文本，即便只差一个字符，md5后的序列也可能非常不同，但是simHash之后的序列可能只是某几位不同）：</p>
+<ul>
+<li>其主要思想是降维，将高维的特征向量映射成低维的特征向量，通过两个向量的Hamming Distance来确定文章是否重复或者高度近似。<ul>
+<li>其中，Hamming Distance，又称汉明距离，在信息论中，两个等长字符串之间的汉明距离是两个字符串对应位置的不同字符的个数。也就是说，它就是将一个字符串变换成另外一个字符串所需要替换的字符个数。例如：1011101 与 1001001 之间的汉明距离是 2。至于我们常说的字符串编辑距离则是一般形式的汉明距离。</li>
+</ul>
+</li>
+</ul>
+<p>如此，通过比较多个文档的simHash值的海明距离，可以获取它们的相似度。</p>
+<p>如何实现这种hash算法呢？以上述三个文本为例，整个过程可以分为以下六步：<br>1、选择simhash的位数，请综合考虑存储成本以及数据集的大小，比如说32位<br>2、将simhash的各位初始化为0<br>3、提取原始文本中的特征，一般采用各种分词的方式。比如对于”the cat sat on the mat”，采用两两分词的方式得到如下结果：{“th”, “he”, “e “, “ c”, “ca”, “at”, “t “, “ s”, “sa”, “ o”, “on”, “n “, “ t”, “ m”, “ma”}<br>4、使用传统的32位hash函数计算各个word的hashcode，比如：”th”.hash = -502157718<br>，”he”.hash = -369049682，……<br>5、对各word的hashcode的每一位，如果该位为1，则simhash相应位的值加1；否则减1<br>6、对最后得到的32位的simhash，如果该位大于1，则设为1；否则设为0 </p>
+<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><p>simhash算法分为5个步骤：分词、hash、加权、合并、降维，具体过程如下所述：</p>
+<ul>
+<li>分词<ul>
+<li>给定一段语句，进行分词，得到有效的特征向量，然后为每一个特征向量设置1-5等5个级别的权重（如果是给定一个文本，那么特征向量可以是文本中的词，其权重可以是这个词出现的次数）。例如给定一段语句：“CSDN博客结构之法算法之道的作者July”，分词后为：“CSDN 博客 结构 之 法 算法 之 道 的 作者 July”，然后为每个特征向量赋予权值：CSDN(4) 博客(5) 结构(3) 之(1) 法(2) 算法(3) 之(1) 道(2) 的(1) 作者(5) July(5)，其中括号里的数字代表这个单词在整条语句中的重要程度，数字越大代表越重要。<ul>
+<li>hash</li>
+</ul>
+</li>
+<li>通过hash函数计算各个特征向量的hash值，hash值为二进制数01组成的n-bit签名。比如“CSDN”的hash值Hash(CSDN)为100101，“博客”的hash值Hash(博客)为“101011”。就这样，字符串就变成了一系列数字。<ul>
+<li>加权</li>
+<li>在hash值的基础上，给所有特征向量进行加权，即W = Hash <em> weight，且遇到1则hash值和权值正相乘，遇到0则hash值和权值负相乘。例如给“CSDN”的hash值“100101”加权得到：W(CSDN) = 100101</em>4 = 4 -4 -4 4 -4 4，给“博客”的hash值“101011”加权得到：W(博客)=101011*5 = 5 -5 5 -5 5 5，其余特征向量类似此般操作。</li>
+<li>合并</li>
+</ul>
+</li>
+<li>将上述各个特征向量的加权结果累加，变成只有一个序列串。拿前两个特征向量举例，例如“CSDN”的“4 -4 -4 4 -4 4”和“博客”的“5 -5 5 -5 5 5”进行累加，得到“4+5 -4+-5 -4+5 4+-5 -4+5 4+5”，得到“9 -9 1 -1 1”。<ul>
+<li>降维</li>
+</ul>
+</li>
+<li>对于n-bit签名的累加结果，如果大于0则置1，否则置0，从而得到该语句的simhash值，最后我们便可以根据不同语句simhash的海明距离来判断它们的相似度。例如把上面计算出来的“9 -9 1 -1 1 9”降维（某位大于0记为1，小于0记为0），得到的01串为：“1 0 1 0 1 1”，从而形成它们的simhash签名。</li>
+</ul>
+</li>
+</ul>
+<p>其流程如下图所示：<br><img src="http://dl.iteye.com/upload/attachment/437426/baf42378-e625-35d2-9a89-471524a355d8.jpg" alt=""></p>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><ul>
+<li>每篇文档得到SimHash签名值后，接着计算两个签名的海明距离即可。根据经验值，对64位的 SimHash值，海明距离在3以内的可认为相似度比较高。 </li>
+<li>海明距离的求法：异或时，只有在两个比较的位不同时其结果是1 ，否则结果为0，两个二进制“异或”后得到1的个数即为海明距离的大小。</li>
+</ul>
+<p>举个例子，上面我们计算到的“CSDN博客”的simhash签名值为“1 0 1 0 1 1”，假定我们计算出另外一个短语的签名值为“1 0 1 0 0 0”，那么根据异或规则，我们可以计算出这两个签名的海明距离为2，从而判定这两个短语的相似度是比较高的。</p>
+<p>换言之，现在问题转换为：对于64位的SimHash值，我们只要找到海明距离在3以内的所有签名，即可找出所有相似的短语。</p>
+<p>但关键是，如何将其扩展到海量数据呢？譬如如何在海量的样本库中查询与其海明距离在3以内的记录呢？</p>
+<ul>
+<li>一种方案是查找待查询文本的64位simhash code的所有3位以内变化的组合<ul>
+<li>大约需要四万多次的查询。</li>
+</ul>
+</li>
+<li>另一种方案是预生成库中所有样本simhash code的3位变化以内的组合<ul>
+<li>大约需要占据4万多倍的原始空间。</li>
+</ul>
+</li>
+</ul>
+<p>这两种方案，要么时间复杂度高，要么空间复杂度复杂，能否有一种方案可以达到时空复杂度的绝佳平衡呢？答案是肯定的：</p>
+<ul>
+<li>我们可以把 64 位的二进制simhash签名均分成4块，每块16位。根据鸽巢原理（也称抽屉原理），如果两个签名的海明距离在3以内，它们必有一块完全相同。如下图所示：<br><img src="http://dl.iteye.com/upload/attachment/437559/689719df-54b7-318c-bc90-e289f84344b9.jpg" alt=""></li>
+<li>然后把分成的4 块中的每一个块分别作为前16位来进行查找，建倒排索引。</li>
+</ul>
+<p>具体如下图所示：</p>
+<p><img src="http://dl.iteye.com/upload/attachment/437586/b72b8dc2-9139-3078-ad24-b689f64fd71a.jpg" alt=""></p>
+<p>如此，如果样本库中存有2^34（差不多10亿）的simhash签名，则每个table返回2^(34-16)=262144个候选结果，大大减少了海明距离的计算成本。</p>
+<ul>
+<li>假设数据是均匀分布，16位的数据，产生的像限为2^16个，则平均每个像限分布的文档数则为2^34/2^16 = 2^(34-16)) ，四个块返回的总结果数为 4* 262144 （大概 100 万）。<ul>
+<li>这样，原本需要比较10亿次，经过索引后，大概只需要处理100万次。</li>
+</ul>
+</li>
+</ul>
+<h2 id="实际应用-不适用与短文本"><a href="#实际应用-不适用与短文本" class="headerlink" title="实际应用-不适用与短文本"></a>实际应用-不适用与短文本</h2><p>来源：<a href="http://www.lanceyan.com/tech/arch/simhash_hamming_distance_similarity.html" target="_blank" rel="external">http://www.lanceyan.com/tech/arch/simhash_hamming_distance_similarity.html</a><br>通过大量测试，simhash用于比较大文本，比如500字以上效果都还蛮好，距离小于3的基本都是相似，误判率也比较低。但是如果我们处理的是微博信息，最多也就140个字，使用simhash的效果并不那么理想。看如下图，在距离为3时是一个比较折中的点，在距离为10时效果已经很差了，不过我们测试短文本很多看起来相似的距离确实为10。如果使用距离为3，短文本大量重复信息不会被过滤，如果使用距离为10，长文本的错误率也非常高，如何解决？</p>
+<h2 id="示例代码（Java）"><a href="#示例代码（Java）" class="headerlink" title="示例代码（Java）"></a>示例代码（Java）</h2><p>来源：<a href="http://www.open-open.com/lib/view/open1375690611500.html" target="_blank" rel="external">http://www.open-open.com/lib/view/open1375690611500.html</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Function: 注：该示例程序暂不支持中文</div><div class="line"></div><div class="line"> * Date:     2013-8-4 下午11:01:45 </div><div class="line"></div><div class="line"> * <span class="doctag">@author</span>   june: decli@qq.com</div><div class="line"> */</div><div class="line"><span class="keyword">import</span> java.math.BigInteger;</div><div class="line"><span class="keyword">import</span> java.util.ArrayList;</div><div class="line"><span class="keyword">import</span> java.util.HashMap;</div><div class="line"><span class="keyword">import</span> java.util.List;</div><div class="line"><span class="keyword">import</span> java.util.StringTokenizer;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimHash</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> String tokens;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> BigInteger intSimHash;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> String strSimHash;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">int</span> hashbits = <span class="number">64</span>;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SimHash</span><span class="params">(String tokens)</span> </span>&#123;</div><div class="line">		<span class="keyword">this</span>.tokens = tokens;</div><div class="line">		<span class="keyword">this</span>.intSimHash = <span class="keyword">this</span>.simHash();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SimHash</span><span class="params">(String tokens, <span class="keyword">int</span> hashbits)</span> </span>&#123;</div><div class="line">		<span class="keyword">this</span>.tokens = tokens;</div><div class="line">		<span class="keyword">this</span>.hashbits = hashbits;</div><div class="line">		<span class="keyword">this</span>.intSimHash = <span class="keyword">this</span>.simHash();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	HashMap wordMap = <span class="keyword">new</span> HashMap();</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> BigInteger <span class="title">simHash</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="comment">// 定义特征向量/数组</span></div><div class="line">		<span class="keyword">int</span>[] v = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="keyword">this</span>.hashbits];</div><div class="line">		<span class="comment">// 1、将文本去掉格式后, 分词.</span></div><div class="line">		StringTokenizer stringTokens = <span class="keyword">new</span> StringTokenizer(<span class="keyword">this</span>.tokens);</div><div class="line">		<span class="keyword">while</span> (stringTokens.hasMoreTokens()) &#123;</div><div class="line">			String temp = stringTokens.nextToken();</div><div class="line">			<span class="comment">// 2、将每一个分词hash为一组固定长度的数列.比如 64bit 的一个整数.</span></div><div class="line">			BigInteger t = <span class="keyword">this</span>.hash(temp);</div><div class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.hashbits; i++) &#123;</div><div class="line">				BigInteger bitmask = <span class="keyword">new</span> BigInteger(<span class="string">"1"</span>).shiftLeft(i);</div><div class="line">				<span class="comment">// 3、建立一个长度为64的整数数组(假设要生成64位的数字指纹,也可以是其它数字),</span></div><div class="line">				<span class="comment">// 对每一个分词hash后的数列进行判断,如果是1000...1,那么数组的第一位和末尾一位加1,</span></div><div class="line">				<span class="comment">// 中间的62位减一,也就是说,逢1加1,逢0减1.一直到把所有的分词hash数列全部判断完毕.</span></div><div class="line">				<span class="keyword">if</span> (t.and(bitmask).signum() != <span class="number">0</span>) &#123;</div><div class="line">					<span class="comment">// 这里是计算整个文档的所有特征的向量和</span></div><div class="line">					<span class="comment">// 这里实际使用中需要 +- 权重，而不是简单的 +1/-1，</span></div><div class="line">					v[i] += <span class="number">1</span>;</div><div class="line">				&#125; <span class="keyword">else</span> &#123;</div><div class="line">					v[i] -= <span class="number">1</span>;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		BigInteger fingerprint = <span class="keyword">new</span> BigInteger(<span class="string">"0"</span>);</div><div class="line">		StringBuffer simHashBuffer = <span class="keyword">new</span> StringBuffer();</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.hashbits; i++) &#123;</div><div class="line">			<span class="comment">// 4、最后对数组进行判断,大于0的记为1,小于等于0的记为0,得到一个 64bit 的数字指纹/签名.</span></div><div class="line">			<span class="keyword">if</span> (v[i] &gt;= <span class="number">0</span>) &#123;</div><div class="line">				fingerprint = fingerprint.add(<span class="keyword">new</span> BigInteger(<span class="string">"1"</span>).shiftLeft(i));</div><div class="line">				simHashBuffer.append(<span class="string">"1"</span>);</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				simHashBuffer.append(<span class="string">"0"</span>);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">this</span>.strSimHash = simHashBuffer.toString();</div><div class="line">		System.out.println(<span class="keyword">this</span>.strSimHash + <span class="string">" length "</span> + <span class="keyword">this</span>.strSimHash.length());</div><div class="line">		<span class="keyword">return</span> fingerprint;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> BigInteger <span class="title">hash</span><span class="params">(String source)</span> </span>&#123;</div><div class="line">		<span class="keyword">if</span> (source == <span class="keyword">null</span> || source.length() == <span class="number">0</span>) &#123;</div><div class="line">			<span class="keyword">return</span> <span class="keyword">new</span> BigInteger(<span class="string">"0"</span>);</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			<span class="keyword">char</span>[] sourceArray = source.toCharArray();</div><div class="line">			BigInteger x = BigInteger.valueOf(((<span class="keyword">long</span>) sourceArray[<span class="number">0</span>]) &lt;&lt; <span class="number">7</span>);</div><div class="line">			BigInteger m = <span class="keyword">new</span> BigInteger(<span class="string">"1000003"</span>);</div><div class="line">			BigInteger mask = <span class="keyword">new</span> BigInteger(<span class="string">"2"</span>).pow(<span class="keyword">this</span>.hashbits).subtract(<span class="keyword">new</span> BigInteger(<span class="string">"1"</span>));</div><div class="line">			<span class="keyword">for</span> (<span class="keyword">char</span> item : sourceArray) &#123;</div><div class="line">				BigInteger temp = BigInteger.valueOf((<span class="keyword">long</span>) item);</div><div class="line">				x = x.multiply(m).xor(temp).and(mask);</div><div class="line">			&#125;</div><div class="line">			x = x.xor(<span class="keyword">new</span> BigInteger(String.valueOf(source.length())));</div><div class="line">			<span class="keyword">if</span> (x.equals(<span class="keyword">new</span> BigInteger(<span class="string">"-1"</span>))) &#123;</div><div class="line">				x = <span class="keyword">new</span> BigInteger(<span class="string">"-2"</span>);</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">return</span> x;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hammingDistance</span><span class="params">(SimHash other)</span> </span>&#123;</div><div class="line"></div><div class="line">		BigInteger x = <span class="keyword">this</span>.intSimHash.xor(other.intSimHash);</div><div class="line">		<span class="keyword">int</span> tot = <span class="number">0</span>;</div><div class="line"></div><div class="line">		<span class="comment">// 统计x中二进制位数为1的个数</span></div><div class="line">		<span class="comment">// 我们想想，一个二进制数减去1，那么，从最后那个1（包括那个1）后面的数字全都反了，对吧，然后，n&amp;(n-1)就相当于把后面的数字清0，</span></div><div class="line">		<span class="comment">// 我们看n能做多少次这样的操作就OK了。</span></div><div class="line"></div><div class="line">		<span class="keyword">while</span> (x.signum() != <span class="number">0</span>) &#123;</div><div class="line">			tot += <span class="number">1</span>;</div><div class="line">			x = x.and(x.subtract(<span class="keyword">new</span> BigInteger(<span class="string">"1"</span>)));</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> tot;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getDistance</span><span class="params">(String str1, String str2)</span> </span>&#123;</div><div class="line">		<span class="keyword">int</span> distance;</div><div class="line">		<span class="keyword">if</span> (str1.length() != str2.length()) &#123;</div><div class="line">			distance = -<span class="number">1</span>;</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			distance = <span class="number">0</span>;</div><div class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; str1.length(); i++) &#123;</div><div class="line">				<span class="keyword">if</span> (str1.charAt(i) != str2.charAt(i)) &#123;</div><div class="line">					distance++;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> distance;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> List <span class="title">subByDistance</span><span class="params">(SimHash simHash, <span class="keyword">int</span> distance)</span> </span>&#123;</div><div class="line">		<span class="comment">// 分成几组来检查</span></div><div class="line">		<span class="keyword">int</span> numEach = <span class="keyword">this</span>.hashbits / (distance + <span class="number">1</span>);</div><div class="line">		List characters = <span class="keyword">new</span> ArrayList();</div><div class="line"></div><div class="line">		StringBuffer buffer = <span class="keyword">new</span> StringBuffer();</div><div class="line"></div><div class="line">		<span class="keyword">int</span> k = <span class="number">0</span>;</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.intSimHash.bitLength(); i++) &#123;</div><div class="line">			<span class="comment">// 当且仅当设置了指定的位时，返回 true</span></div><div class="line">			<span class="keyword">boolean</span> sr = simHash.intSimHash.testBit(i);</div><div class="line"></div><div class="line">			<span class="keyword">if</span> (sr) &#123;</div><div class="line">				buffer.append(<span class="string">"1"</span>);</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				buffer.append(<span class="string">"0"</span>);</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			<span class="keyword">if</span> ((i + <span class="number">1</span>) % numEach == <span class="number">0</span>) &#123;</div><div class="line">				<span class="comment">// 将二进制转为BigInteger</span></div><div class="line">				BigInteger eachValue = <span class="keyword">new</span> BigInteger(buffer.toString(), <span class="number">2</span>);</div><div class="line">				System.out.println(<span class="string">"----"</span> + eachValue);</div><div class="line">				buffer.delete(<span class="number">0</span>, buffer.length());</div><div class="line">				characters.add(eachValue);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">return</span> characters;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		String s = <span class="string">"This is a test string for testing"</span>;</div><div class="line">		SimHash hash1 = <span class="keyword">new</span> SimHash(s, <span class="number">64</span>);</div><div class="line">		System.out.println(hash1.intSimHash + <span class="string">"  "</span> + hash1.intSimHash.bitLength());</div><div class="line">		hash1.subByDistance(hash1, <span class="number">3</span>);</div><div class="line"></div><div class="line">		s = <span class="string">"This is a test string for testing, This is a test string for testing abcdef"</span>;</div><div class="line">		SimHash hash2 = <span class="keyword">new</span> SimHash(s, <span class="number">64</span>);</div><div class="line">		System.out.println(hash2.intSimHash + <span class="string">"  "</span> + hash2.intSimHash.bitCount());</div><div class="line">		hash1.subByDistance(hash2, <span class="number">3</span>);</div><div class="line">		</div><div class="line">		s = <span class="string">"This is a test string for testing als"</span>;</div><div class="line">		SimHash hash3 = <span class="keyword">new</span> SimHash(s, <span class="number">64</span>);</div><div class="line">		System.out.println(hash3.intSimHash + <span class="string">"  "</span> + hash3.intSimHash.bitCount());</div><div class="line">		hash1.subByDistance(hash3, <span class="number">4</span>);</div><div class="line">		</div><div class="line">		System.out.println(<span class="string">"============================"</span>);</div><div class="line">		</div><div class="line">		<span class="keyword">int</span> dis = hash1.getDistance(hash1.strSimHash, hash2.strSimHash);</div><div class="line">		System.out.println(hash1.hammingDistance(hash2) + <span class="string">" "</span> + dis);</div><div class="line"></div><div class="line">		<span class="keyword">int</span> dis2 = hash1.getDistance(hash1.strSimHash, hash3.strSimHash);</div><div class="line">		System.out.println(hash1.hammingDistance(hash3) + <span class="string">" "</span> + dis2);</div><div class="line">		</div><div class="line">		<span class="comment">//通过Unicode编码来判断中文</span></div><div class="line">		<span class="comment">/*String str = "中国chinese";</span></div><div class="line">		for (int i = 0; i &lt; str.length(); i++) &#123;</div><div class="line">			System.out.println(str.substring(i, i + 1).matches("[\\u4e00-\\u9fbb]+"));</div><div class="line">		&#125;*/</div><div class="line"></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="其他去重算法"><a href="#其他去重算法" class="headerlink" title="其他去重算法"></a>其他去重算法</h2><p><a href="http://www.cnblogs.com/hxsyl/p/4456001.html" target="_blank" rel="external">引用</a></p>
+<h3 id="百度"><a href="#百度" class="headerlink" title="百度"></a>百度</h3><p>　百度的去重算法最简单，就是直接找出此文章的最长的n句话，做一遍hash签名。n一般取3。 工程实现巨简单，据说准确率和召回率都能到达80%以上。</p>
+<h3 id="shingle算法"><a href="#shingle算法" class="headerlink" title="shingle算法"></a>shingle算法</h3><p>shingle原理略复杂，不细说。 shingle算法我认为过于学院派，对于工程实现不够友好，速度太慢，基本上无法处理海量数据。</p>
+<h2 id="自己的疑问"><a href="#自己的疑问" class="headerlink" title="自己的疑问"></a>自己的疑问</h2><ol>
+<li>权重该如何指派呢？TF-IDF算法？</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a><a href="/tags/Interview/">Interview</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/02/SimHash/" data-title="Simhash算法 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/02/TrieTree/" title="Trie树">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Trie树</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/01/Java常见知识点/"  title="Java常考知识点">
+ <strong>下一篇：</strong><br/> 
+ <span>Java常考知识点
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/02/SimHash/" data-title="Simhash算法" data-url="http://yoursite.com/2016/08/02/SimHash/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#简介"><span class="toc-number">2.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#流程"><span class="toc-number">3.</span> <span class="toc-text">流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用"><span class="toc-number">4.</span> <span class="toc-text">应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实际应用-不适用与短文本"><span class="toc-number">5.</span> <span class="toc-text">实际应用-不适用与短文本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#示例代码（Java）"><span class="toc-number">6.</span> <span class="toc-text">示例代码（Java）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他去重算法"><span class="toc-number">7.</span> <span class="toc-text">其他去重算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#百度"><span class="toc-number">7.1.</span> <span class="toc-text">百度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shingle算法"><span class="toc-number">7.2.</span> <span class="toc-text">shingle算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自己的疑问"><span class="toc-number">8.</span> <span class="toc-text">自己的疑问</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

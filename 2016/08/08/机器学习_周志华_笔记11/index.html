@@ -1,0 +1,656 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>机器学习（周志华）- 第11章特征选择与稀疏学习笔记 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="维度缩减的原因
+维数灾难。较少复杂度
+除去不相关特征降低学习难度
+
+因此，需要去掉冗余属性和不相关属性。
+维度约减的两个主要过程
+子集搜索（搜索策略） 一般采用贪心的方法，否则想获取全局最优必须穷举所有可能组合。 往目前的子集中按一定顺序去增加、减少属性，因为是一个一个地加，故是局部最优的。有前向搜索、后向搜索和双向搜索等。
+ 1)  朴素序列特征选择：对属性进行评分然后按分值大小排列，选取分数最">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习（周志华）- 第11章特征选择与稀疏学习笔记">
+<meta property="og:url" content="http://yoursite.com/2016/08/08/机器学习_周志华_笔记11/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="维度缩减的原因
+维数灾难。较少复杂度
+除去不相关特征降低学习难度
+
+因此，需要去掉冗余属性和不相关属性。
+维度约减的两个主要过程
+子集搜索（搜索策略） 一般采用贪心的方法，否则想获取全局最优必须穷举所有可能组合。 往目前的子集中按一定顺序去增加、减少属性，因为是一个一个地加，故是局部最优的。有前向搜索、后向搜索和双向搜索等。
+ 1)  朴素序列特征选择：对属性进行评分然后按分值大小排列，选取分数最">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/L1%E8%8C%83%E6%95%B0.jpg">
+<meta property="og:updated_time" content="2016-08-09T00:23:23.062Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习（周志华）- 第11章特征选择与稀疏学习笔记">
+<meta name="twitter:description" content="维度缩减的原因
+维数灾难。较少复杂度
+除去不相关特征降低学习难度
+
+因此，需要去掉冗余属性和不相关属性。
+维度约减的两个主要过程
+子集搜索（搜索策略） 一般采用贪心的方法，否则想获取全局最优必须穷举所有可能组合。 往目前的子集中按一定顺序去增加、减少属性，因为是一个一个地加，故是局部最优的。有前向搜索、后向搜索和双向搜索等。
+ 1)  朴素序列特征选择：对属性进行评分然后按分值大小排列，选取分数最">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/L1%E8%8C%83%E6%95%B0.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/08/机器学习_周志华_笔记11/" title="机器学习（周志华）- 第11章特征选择与稀疏学习笔记" itemprop="url">机器学习（周志华）- 第11章特征选择与稀疏学习笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-08T10:12:06.674Z" itemprop="datePublished"> Published 2016-08-08</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#维度缩减的原因"><span class="toc-number">1.</span> <span class="toc-text">维度缩减的原因</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#维度约减的两个主要过程"><span class="toc-number">2.</span> <span class="toc-text">维度约减的两个主要过程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#过滤式选择"><span class="toc-number">3.</span> <span class="toc-text">过滤式选择</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#包裹式选择"><span class="toc-number">4.</span> <span class="toc-text">包裹式选择</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#嵌入式选择与L1正则化"><span class="toc-number">5.</span> <span class="toc-text">嵌入式选择与L1正则化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#稀疏表示与字典学习"><span class="toc-number">6.</span> <span class="toc-text">稀疏表示与字典学习</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#压缩感知"><span class="toc-number">7.</span> <span class="toc-text">压缩感知</span></a></li></ol>
+		
+		</div>
+		
+		<h1 id="维度缩减的原因"><a href="#维度缩减的原因" class="headerlink" title="维度缩减的原因"></a>维度缩减的原因</h1><ol>
+<li>维数灾难。较少复杂度</li>
+<li>除去不相关特征降低学习难度</li>
+</ol>
+<p>因此，需要去掉冗余属性和不相关属性。</p>
+<h1 id="维度约减的两个主要过程"><a href="#维度约减的两个主要过程" class="headerlink" title="维度约减的两个主要过程"></a>维度约减的两个主要过程</h1><ol>
+<li><p>子集搜索（搜索策略）<br> 一般采用贪心的方法，否则想获取全局最优必须穷举所有可能组合。<br> 往目前的子集中按一定顺序去增加、减少属性，因为是一个一个地加，故是局部最优的。有前向搜索、后向搜索和双向搜索等。</p>
+<p> 1)  朴素序列特征选择：对属性进行评分然后按分值大小排列，选取分数最高的M个属性。基本不能用，因为没有考虑到属性之间的相互依赖。</p>
+<p> 2)  顺序向前选择（SFS）：以一个空集开始，然后向空集中增加一个属性，该属性在给定某个分类器时要有最大识别率。然后在剩余的属性集中依次取出一个属性，使组合起来的识别率最大。当识别率不在增大或者减小时停止加入属性。</p>
+<pre><code>当最终最优子集特征数目比较小时用这个方法最好。然而加入属性后就不能再取出。
+</code></pre><p> 3)  顺序向后选择（SBS）：选择所有属性放入集合，第一次拿出一个识别率最低的属性，然后依次拿出属性直到拿出一个属性后该属性集合的性能不升高反而下降。</p>
+<pre><code>当最终最优子集特征数目比较大时用此方法最好。但是一旦拿出一个属性就不能放回去。
+</code></pre><p> Both SFS and SBS algorithms suffer from the so called nesting problem: once a feature is added or removed, this action can never be reversed</p>
+<p> 4)  双向搜索（BDS）：从空集开始使用SFS，从全集开始使用SBS，每一次确保SFS选择的属性SBS不能删除，SBS删除的属性SFS不能选择。</p>
+<p> For example, before SFS attempts to add a new feature, it checks if it has been removed by SBS; and, if it has, attempts to add the second best feature, and so on. SBS operates in a similar fashion.</p>
+<p> 5)  序列漂浮向前选择（SFFS）：从空集开始，每次用SFS增加一个属性的同时用SBS检查该集合内是否有可以删除的属性，循环该过程，直到该属性集合的识别率下降停止。</p>
+</li>
+<li><p>子集评价（目标函数）</p>
+<ul>
+<li>评价指标：信息熵增益、不合度量、相关系数等可以判断两个划分差异的都可以</li>
+<li>评价测策略：<br> a)  Filters：目标函数评价属性用属性所含的信息量，而和要用的预测算法无关，是一种无指导的选择方法。它主要解决特征之间的相关性。相关性是由数据集本身的特性决定的。侧重于相关性。无监督<br> b)  Wrappers：目标函数本身就是一个学习器，用预测精度来评估。它主要通过统计抽样和交叉验证的精度来评估特征子集，计算成本较高。有监督</li>
+</ul>
+</li>
+</ol>
+<h1 id="过滤式选择"><a href="#过滤式选择" class="headerlink" title="过滤式选择"></a>过滤式选择</h1><p>过滤式方法先对数据集进行特征选择，然后再训练学习器，特征过程选择与后继学习器无关。这相当于先用特征选择对初始特征进行“过滤”，再用过滤后的特征来训练模型。</p>
+<p>Relief是一种著名的过滤式特征选择的方法，该方法设计了一个“相关统计量”来度量特征的重要性。该统计量是一个向量，其每个分量分别对应一个初始特征，而特征子集的重要性则是由每个特征对应的相关统计量分量所对应的计量分量之和来决定。于是最终只需要找出相关统计量分量对应的特征大于阈值的即可。</p>
+<p>相关统计度量采用“猜对近邻”和“猜错近邻”结合。</p>
+<h1 id="包裹式选择"><a href="#包裹式选择" class="headerlink" title="包裹式选择"></a>包裹式选择</h1><p>与过滤式特征不考虑后继学习器不同，包裹式特征选择直接把最终将要使用的学习器的性能作为特征子集的评价准则。换言之，包裹式特征选择的目的就是为给定学习器选择有利于其性能、“量身定做”的特征子集。</p>
+<p>一般包裹式的最终学习器性能比过滤式好，但是计算开销大得多。</p>
+<p>LVW是一个典型的包裹式特征选择方法，它在拉斯维加斯方法框架下使用随机策略来进行子集搜索，并以最终分类器的误差作为特征子集评价准则。</p>
+<h1 id="嵌入式选择与L1正则化"><a href="#嵌入式选择与L1正则化" class="headerlink" title="嵌入式选择与L1正则化"></a>嵌入式选择与L1正则化</h1><p>与前面两者不同，嵌入式选择时将特征选择过程与学习器训练过程融为一体，两者在同一个优化过程中完成，即在学习器训练过程中自动的进行特征选择。</p>
+<p>给定数据集，考虑最简单的线性回归模型，以平方误差为损失函数，则优化目标是：<br>$$min_w \sum_{i=1}^m (y_i - w^T x_i)^2   \quad (1)$$<br>当样本特征很多而样本数很少的时候，(1)会陷入过拟合。为了缓解过拟合，我们引入正则化项，若使用L2范数正则化，则有：<br>$$min_w \sum_{i=1}^m (y_i - w^T x_i)^2+ λ||w||_2^2  \quad (2)$$<br>其中正则化参数λ&gt;0，（2）称为岭回归。</p>
+<p>那么能将L2范数换为Lp范数吗？答案是可以。例如L1范数<br>$$min_w \sum_{i=1}^m (y_i - w^T x_i)^2+λ||w||_1  \quad (3)$$<br>（3）称作LASSO（最小绝对化收缩因子）。</p>
+<p>L1范数和L2范数正则化都有助于降低过拟合的风险，但是L1还会带来一个额外好处：L1比L2更容易获得“稀疏解”，即求得的w会有更少的非零分量。<br>如图：<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/L1%E8%8C%83%E6%95%B0.jpg" alt=""></p>
+<p>采用L1范数的平方误差等值线与正则化项的等值线常出现在坐标轴，而L2常出现在象限。L1比L2更容易得到稀疏解。</p>
+<p>注意到w取得稀疏解意味着初始的d个特征中仅有对应着w的非零向量的特征才会出现在最终的模型中。于是，求解L1范数正则化的结果得到了仅仅采用一部分初始特征的模型，换言之，L1正则化的学习方法就是一种嵌入式的特征选择方法，其特征选择过程与学习器训练过程融为一体，同时完成。</p>
+<p>L1正则化问题的求解可以用近端梯度下降（Proximal Grandient Descent,PGD）。</p>
+<h1 id="稀疏表示与字典学习"><a href="#稀疏表示与字典学习" class="headerlink" title="稀疏表示与字典学习"></a>稀疏表示与字典学习</h1><p>当赝本具有一定的稀疏表达形式的时候，问题容易变得线性可分。因此我们考虑为普通稠密表达的样本找到合适的字典，将样本转换为合适的稀疏表达式，从而使学习任务得以简化，模型复杂度得以降低，通常称为“字典学习”，亦称“稀疏编码”。</p>
+<p>字典学习更侧重于学得字典的过程而稀疏编码侧重于样本进行稀疏表达的过程。</p>
+<h1 id="压缩感知"><a href="#压缩感知" class="headerlink" title="压缩感知"></a>压缩感知</h1>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/MachineLearning/">MachineLearning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/MachineLearning/">MachineLearning</a><a href="/tags/Notes/">Notes</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/08/机器学习_周志华_笔记11/" data-title="机器学习（周志华）- 第11章特征选择与稀疏学习笔记 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/08/统计学习方法_李航_笔记11/" title="统计学习方法（李航）- 第11章条件随机场">
+  <strong>上一篇：</strong><br/>
+  <span>
+  统计学习方法（李航）- 第11章条件随机场</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/07/统计学习方法_李航_笔记10/"  title="统计学习方法（李航）- 第10章隐马尔科夫模型笔记">
+ <strong>下一篇：</strong><br/> 
+ <span>统计学习方法（李航）- 第10章隐马尔科夫模型笔记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/08/机器学习_周志华_笔记11/" data-title="机器学习（周志华）- 第11章特征选择与稀疏学习笔记" data-url="http://yoursite.com/2016/08/08/机器学习_周志华_笔记11/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#维度缩减的原因"><span class="toc-number">1.</span> <span class="toc-text">维度缩减的原因</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#维度约减的两个主要过程"><span class="toc-number">2.</span> <span class="toc-text">维度约减的两个主要过程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#过滤式选择"><span class="toc-number">3.</span> <span class="toc-text">过滤式选择</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#包裹式选择"><span class="toc-number">4.</span> <span class="toc-text">包裹式选择</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#嵌入式选择与L1正则化"><span class="toc-number">5.</span> <span class="toc-text">嵌入式选择与L1正则化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#稀疏表示与字典学习"><span class="toc-number">6.</span> <span class="toc-text">稀疏表示与字典学习</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#压缩感知"><span class="toc-number">7.</span> <span class="toc-text">压缩感知</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

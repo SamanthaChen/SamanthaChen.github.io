@@ -1,0 +1,721 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>Java编程思想-类型信息RTTI和反射 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="来源1来源2来源2
+有Java中，我们如何在运行时识别类和对象的信息？有两种方法，一是传统的RTTI，另一种是反射。
+RTTI： 运行时类型识别，在编译与运行时已知类型。反射机制：运行期对模块无任何了解。
+RTTI与反射的区别？RTTI编译时类型必须已知。 编译器在编译时打开和检查.class文件。Reflection编译时不知晓类型,.class文件在编译时候不可获取的，所以在运行时打开和检查.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java编程思想-类型信息RTTI和反射">
+<meta property="og:url" content="http://yoursite.com/2016/08/22/ThinkingInJava笔记5/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="来源1来源2来源2
+有Java中，我们如何在运行时识别类和对象的信息？有两种方法，一是传统的RTTI，另一种是反射。
+RTTI： 运行时类型识别，在编译与运行时已知类型。反射机制：运行期对模块无任何了解。
+RTTI与反射的区别？RTTI编译时类型必须已知。 编译器在编译时打开和检查.class文件。Reflection编译时不知晓类型,.class文件在编译时候不可获取的，所以在运行时打开和检查.">
+<meta property="og:updated_time" content="2016-08-22T08:57:49.231Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java编程思想-类型信息RTTI和反射">
+<meta name="twitter:description" content="来源1来源2来源2
+有Java中，我们如何在运行时识别类和对象的信息？有两种方法，一是传统的RTTI，另一种是反射。
+RTTI： 运行时类型识别，在编译与运行时已知类型。反射机制：运行期对模块无任何了解。
+RTTI与反射的区别？RTTI编译时类型必须已知。 编译器在编译时打开和检查.class文件。Reflection编译时不知晓类型,.class文件在编译时候不可获取的，所以在运行时打开和检查.">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/22/ThinkingInJava笔记5/" title="Java编程思想-类型信息RTTI和反射" itemprop="url">Java编程思想-类型信息RTTI和反射</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-22T01:31:22.848Z" itemprop="datePublished"> Published 2016-08-22</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Class常用方法"><span class="toc-number">1.</span> <span class="toc-text">Class常用方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RTTI-Run-Time-Type-Infomation-运行时类型信息"><span class="toc-number">2.</span> <span class="toc-text">RTTI Run-Time Type Infomation 运行时类型信息</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Class类与Class对象"><span class="toc-number">2.1.</span> <span class="toc-text">Class类与Class对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Class-forName-String-str"><span class="toc-number">2.2.</span> <span class="toc-text">Class.forName(String str)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类字面变量"><span class="toc-number">2.3.</span> <span class="toc-text">类字面变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#范化的Class引用"><span class="toc-number">2.4.</span> <span class="toc-text">范化的Class引用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Class-newInstance"><span class="toc-number">2.5.</span> <span class="toc-text">Class.newInstance()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类型检查"><span class="toc-number">2.6.</span> <span class="toc-text">类型检查</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#反射-Reflection：运行时的类信息"><span class="toc-number">3.</span> <span class="toc-text">反射 Reflection：运行时的类信息</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#获取类的class对象"><span class="toc-number">3.1.</span> <span class="toc-text">获取类的class对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取类的Fields"><span class="toc-number">3.2.</span> <span class="toc-text">获取类的Fields</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取类的Method"><span class="toc-number">3.3.</span> <span class="toc-text">获取类的Method</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取类的Constructor"><span class="toc-number">3.4.</span> <span class="toc-text">获取类的Constructor</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p><a href="http://www.jianshu.com/p/5a6bad3752d9" target="_blank" rel="external">来源1</a><br><a href="http://blog.csdn.net/androiddevelop/article/details/17364641" target="_blank" rel="external">来源2</a><br><a href="http://www.cnblogs.com/quincy/archive/2011/06/19/2084557.html" target="_blank" rel="external">来源2</a></p>
+<p>有Java中，我们如何在运行时识别类和对象的信息？有两种方法，一是传统的RTTI，另一种是反射。</p>
+<p>RTTI： 运行时类型识别，在编译与运行时已知类型。<br>反射机制：运行期对模块无任何了解。</p>
+<p>RTTI与反射的区别？<br>RTTI编译时类型必须已知。 编译器在编译时打开和检查.class文件。<br>Reflection编译时不知晓类型,.class文件在编译时候不可获取的，所以在运行时打开和检查.class文件。</p>
+<p>另外，RTTI有时能解决效率问题。当程序中使用多态给程序的运行带来负担的时候，可以使用RTTI编写一段代码来提高效率。</p>
+<h1 id="Class常用方法"><a href="#Class常用方法" class="headerlink" title="Class常用方法"></a>Class常用方法</h1><ol>
+<li>getName()<br>由于历史原因<br>Double[].class.getName()   返回”[Ljava.lang.Double;”<br>int[].class.getName()  返回”[“</li>
+<li>forName()<br>  静态 ：立即加载类型信息</li>
+<li>getClass()</li>
+<li>T.class<br>  动态：不理解加载 类型信息<br>  代表匹配的类对象<pre><code>一个类对象表示一个“类型”
+</code></pre>  这个类型未必是类，例如int不是类，int.clss是一个Class类型的对象<br>5.Class<t><br>  限定Class引用必须是T类型<br>  问题<pre><code>Class&lt;Number&gt; genericNumberClass = int.class
+Integer继承自Number
+Integer.Class对象不是Number.Class对象的子类
+</code></pre>  解决以上问题<pre><code>通配符&quot; ? &quot;
+&lt;? extends Number&gt;
+</code></pre></t></li>
+</ol>
+<h1 id="RTTI-Run-Time-Type-Infomation-运行时类型信息"><a href="#RTTI-Run-Time-Type-Infomation-运行时类型信息" class="headerlink" title="RTTI Run-Time Type Infomation 运行时类型信息"></a>RTTI Run-Time Type Infomation 运行时类型信息</h1><ul>
+<li>RTTI的三种方法？</li>
+</ul>
+<ol>
+<li>强制类型转换<br>SuperClass  instance = (SuperClass) sub;</li>
+<li>利用Class对象<br>Class class = Class.forName(“className”);<br>Class class = objectInstance.getClass();<br>Class class = ObjectInstance.class</li>
+<li>‹通过比较识别类型<br>if (sub instanceof SubClass) {}<br>if ( Class.isInstance() )</li>
+</ol>
+<p>##为什么需要RTTI？<br>越是优秀的面向对象设计，越是强调高内聚低耦合，正如依赖倒转原则所说：“无论是高层模块还是低层模块，都应该针对抽象编程”。</p>
+<p>比如说我们有一个抽象父类：<br>Shape draw()<br>以下是三个具体类：<br>Circle draw()<br>Square draw()<br>Triangle draw()<br>某些情况下，我们持有Shape，但却远远不够——因为我们想要针对它的具体类型进行特殊处理，然而我们的设计完全针对抽象，所以在当前上下文环境中无法判断具体类型。<br>因为RTTI的存在，使得我们在不破坏设计的前提下得以达到目的。</p>
+<p>总的来说分为以下两点</p>
+<ol>
+<li>多态 - 实例都被向上转型为父类引用，实例调用相应方法时，需要知道当前父类型引用的具体类型，并从中查找相应方法。</li>
+<li>IDE - 获取任意类的所有字段和方法。<br>跨网络的远程平台上创建和运行对象的能力<br>从磁盘文件，或者网络连接中获取一串字节（表示类）<br>对象序列化</li>
+</ol>
+<h2 id="Class类与Class对象"><a href="#Class类与Class对象" class="headerlink" title="Class类与Class对象"></a>Class类与Class对象</h2><p>事实上，每一个类都持有其对应的Class类的对象的引用（Object类中的getClass()能让我们获取到它），其中包含着与类相关的信息。<br>非常容易注意到，针对每一个类，编译Java文件会生成一个二进制.class文件，这其中就保存着该类对应的Class对象的信息。<br>.class是用于供类加载器使用的文件<br>Java程序在运行之前并没有被完全加载，各个部分是在需要时才被加载的。</p>
+<p>为了使用类而作的准备包含三步：</p>
+<ol>
+<li>加载。由类加载器执行，查找字节码，创建一个Class对象。</li>
+<li>链接。验证字节码，为静态域分配存储空间，如果必需的话，会解析这个类创建的对其他类的所有引用（比如说该类持有static域）。</li>
+<li>初始化。如果该类有超类，则对其初始化，执行静态初始化器[注]和静态初始化块。<br>注：原文为static initializers，经查看Thinking in Java，其意应为静态域在定义处的初始化，如：<br>static Dog d = new Dog(0);。</li>
+</ol>
+<p>所有的类都是在对其第一次使用时，动态加载到JVM中去的。当程序创建第一个对类的静态成员的引用时，JVM会使用类加载器来根据类名查找同名的.class——一旦某个类的Class对象被载入内存，它就被用来创建这个类的所有对象。构造器也是类的静态方法，使用new操作符创建新对象会被当作对类的静态成员的引用。<br>注意特例：如果一个static final值是编译期常量，读取这个值不需要对类进行初始化。所以说对于不变常量，我们总是应该使用static final修饰。</p>
+<h2 id="Class-forName-String-str"><a href="#Class-forName-String-str" class="headerlink" title="Class.forName(String str)"></a>Class.forName(String str)</h2><p>Class类有一个很有用的静态方法forName(String str)，可以让我们对于某个类不进行创建就得到它的Class对象的引用，例如这个样子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">     Class toyClass = Class.forName(<span class="string">"com.duanze.Toy"</span>); <span class="comment">// 注意必须使用全限定名</span></div><div class="line">&#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然而，使用forName(String str)有一个副作用：如果Toy类没有被加载，调用它会触发Toy类的static子句（静态初始化块）。</p>
+<h2 id="类字面变量"><a href="#类字面变量" class="headerlink" title="类字面变量"></a>类字面变量</h2><p>与之相比，更好用的是类字面常量，像是这样:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Class toyClass = Toy.class;</div></pre></td></tr></table></figure>
+<p>支持编译时检查，所以不会抛出异常。使用类字面常量创建Class对象的引用与forName(String str)不同，不会触发Toy类的static子句（静态初始化块）。所以，更简单更安全更高效。<br>类字面常量支持类、接口、数组、基本数据类型。</p>
+<p>Class.forName（String className）使用装载当前类的类装载器来装载指定类。因为class.forName(String className)方法内部调用了Class.forName(className, true, this.getClass().getClassLoader())方法，如你所见，第三个参数就是指定类装载器，显而易见，它指定的是装载当前类的类装载器的实例，也就是this.getClass().getClassLoader();<br>你可以选择手动指定装载器。</p>
+<h2 id="范化的Class引用"><a href="#范化的Class引用" class="headerlink" title="范化的Class引用"></a>范化的Class引用</h2><p>通过范型以及通配符，我们能对Class对象的引用进行类型限定，像是：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Class&lt;Integer&gt; intClass = <span class="keyword">int</span>.class; <span class="comment">// 注意右边是基本数据类型的类字面常量</span></div></pre></td></tr></table></figure>
+<p>这样做的好处是能让编译器进行额外的类型检查。<br>知道了这一点以后，我们可以把之前的例子改写一下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Class toyClass = Toy.class;</div><div class="line">Class&lt;?&gt; toyClass = Toy.class;</div></pre></td></tr></table></figure>
+<p>虽然这两句是等价的，但从可读性来说Class&lt;?&gt;要优于Class，这说明编程者并不是由于疏忽而选择了非具体版本，而是特意选择了非具体版本。</p>
+<h2 id="Class-newInstance"><a href="#Class-newInstance" class="headerlink" title="Class.newInstance()"></a>Class.newInstance()</h2><p>既然拿到了包含着类信息的Class对象的引用，我们理应可以构造出一个类的实例。Class.newInstance()就是这样一个方法，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    Class&lt;?&gt; toyClass = Class.forName(<span class="string">"com.duanze.Toy"</span>); </div><div class="line">    Object obj = toyClass.newInstance();</div><div class="line">&#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// Two</span></div><div class="line">Class&lt;?&gt; toyClass = Toy.class;</div><div class="line">Object obj = toyClass.newInstance();</div></pre></td></tr></table></figure>
+<p>使用newInstance()创建的类，必须带有默认构造器。<br>由于toyClass仅仅只是一个Class对象引用，在编译期不具备更进一步的类型信息，所以你使用newInstance()时只会得到一个Object引用。如果你需要拿到确切类型，需要这样做：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Class&lt;Toy&gt; toyClass = Toy.class;</div><div class="line">Toy obj = toyClass.newInstance();</div></pre></td></tr></table></figure>
+<p>但是，如果你遇到下面的情况，还是只能拿到Object引用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Class&lt;SubToy&gt; subToyClass = SubToy.class;</div><div class="line">Class&lt;? <span class="keyword">super</span> SubToy&gt; upClass = subToy.getSuperclass(); <span class="comment">// 希望拿到SubToy的父类Toy的Class对象引用</span></div><div class="line"><span class="comment">// This won't compile:</span></div><div class="line"><span class="comment">// Class&lt;Toy&gt; upClass = subToy.getSuperclass();</span></div><div class="line"><span class="comment">// Only produces Object:</span></div><div class="line">Object obj = upClass.newInstance();</div></pre></td></tr></table></figure>
+<p>虽然从常理上来讲，编译器应该在编译期就能知道SubToy的超类是Toy，但实际上却并不支持这样写：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// This won't compile:</span></div><div class="line">Class&lt;Toy&gt; upClass = subToy.getSuperclass();</div></pre></td></tr></table></figure>
+<p>而只能够接受：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Class&lt;? <span class="keyword">super</span> SubToy&gt; upClass = subToy.getSuperclass(); <span class="comment">// 希望拿到SubToy的父类Toy</span></div></pre></td></tr></table></figure>
+<p>这看上去有些奇怪，但现状就是如此，我们惟有接受。好在这并不是什么大问题，因为转型操作并不困难。</p>
+<h2 id="类型检查"><a href="#类型检查" class="headerlink" title="类型检查"></a>类型检查</h2><p>在进行类型转换之前，可以使用instanceof关键字进行类型检查，像是：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ( x <span class="keyword">instanceof</span> Shape ) &#123;</div><div class="line">     Shape s = (Shape)x;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>一般情况下instanceof已经够用，但有些时候你可能需要更动态的测试途径:Class.isInstance(Class clz):</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Class&lt;Shape&gt; s = Shape.class;</div><div class="line">s.isInstance(x);</div></pre></td></tr></table></figure>
+<p>可以看到，与instanceof相比，isInstance()的左右两边都是可变的，这一动态性有时可以让大量包裹在if else…中的instanceof缩减为一句。</p>
+<h1 id="反射-Reflection：运行时的类信息"><a href="#反射-Reflection：运行时的类信息" class="headerlink" title="反射 Reflection：运行时的类信息"></a>反射 Reflection：运行时的类信息</h1><p>不知道你注意到了没有，以上使用的RTTI都具有一个共同的限制：在编译时，编译器必须知道所有要通过RTTI来处理的类。</p>
+<p>但有的时候，你获取了一个对象引用，然而其对应的类并不在你的程序空间中，怎么办？（这种情况并不少见，比如说你从磁盘文件或者网络中获取了一串字串，并且被告知这一串字串代表了一个类，这个类在编译器为你的程序生成代码之后才会出现。）</p>
+<p>Class类和java.lang.reflect类库一同对反射的概念提供了支持。反射机制并没有什么神奇之处，当通过反射与一个未知类型的对象打交道时，JVM只是简单地检查这个对象，看它属于哪个特定的类。因此，那个类的.class对于JVM来说必须是可获取的，要么在本地机器上，要么从网络获取。所以对于RTTI和反射之间的真正区别只在于：</p>
+<ul>
+<li>RTTI，编译器在编译时打开和检查.class文件</li>
+<li>反射，运行时打开和检查.class文件</li>
+</ul>
+<p>明白了以上概念后，什么getFields(),getMethods(),getConstructors()之类的方法基本上全都可以望文生义了。</p>
+<p>java.lang.reflect<br>这些类型的对象是由JVM在运行时创建的，可以表示未知类里对应的成员：<br>|类名  |作用|<br>|——|—–|<br>|Class |  代表一个类。|<br>|Field |<br>代表类的成员变量（成员变量也称为类的属性）。？对象？<br>get() set()方法读取和修改与Field对象关联的字段|<br>|Method | 代表类的方法。 用invoke()方法调用与此类关联的方法|<br>|Constructor |代表类的构造方法。|<br>|Array |  提供了动态创建数组，以及访问数组的元素的静态方法。|</p>
+<p>Class类支持反射，是在java.lang.reflect中包含了Field/Method/Constructor类，每个类都实现了Member接口。这些类型的对象都是由JVM在运行时创建的，用来表示未知类里对应的成员。如可以用Constructor类创建新的对象，用get()和set()方法读取和修改与Field对象关联的字段，用invoke()方法调用与Method对象关联的方法。同时，还可以调用getFields()、getMethods()、getConstructors()等方法来返回表示字段、方法以及构造器的对象数组。这样，未知的对象的类信息在运行时就能被完全确定下来，而在编译时不需要知道任何信息。</p>
+<p>Java反射机制提供如下功能：</p>
+<ul>
+<li>在运行时判断任意一个对象所属的类</li>
+<li>在运行时构造任意一个类的对象</li>
+<li>在运行时判段任意一个类所具有的成员变量和方法</li>
+<li>在运行时调用任一个对象的方法</li>
+<li>在运行时创建新类对象<br>在使用Java的反射功能时，基本首先都要获取类的Class对象，再通过Class对象获取其他的对象。</li>
+</ul>
+<h2 id="获取类的class对象"><a href="#获取类的class对象" class="headerlink" title="获取类的class对象"></a>获取类的class对象</h2><ol>
+<li><p>调用getClass<br>Boolean var1 = true;<br>Class&lt;?&gt; classType2 = var1.getClass();<br>System.out.println(classType2);<br>输出：class java.lang.Boolean</p>
+</li>
+<li><p>运用.class 语法<br>Class&lt;?&gt; classType4 = Boolean.class;<br>System.out.println(classType4);<br>输出：class java.lang.Boolean</p>
+</li>
+<li><p>运用static method Class.forName()<br>Class&lt;?&gt; classType5 = Class.forName(“java.lang.Boolean”);<br>System.out.println(classType5);<br>输出：class java.lang.Boolean</p>
+</li>
+<li><p>运用primitive wrapper classes的TYPE 语法<br>这里返回的是原生类型，和Boolean.class返回的不同<br>Class&lt;?&gt; classType3 = Boolean.TYPE;<br>System.out.println(classType3);<br>输出：boolean</p>
+</li>
+</ol>
+<h2 id="获取类的Fields"><a href="#获取类的Fields" class="headerlink" title="获取类的Fields"></a>获取类的Fields</h2><p>可以通过反射机制得到某个类的某个属性，然后改变对应于这个类的某个实例的该属性值。JAVA 的Class<t>类提供了几个方法获取类的属性。</t></p>
+<ol>
+<li>public Field getField(String name)<br>返回一个 Field 对象，它反映此 Class 对象所表示的类或接口的指定公共成员字段</li>
+<li>public Field[] getFields()<br>返回一个包含某些 Field 对象的数组，这些对象反映此 Class 对象所表示的类或接口的所有可访问公共字段</li>
+<li>public Field getDeclaredField(String name)<br>返回一个 Field 对象，该对象反映此 Class 对象所表示的类或接口的指定已声明字段</li>
+<li>public Field[] getDeclaredFields()<br>返回 Field 对象的一个数组，这些对象反映此 Class 对象所表示的类或接口所声明的所有字段</li>
+</ol>
+<p>可见getFields和getDeclaredFields区别：<br>getFields返回的是申明为public的属性，包括父类中定义，<br>getDeclaredFields返回的是指定类定义的所有定义的属性，不包括父类的。</p>
+<h2 id="获取类的Method"><a href="#获取类的Method" class="headerlink" title="获取类的Method"></a>获取类的Method</h2><p>通过反射机制得到某个类的某个方法，然后调用对应于这个类的某个实例的该方法<br>Class<t>类提供了几个方法获取类的方法。</t></p>
+<ol>
+<li>public Method getMethod(String name, Class&lt;?&gt;… parameterTypes)<br>返回一个 Method 对象，它反映此 Class 对象所表示的类或接口的指定公共成员方法</li>
+<li>public Method[] getMethods()<br>返回一个包含某些 Method 对象的数组，这些对象反映此 Class 对象所表示的类或接口（包括那些由该类或接口声明的以及从超类和超接口继承的那些的类或接口）的公共 member 方法</li>
+<li>public Method getDeclaredMethod(String name,Class&lt;?&gt;… parameterTypes)<br>返回一个 Method 对象，该对象反映此 Class 对象所表示的类或接口的指定已声明方法</li>
+<li>public Method[] getDeclaredMethods()<br>返回 Method 对象的一个数组，这些对象反映此 Class 对象表示的类或接口声明的所有方法，包括公共、保护、默认（包）访问和私有方法，但不包括继承的方法</li>
+</ol>
+<h2 id="获取类的Constructor"><a href="#获取类的Constructor" class="headerlink" title="获取类的Constructor"></a>获取类的Constructor</h2><p>通过反射机制得到某个类的构造器，然后调用该构造器创建该类的一个实例<br>Class<t>类提供了几个方法获取类的构造器。</t></p>
+<ol>
+<li>public Constructor<t> getConstructor(Class&lt;?&gt;… parameterTypes)<br>返回一个 Constructor 对象，它反映此 Class 对象所表示的类的指定公共构造方法</t></li>
+<li>public Constructor&lt;?&gt;[] getConstructors()<br>返回一个包含某些 Constructor 对象的数组，这些对象反映此 Class 对象所表示的类的所有公共构造方法</li>
+<li>public Constructor<t> getDeclaredConstructor(Class&lt;?&gt;… parameterTypes)<br>返回一个 Constructor 对象，该对象反映此 Class 对象所表示的类或接口的指定构造方法</t></li>
+<li>public Constructor&lt;?&gt;[] getDeclaredConstructors()<br>返回 Constructor 对象的一个数组，这些对象反映此 Class 对象表示的类声明的所有构造方法。它们是公共、保护、默认（包）访问和私有构造方法</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Interview/">Interview</a><a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/22/ThinkingInJava笔记5/" data-title="Java编程思想-类型信息RTTI和反射 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/22/ThinkingInJava笔记6/" title="Java编程思想-泛型">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Java编程思想-泛型</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/21/ThinkingInJava笔记4/"  title="Java编程思想-java异常">
+ <strong>下一篇：</strong><br/> 
+ <span>Java编程思想-java异常
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/22/ThinkingInJava笔记5/" data-title="Java编程思想-类型信息RTTI和反射" data-url="http://yoursite.com/2016/08/22/ThinkingInJava笔记5/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Class常用方法"><span class="toc-number">1.</span> <span class="toc-text">Class常用方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RTTI-Run-Time-Type-Infomation-运行时类型信息"><span class="toc-number">2.</span> <span class="toc-text">RTTI Run-Time Type Infomation 运行时类型信息</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Class类与Class对象"><span class="toc-number">2.1.</span> <span class="toc-text">Class类与Class对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Class-forName-String-str"><span class="toc-number">2.2.</span> <span class="toc-text">Class.forName(String str)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类字面变量"><span class="toc-number">2.3.</span> <span class="toc-text">类字面变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#范化的Class引用"><span class="toc-number">2.4.</span> <span class="toc-text">范化的Class引用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Class-newInstance"><span class="toc-number">2.5.</span> <span class="toc-text">Class.newInstance()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类型检查"><span class="toc-number">2.6.</span> <span class="toc-text">类型检查</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#反射-Reflection：运行时的类信息"><span class="toc-number">3.</span> <span class="toc-text">反射 Reflection：运行时的类信息</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#获取类的class对象"><span class="toc-number">3.1.</span> <span class="toc-text">获取类的class对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取类的Fields"><span class="toc-number">3.2.</span> <span class="toc-text">获取类的Fields</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取类的Method"><span class="toc-number">3.3.</span> <span class="toc-text">获取类的Method</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#获取类的Constructor"><span class="toc-number">3.4.</span> <span class="toc-text">获取类的Constructor</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

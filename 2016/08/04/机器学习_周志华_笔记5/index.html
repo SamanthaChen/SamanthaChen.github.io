@@ -1,0 +1,654 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>机器学习（周志华）- 第5章神经网络笔记 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="神经元模型“M-P神经元模型”：在这个模型中，神经元接收到来自n个其他神经元传递过来的输入信号，这些输入信号通过待权重的链接进行传递，神经元接受到的总输入值与神经元的阈值进行比较，然后通过激活函数处理输出。如下图：理想的激活函数是阶跃函数，将输出值映射为0或1,。但是阶跃函数具有不连续、不光滑等不太好的性质，因此实际常用Sigmod函数作为激活函数。把许多个这样的神经元按照一定的层次结构连接起来就">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习（周志华）- 第5章神经网络笔记">
+<meta property="og:url" content="http://yoursite.com/2016/08/04/机器学习_周志华_笔记5/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="神经元模型“M-P神经元模型”：在这个模型中，神经元接收到来自n个其他神经元传递过来的输入信号，这些输入信号通过待权重的链接进行传递，神经元接受到的总输入值与神经元的阈值进行比较，然后通过激活函数处理输出。如下图：理想的激活函数是阶跃函数，将输出值映射为0或1,。但是阶跃函数具有不连续、不光滑等不太好的性质，因此实际常用Sigmod函数作为激活函数。把许多个这样的神经元按照一定的层次结构连接起来就">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%A5%9E%E7%BB%8F%E5%85%83.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E6%84%9F%E7%9F%A5%E6%9C%BA.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/BPNetwork.jpg">
+<meta property="og:updated_time" content="2016-08-05T04:17:41.108Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习（周志华）- 第5章神经网络笔记">
+<meta name="twitter:description" content="神经元模型“M-P神经元模型”：在这个模型中，神经元接收到来自n个其他神经元传递过来的输入信号，这些输入信号通过待权重的链接进行传递，神经元接受到的总输入值与神经元的阈值进行比较，然后通过激活函数处理输出。如下图：理想的激活函数是阶跃函数，将输出值映射为0或1,。但是阶跃函数具有不连续、不光滑等不太好的性质，因此实际常用Sigmod函数作为激活函数。把许多个这样的神经元按照一定的层次结构连接起来就">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%A5%9E%E7%BB%8F%E5%85%83.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/04/机器学习_周志华_笔记5/" title="机器学习（周志华）- 第5章神经网络笔记" itemprop="url">机器学习（周志华）- 第5章神经网络笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-04T05:28:44.019Z" itemprop="datePublished"> Published 2016-08-04</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#神经元模型"><span class="toc-number">1.</span> <span class="toc-text">神经元模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#感知机与多层模型"><span class="toc-number">1.1.</span> <span class="toc-text">感知机与多层模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#简单感知机学习规则"><span class="toc-number">1.1.1.</span> <span class="toc-text">简单感知机学习规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多层前馈神经网络"><span class="toc-number">1.1.2.</span> <span class="toc-text">多层前馈神经网络</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#误差逆传播算法（BackPropagation，BP）"><span class="toc-number">2.</span> <span class="toc-text">误差逆传播算法（BackPropagation，BP）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#BP算法详解"><span class="toc-number">2.1.</span> <span class="toc-text">BP算法详解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#具体步骤"><span class="toc-number">2.2.</span> <span class="toc-text">具体步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#防止BP过拟合"><span class="toc-number">2.3.</span> <span class="toc-text">防止BP过拟合</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#全局最小与局部最小"><span class="toc-number">3.</span> <span class="toc-text">全局最小与局部最小</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他常见神经网络"><span class="toc-number">4.</span> <span class="toc-text">其他常见神经网络</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#RBF网络"><span class="toc-number">4.1.</span> <span class="toc-text">RBF网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ART网络"><span class="toc-number">4.2.</span> <span class="toc-text">ART网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SOM网络"><span class="toc-number">4.3.</span> <span class="toc-text">SOM网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#及连相关网络"><span class="toc-number">4.4.</span> <span class="toc-text">及连相关网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Elman网络"><span class="toc-number">4.5.</span> <span class="toc-text">Elman网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Boltzmann机"><span class="toc-number">4.6.</span> <span class="toc-text">Boltzmann机</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#深度学习"><span class="toc-number">5.</span> <span class="toc-text">深度学习</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#课外阅读材料"><span class="toc-number">6.</span> <span class="toc-text">课外阅读材料</span></a></li></ol>
+		
+		</div>
+		
+		<h1 id="神经元模型"><a href="#神经元模型" class="headerlink" title="神经元模型"></a>神经元模型</h1><p>“M-P神经元模型”：<br>在这个模型中，神经元接收到来自n个其他神经元传递过来的输入信号，这些输入信号通过待权重的链接进行传递，神经元接受到的总输入值与神经元的阈值进行比较，然后通过<strong>激活函数</strong>处理输出。如下图：<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%A5%9E%E7%BB%8F%E5%85%83.jpg" alt=""><br>理想的激活函数是阶跃函数，将输出值映射为0或1,。但是阶跃函数具有不连续、不光滑等不太好的性质，因此实际常用Sigmod函数作为激活函数。<br>把许多个这样的神经元按照一定的层次结构连接起来就得到了神经网络。<br>例如，将若干个$y = f(\sum_i w_i x_i - \theta_j)$互相嵌套带入得到。有效的神经网络算法大多以数据证明为支撑。</p>
+<h2 id="感知机与多层模型"><a href="#感知机与多层模型" class="headerlink" title="感知机与多层模型"></a>感知机与多层模型</h2><h3 id="简单感知机学习规则"><a href="#简单感知机学习规则" class="headerlink" title="简单感知机学习规则"></a>简单感知机学习规则</h3><p>感知机由两层神经元组成，如图。输入层即受到外界输入信号后传递给输出层，输出层是“M-P”神经元模型，亦称“阈值逻辑单元”。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E6%84%9F%E7%9F%A5%E6%9C%BA.png" alt=""><br>感知机能够容易的实现与、或、非运算。<br>把阈值$\theta$看做一个固定输入为-1.0的哑节点，连接权重为$w_{n+1}$，这样，权重和阈值的学习就可以统一为权重的学习。感知机学习规则很简单，对训练样例(x,y)，若当前感知机的输出为$\hat{y}$,则感知机权重将这样调整，</p>
+<p>$$w_i \leftarrow w_i + \Delta w_i$$<br>$$ \Delta w_i = \eta (y - \hat{y}) x+i$$<br>其中$\eta \in (0,1)$称为学习率。从上式可以看出，若感知机对训练样例(x,y)预测正确，即 $y = \hat{y}$则感知机不会变化，否则将会根据错误的程度进行权重调整。</p>
+<p>需要注意，感知机只有输出神经元进行激活函数处理，即只有一层功能神经元，其学习能力十分有限。<br>而与或非都是线性可分的问题，可以证明若两类模式是线性可分的，即存在一个线性超平面能将他们分开，则感知机的学习过程一定会收敛而求得适当的权向量$w=(w_1;w_2;\ldots, w_{n+1})$,否则感知机学习过程将会发生震荡，w难以稳定下来，不能求得合适解。</p>
+<p>要解决非线性可分功能，需要考虑使用多层功能神经元。</p>
+<h3 id="多层前馈神经网络"><a href="#多层前馈神经网络" class="headerlink" title="多层前馈神经网络"></a>多层前馈神经网络</h3><p>每层神经元与下一层神经元完全互联，神经元之间不存在同层链接也不存在跨层链接。<br>即谁曾神经元仅是接受输入，不进行函数处理，隐含层与输出层包含功能神经元。</p>
+<p><code>神经网络的学习过程，就是根据训练函数来调整神经元之间的“连接权”以及每个功能神经元的阈值；换言之，神经网络“学”到的东西，蕴含在连接权和阈值中。</code></p>
+<h1 id="误差逆传播算法（BackPropagation，BP）"><a href="#误差逆传播算法（BackPropagation，BP）" class="headerlink" title="误差逆传播算法（BackPropagation，BP）"></a>误差逆传播算法（BackPropagation，BP）</h1><p>预训练多层网络，简单感知机学习规则不够，需要更强大的算法。<br>BP是迄今最成功的神经网络学习算法，现实任务中使用神经网络大多是使用BP。<br>BP算法不仅可以用于多层前馈神经网络，还可以用于其他类型，例如“训练递归神经网络”。但常说的“BP网络”一般指BP训练的多层前馈神经网络。</p>
+<h2 id="BP算法详解"><a href="#BP算法详解" class="headerlink" title="BP算法详解"></a>BP算法详解</h2><p><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/BPNetwork.jpg" alt=""><br>如上图，对训练例$(\mathbf{x_k},\mathbf{y_k})$,假设神经网络的输出为$\hat{y}_k = (\hat{y}_1,\hat{y}_2,\ldots,\hat{y}_l)$,即<br>$$\hat{y}_j^k = f(\beta_j-\theta_j)$$<br>则网络在$(\mathbf{x_k},\mathbf{y_k})$上均方误差:<br>$$E_k = \frac{1}{2} \sum_{j=1}^l (\hat{y}_j^k-y_j^k)^2 \quad (1)$$<br>上图的网络一共有下面的参数需要确定：</p>
+<ul>
+<li>输入层到隐层的d * p个权值</li>
+<li>隐层到输出层的q * l个权值</li>
+<li>q个隐层神经元阈值</li>
+<li>l个输出层神经元阈值<br>BP是一个迭代学习算法，在迭代的每一层才赢广义的感知机学习规则对参数进行更新估计，任意参数v的更新公式为：<br>$$v\rightarrow v+\Delta v \quad (2)$$</li>
+</ul>
+<p>下面以隐层到输出层连接权$w_{hj}$为例进行推导。</p>
+<p>BP算法基于梯度下降策略，以目标的负梯度方向对参数进行调整。对（1）式的误差$E_k$，给定学习率$\eta$有：<br>$$\Delta w_{hj} = - \eta \frac{<br>\partial{E_k}}{\partial{w_{hj}}}$$<br>注意到$w_{hj}$先影响到到第j个输出层神经元的输入值$\beta_j$，再影响到其输入值$\hat{y}_j^k$,然后到$E_k$，有：<br>$$\frac{<br>\partial{E_k}}{\partial{w_{hj}}} =  \frac{<br>\partial{E_k}}{\partial{\hat{y}_j^k}}  ·  \frac{<br>\partial{\hat{y}_j^k}}{\partial{\beta_j}} ·   \frac{<br>\partial{\beta_j}}{\partial{w_{hj}}}$$</p>
+<p>(推导过程暂时不写了 )<br>学习率控制着每一轮迭代中的更新步长，若胎发则容易震荡，太小收敛速度又慢，有时为了调整，几个层之间的学习率可以不相等。</p>
+<h2 id="具体步骤"><a href="#具体步骤" class="headerlink" title="具体步骤"></a>具体步骤</h2><ol>
+<li>先将输入实例提供给输入层神经元，然后逐层将信号前传，直到产生输出层的结果；</li>
+<li>计算输出层误差，计算输出层神经元梯度项，再将误差逆向传播至隐层神经元</li>
+<li>最后根据隐层神经元的误差对连接权和阈值进行调整<br>该迭代过程循环进行，直到达到某些同志条件为止。例如训练误差已经达到一个很小的值。</li>
+</ol>
+<p>需要注意的是，BP实验法的目标是最小化训练结D上的累计误差，但我们所说的只是针对一个训练样例的更新连接权值和阈值。</p>
+<p>标准BP算法每次只针对翻个样例，参数更新十分频繁，而且对不同样例进行更新可能会出现“抵消”现象，因此为了达到同样的积累误差极小点，标准BP需要进行多次迭代。</p>
+<p>累积BP则直接针对累积误差最小化，在读取完整个训练结一遍后才对参数进行更新，更新频率低得多。</p>
+<p>但在很多任务中累积误差下降到一定程度后进一步下降会十分缓慢，这时标准BP反而获得较好解。</p>
+<h2 id="防止BP过拟合"><a href="#防止BP过拟合" class="headerlink" title="防止BP过拟合"></a>防止BP过拟合</h2><p>由于强大的表示能力，BP神经网络容易过拟合，其训练误差持续降低但是测试误差可能上升。有两种策略：</p>
+<ol>
+<li>“早停”：将数据集分为训练集和验证集，训练集用于计算梯度、更新连接权值和阈值，验证集用来估计误差。若训练误差降低但是验证集误差升高则停止训练。</li>
+<li>“正则化”：基本思想是在误差目标函数中增加一个用于描述网络复杂度的部分，例如链接权值和阈值的平方和。训练过程将会偏好比较小的连接权值和阈值，使网络输出更加“光滑”，从而缓解过拟合。</li>
+</ol>
+<h1 id="全局最小与局部最小"><a href="#全局最小与局部最小" class="headerlink" title="全局最小与局部最小"></a>全局最小与局部最小</h1><p>梯度下降法沿着负梯度下降方向搜索最优解，容易陷入局部最小值。<br>现实生活中人们通常采用以下策略来“跳出”局部最小值，进一步获得全局最小：</p>
+<ol>
+<li>以多组不同参数初始化多个神经网络，按标准方法训练后去其中误差最小的解作为最终参数。相当于从多个不同的初始点开始搜索，这样可能陷入不同的局部最小值，从中选出可能获得更接近全局最小的结果。</li>
+<li>使用模拟退火。模拟退火在每一步都以一定概率接受比当前解更差的结果，从而有助于跳出局部最小。在每部迭代中接受次优解的概率随着时间的推移而逐渐降低，从而保证算法稳定。</li>
+<li>采用随机梯度下降。与标准梯度下降的精确计算梯度不同，随机梯度下降在计算题都的时候加入了随机因素，因此，即时陷入局部极小点，它计算出来的梯度仍可能不为0，就有机会跳出局部最小继续搜索。</li>
+<li>遗传算法。</li>
+</ol>
+<p>上述大多是启发式，理论上缺乏保证。</p>
+<h1 id="其他常见神经网络"><a href="#其他常见神经网络" class="headerlink" title="其他常见神经网络"></a>其他常见神经网络</h1><h2 id="RBF网络"><a href="#RBF网络" class="headerlink" title="RBF网络"></a>RBF网络</h2><p>径向基函数网络，是一种单隐层前馈神经网络，它使用径向基函数作为隐层神经元激活函数，输出层是对隐层神经元输出的线性组合。</p>
+<p>通常采用两步过程来训练RBF网络：</p>
+<ul>
+<li>第一步，确定神经元中心ci，常用的方式有随机采样、聚类等</li>
+<li>第二步，利用BP算法来确定参数wi和$\beta_i $<h2 id="ART网络"><a href="#ART网络" class="headerlink" title="ART网络"></a>ART网络</h2>自适应谐振网络。<h2 id="SOM网络"><a href="#SOM网络" class="headerlink" title="SOM网络"></a>SOM网络</h2>自组织映射网络<h2 id="及连相关网络"><a href="#及连相关网络" class="headerlink" title="及连相关网络"></a>及连相关网络</h2><h2 id="Elman网络"><a href="#Elman网络" class="headerlink" title="Elman网络"></a>Elman网络</h2><h2 id="Boltzmann机"><a href="#Boltzmann机" class="headerlink" title="Boltzmann机"></a>Boltzmann机</h2>是一种递归神经网络。</li>
+</ul>
+<h1 id="深度学习"><a href="#深度学习" class="headerlink" title="深度学习"></a>深度学习</h1><p>理论上说，参数越多的模型复杂度越高，容量越大，这意味着能完成更复杂的学习任务。但是一般情形下，复杂模型的训练效率低，容易陷入过拟合，难以收到人们青睐。<br>随着云计算、大数据时代的到来，计算能力的大幅增加可以降低过拟合的风险，因此，以深度学习为代表的复杂模型收到人们的关注。</p>
+<p>典型的深度学习模型就是很深层的神经网络。<br>提高容量的一个方法就是增加隐层的数目，然而多隐层神经网络难以直接用经典算法进行训练，因为误差在多隐层内逆传播时候往往会发散而不能收敛到稳定状态。</p>
+<p>无监督组成训练是多隐层网络训练的有效手段，基本思想是每次训练一层隐节点，训练时候将上一层隐节点的输出作为输入。，成为“预训练”，在预训练全部完成以后，再对整个网络进行微调。<br>事实上“预训练+微调”做法可以看成将大量参数分组，对每组找到局部看起来较好的设置，然后再基于这些局部较优的结果联合起来全局寻优。这样就利用了模型大量参数所提供的自由度的同时，有效节省了训练开销。</p>
+<p>另一种节省训练开销的策略是“权共享”，让一组神经元使用相同的连接权，这个策略在卷积神经网络（CNN）中发挥了重要作用。</p>
+<p>换另一个角度理解深度学习，无论是DBN还是DNN，其多层堆叠、每层对上一层输出进行处理的机制，可以看做对输入信号进行逐层加工，从而把初始的、与输出目标之间联系不密切的输入表示为与输出更模切的表示是的原来仅基于最后一层输出映射难以完成的任务成为可能。<br>换言之，通过多层处理逐渐将初始的低层特征表示转换为高层的特征表示后用简单模型即可完成复杂的分类更学习任务，因此深度学习也可以理解为“特征学习”或者“表示学习”。</p>
+<h1 id="课外阅读材料"><a href="#课外阅读材料" class="headerlink" title="课外阅读材料"></a>课外阅读材料</h1><ol>
+<li>除了MP神经模型还有脉冲盛景园模型等。</li>
+<li>MacKay在贝叶斯框架下提出了自动确定神经网络正则化参数的方法。</li>
+<li>神经网络是一种难以解释的黑箱模型，但是有一些工作尝试改善神经网络的可解释性，主要途径是从神经网络中抽取易于理解的符号规则。</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/MachineLearning/">MachineLearning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/MachineLearning/">MachineLearning</a><a href="/tags/Notes/">Notes</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/04/机器学习_周志华_笔记5/" data-title="机器学习（周志华）- 第5章神经网络笔记 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/04/机器学习_周志华_笔记6/" title="机器学习（周志华）- 第6章支持向量机(1)笔记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  机器学习（周志华）- 第6章支持向量机(1)笔记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/03/机器学习_周志华_笔记4/"  title="机器学习（周志华）- 第4章决策树笔记">
+ <strong>下一篇：</strong><br/> 
+ <span>机器学习（周志华）- 第4章决策树笔记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/04/机器学习_周志华_笔记5/" data-title="机器学习（周志华）- 第5章神经网络笔记" data-url="http://yoursite.com/2016/08/04/机器学习_周志华_笔记5/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#神经元模型"><span class="toc-number">1.</span> <span class="toc-text">神经元模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#感知机与多层模型"><span class="toc-number">1.1.</span> <span class="toc-text">感知机与多层模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#简单感知机学习规则"><span class="toc-number">1.1.1.</span> <span class="toc-text">简单感知机学习规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多层前馈神经网络"><span class="toc-number">1.1.2.</span> <span class="toc-text">多层前馈神经网络</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#误差逆传播算法（BackPropagation，BP）"><span class="toc-number">2.</span> <span class="toc-text">误差逆传播算法（BackPropagation，BP）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#BP算法详解"><span class="toc-number">2.1.</span> <span class="toc-text">BP算法详解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#具体步骤"><span class="toc-number">2.2.</span> <span class="toc-text">具体步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#防止BP过拟合"><span class="toc-number">2.3.</span> <span class="toc-text">防止BP过拟合</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#全局最小与局部最小"><span class="toc-number">3.</span> <span class="toc-text">全局最小与局部最小</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他常见神经网络"><span class="toc-number">4.</span> <span class="toc-text">其他常见神经网络</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#RBF网络"><span class="toc-number">4.1.</span> <span class="toc-text">RBF网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ART网络"><span class="toc-number">4.2.</span> <span class="toc-text">ART网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SOM网络"><span class="toc-number">4.3.</span> <span class="toc-text">SOM网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#及连相关网络"><span class="toc-number">4.4.</span> <span class="toc-text">及连相关网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Elman网络"><span class="toc-number">4.5.</span> <span class="toc-text">Elman网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Boltzmann机"><span class="toc-number">4.6.</span> <span class="toc-text">Boltzmann机</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#深度学习"><span class="toc-number">5.</span> <span class="toc-text">深度学习</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#课外阅读材料"><span class="toc-number">6.</span> <span class="toc-text">课外阅读材料</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

@@ -1,0 +1,778 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>计算机操作系统（汤小丹）--处理机调度-笔记 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="单道环境下,CPU利用率非常低,于是引入多道程序设计。在多道程序环境下，主存中有多个进程，其数目往往多于处理机数目。这就要求系统能按照某种算法，动态的把处理机分配给就绪队列中的一个进程，使之执行。
+衡量调度的标准不同的调度算法有各自不同的属性,侧重点是不一样的.调度准则用于比较不同的调度算法.根据不同的调度准则进行比较,则得出的比较结果是不同的.
+
+CPU利用率:使CPU尽可能的忙碌
+吞吐量（Th">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机操作系统（汤小丹）--处理机调度-笔记">
+<meta property="og:url" content="http://yoursite.com/2016/08/13/计算机操作系统_汤小丹_笔记2/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="单道环境下,CPU利用率非常低,于是引入多道程序设计。在多道程序环境下，主存中有多个进程，其数目往往多于处理机数目。这就要求系统能按照某种算法，动态的把处理机分配给就绪队列中的一个进程，使之执行。
+衡量调度的标准不同的调度算法有各自不同的属性,侧重点是不一样的.调度准则用于比较不同的调度算法.根据不同的调度准则进行比较,则得出的比较结果是不同的.
+
+CPU利用率:使CPU尽可能的忙碌
+吞吐量（Th">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS5.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS6.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS7.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS8.png">
+<meta property="og:updated_time" content="2016-08-14T01:05:55.146Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计算机操作系统（汤小丹）--处理机调度-笔记">
+<meta name="twitter:description" content="单道环境下,CPU利用率非常低,于是引入多道程序设计。在多道程序环境下，主存中有多个进程，其数目往往多于处理机数目。这就要求系统能按照某种算法，动态的把处理机分配给就绪队列中的一个进程，使之执行。
+衡量调度的标准不同的调度算法有各自不同的属性,侧重点是不一样的.调度准则用于比较不同的调度算法.根据不同的调度准则进行比较,则得出的比较结果是不同的.
+
+CPU利用率:使CPU尽可能的忙碌
+吞吐量（Th">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS4.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/13/计算机操作系统_汤小丹_笔记2/" title="计算机操作系统（汤小丹）--处理机调度-笔记" itemprop="url">计算机操作系统（汤小丹）--处理机调度-笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-13T02:00:11.086Z" itemprop="datePublished"> Published 2016-08-13</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#衡量调度的标准"><span class="toc-number">1.</span> <span class="toc-text">衡量调度的标准</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#处理机调度的层次"><span class="toc-number">2.</span> <span class="toc-text">处理机调度的层次</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#高级调度–作业调度"><span class="toc-number">2.1.</span> <span class="toc-text">高级调度–作业调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#概念"><span class="toc-number">2.1.1.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#作业的状态"><span class="toc-number">2.1.2.</span> <span class="toc-text">作业的状态</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#低级调度–进程调度"><span class="toc-number">2.2.</span> <span class="toc-text">低级调度–进程调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#进程调度的功能"><span class="toc-number">2.2.1.</span> <span class="toc-text">进程调度的功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进程调度的三个基本机制"><span class="toc-number">2.2.2.</span> <span class="toc-text">进程调度的三个基本机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进程调度方式"><span class="toc-number">2.2.3.</span> <span class="toc-text">进程调度方式</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#中级调度–中程调度"><span class="toc-number">3.</span> <span class="toc-text">中级调度–中程调度</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#调度队列模型"><span class="toc-number">4.</span> <span class="toc-text">调度队列模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#仅有进程调度的队列模型"><span class="toc-number">4.1.</span> <span class="toc-text">仅有进程调度的队列模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#具有作业调度和进程调度的调度队列模型"><span class="toc-number">4.2.</span> <span class="toc-text">具有作业调度和进程调度的调度队列模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#具有进程调度和中级调度的队列模型"><span class="toc-number">4.3.</span> <span class="toc-text">具有进程调度和中级调度的队列模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#同时具有三级调度的队列模型"><span class="toc-number">4.3.1.</span> <span class="toc-text">同时具有三级调度的队列模型</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#选择调度方式和调度算法的若干准则"><span class="toc-number">5.</span> <span class="toc-text">选择调度方式和调度算法的若干准则</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#调度算法"><span class="toc-number">6.</span> <span class="toc-text">调度算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#先来先服务调度算法（FCFS）"><span class="toc-number">6.1.</span> <span class="toc-text">先来先服务调度算法（FCFS）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#短进程（作业）优先调度算法"><span class="toc-number">6.2.</span> <span class="toc-text">短进程（作业）优先调度算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高优先权调度算法"><span class="toc-number">6.3.</span> <span class="toc-text">高优先权调度算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#静态优先权"><span class="toc-number">6.3.1.</span> <span class="toc-text">静态优先权</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#动态优先权"><span class="toc-number">6.3.2.</span> <span class="toc-text">动态优先权</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#高响应比优先调度算法"><span class="toc-number">6.3.3.</span> <span class="toc-text">高响应比优先调度算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基于时间片的轮转调度算法（Round-Robin）"><span class="toc-number">6.4.</span> <span class="toc-text">基于时间片的轮转调度算法（Round-Robin）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#时间片轮转法"><span class="toc-number">6.4.1.</span> <span class="toc-text">时间片轮转法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多级反馈队列调度算法"><span class="toc-number">6.4.2.</span> <span class="toc-text">多级反馈队列调度算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对几种调度算法的评述"><span class="toc-number">6.5.</span> <span class="toc-text">对几种调度算法的评述</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#实时调度"><span class="toc-number">7.</span> <span class="toc-text">实时调度</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#线程调度"><span class="toc-number">8.</span> <span class="toc-text">线程调度</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#各种操作系统采用的调度算法例子"><span class="toc-number">9.</span> <span class="toc-text">各种操作系统采用的调度算法例子</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Solaris-Scheduling"><span class="toc-number">9.1.</span> <span class="toc-text">Solaris Scheduling</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows-XP-Scheduling"><span class="toc-number">9.2.</span> <span class="toc-text">Windows XP Scheduling</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux-Scheduling"><span class="toc-number">9.3.</span> <span class="toc-text">Linux Scheduling</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#java线程调度"><span class="toc-number">9.4.</span> <span class="toc-text">java线程调度</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>单道环境下,CPU利用率非常低,于是引入多道程序设计。<br>在多道程序环境下，主存中有多个进程，其数目往往多于处理机数目。这就要求系统能按照某种算法，动态的把处理机分配给就绪队列中的一个进程，使之执行。</p>
+<h1 id="衡量调度的标准"><a href="#衡量调度的标准" class="headerlink" title="衡量调度的标准"></a>衡量调度的标准</h1><p>不同的调度算法有各自不同的属性,侧重点是不一样的.<br>调度准则用于比较不同的调度算法.根据不同的调度准则进行比较,则得出的比较结果是不同的.</p>
+<ul>
+<li>CPU利用率:使CPU尽可能的忙碌</li>
+<li>吞吐量（Throughput）：单位时间内运行完的进程数</li>
+<li>周转时间(Turnaround time):从提交到运行结束的全部时间</li>
+<li>等待时间:进程在就绪队列中等待调度的时间总和 </li>
+<li>响应时间:从进程提出请求到首次被响应的时间段[在分时系统环境下不是输出完结果的时间] </li>
+</ul>
+<p>优化标准：最大的CPU利用率、最大的吞吐量、最短的周转时间、最短的等待时间、最短的响应时间。</p>
+<h1 id="处理机调度的层次"><a href="#处理机调度的层次" class="headerlink" title="处理机调度的层次"></a>处理机调度的层次</h1><h2 id="高级调度–作业调度"><a href="#高级调度–作业调度" class="headerlink" title="高级调度–作业调度"></a>高级调度–作业调度</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>调度对象是作业。<br>作业：是比程序更为广泛的概念，不仅包含了通常的程序和数据，而且应该还配有一份作业说明书，系统根据说明书来对程序的运行进行控制。</p>
+<ul>
+<li>决定把外存输入井上处于作业后备队列的那些作业调入内存，并为它们创建进程、分配必要的资源，然后再将新创建的进程排在就绪队列上，准备执行。</li>
+<li>在批处理系统中，作业是先驻留在外存的输入井上的，因此需要有作业调度。</li>
+<li>在分时系统中，通过键盘输入的命令和数据直接进入内存，无需作业调度。</li>
+</ul>
+<h3 id="作业的状态"><a href="#作业的状态" class="headerlink" title="作业的状态"></a>作业的状态</h3><p>作业从进入到运行结束，一般需要经历“提交”、“后备”、“运行”和“完成”四个阶段。</p>
+<h2 id="低级调度–进程调度"><a href="#低级调度–进程调度" class="headerlink" title="低级调度–进程调度"></a>低级调度–进程调度</h2><ul>
+<li>决定就绪队列中哪个进程将获得处理机，然后由分派程序执行把处理机分配给该进程的操作。</li>
+<li>是最基本的调度，任何OS都有进程调度。</li>
+<li>低级调度由每秒可执行许多次的处理机调度程序(Scheduler)执行，处理机调度程序应常驻内存。</li>
+<li>调度对象是进程（或者内核级线程）。在多批道处理、分时和实时三种类型的OS中都必须配置这种低级调度。</li>
+</ul>
+<h3 id="进程调度的功能"><a href="#进程调度的功能" class="headerlink" title="进程调度的功能"></a>进程调度的功能</h3><ol>
+<li>保存处理机的现场信息</li>
+<li>按照某种算法选择进程</li>
+<li>把处理器分配给进程</li>
+</ol>
+<h3 id="进程调度的三个基本机制"><a href="#进程调度的三个基本机制" class="headerlink" title="进程调度的三个基本机制"></a>进程调度的三个基本机制</h3><ol>
+<li>排队器：把系统中所有就绪程序按照一个方式排队，以便最快找到它</li>
+<li>分派器：把进程调度程序所选定进程，从就绪队列中取出该进程，然后进行上下文切换，将处理机分配给它。</li>
+<li>上下文切换机制</li>
+</ol>
+<h3 id="进程调度方式"><a href="#进程调度方式" class="headerlink" title="进程调度方式"></a>进程调度方式</h3><ul>
+<li><p>非抢占式方式（nonpreemptive）<br> 把处理机分配给某进程后，便让其一直执行，直到该进程完成或发生某事件而被阻塞时，才把处理机分配给其它进程，不允许其他进程抢占已经分配出去的处理机。</p>
+<p> 优点：实现简单、系统开销小，适用于大多数批处理系统环境<br> 缺点：难以满足紧急任务的要求，不适用于实时、分时系统要求</p>
+</li>
+<li><p>抢占式方式（Preemptive）<br> 允许调度程序根据某个原则，去停止某个正在执行的进程，将处理机重新分配给另一个进程。</p>
+<p> 需要基于一定的原则：</p>
+<ol>
+<li>优先权原则<br>通常对一些重要的和紧急的进程赋予较高的优先权。当这种进程进入就绪队列时，如果其优先权比正在执行的进程优先权高，便停止正在执行的进程，将处理机分配给优先权高的进程，使之执行</li>
+<li>短作业（进程）优先原则<br>当到达的进程比正在执行的进程明显短的时候，将暂停当前长进程的执行，将处理机分配给新到的短作业，使之优先执行。</li>
+<li>时间片原则<br>各进程按时间片运行，当一个时间片用完后，便停止该进程的执行而重新进行调度。这个原则适用于分时系统</li>
+</ol>
+<p>优点：可以防止一个长进程长时间占用处理机，能为大多数进程提供更公平的服务，特别是对响应时间有着严格要求的实时任务。<br>缺点：额外开销</p>
+</li>
+</ul>
+<h1 id="中级调度–中程调度"><a href="#中级调度–中程调度" class="headerlink" title="中级调度–中程调度"></a>中级调度–中程调度</h1><ul>
+<li>引入中级调度的目的是为了提高主存利用率和系统吞吐量</li>
+<li>把暂时不能运行的进程调至外存上去等待，此时的状态就称为绪驻外存状态或者挂起状态。当这些进程重新又具备运行条件且内存又稍有空闲的时候，由中级调度来决定把外存上那些又具备运行条件的就绪程序重新调入内存，并修改其状态为就绪状态，挂在就绪队列上等待进程调度。</li>
+<li>中级调度实际上就是存储器管理中的对换功能。</li>
+</ul>
+<p>总的三种调度方式：<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS4.png" alt=""><br>在上述三种调度中，进程调度的运行频率最高，在分时系统中通常是10~100ms便进行一次调度，因此称为短程调度。为避免进程调度占用过多的CPU时间，进程调度算法不宜太复杂。<br>作业调度往往发生在一个批处理运行完毕，退出系统，而需要重新调入一个批作业进入内存时，故作业调度的周期较长，大约几分钟一次，因此称为长程调度。由于其运行频率较低，允许作业调度算法花费较多时间。<br>中级调度运行频率介于两者之间，因此称为中程调度。</p>
+<h1 id="调度队列模型"><a href="#调度队列模型" class="headerlink" title="调度队列模型"></a>调度队列模型</h1><h2 id="仅有进程调度的队列模型"><a href="#仅有进程调度的队列模型" class="headerlink" title="仅有进程调度的队列模型"></a>仅有进程调度的队列模型</h2><p><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS5.png" alt=""><br>系统可以把处于就绪状态的进程组织成栈、树或者一个无序链表，到底采用哪种形式，则与OS类型以及所采用的调度算法有关。例如分时系统通常用FIFO队列，按时间片轮转法运行。</p>
+<h2 id="具有作业调度和进程调度的调度队列模型"><a href="#具有作业调度和进程调度的调度队列模型" class="headerlink" title="具有作业调度和进程调度的调度队列模型"></a>具有作业调度和进程调度的调度队列模型</h2><p>在多道批处理系统中，一般CPU管理需设置作业和进程两级调度。<br>模型增加了在磁盘的作业后备队列，作业调度的任务是从作业后备队列中选一个作业为它创建至少一个进程，并分配资源，将它排入内存进程就绪队列末尾。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS6.png" alt=""><br>该模型与上一个模型的主要区别是：</p>
+<ol>
+<li>就绪队列的形式：由于批处理最常用的是最高优先权调度算法，相应的常用就绪队列的形式是优先权队列。</li>
+<li>设置多个阻塞队列</li>
+</ol>
+<h2 id="具有进程调度和中级调度的队列模型"><a href="#具有进程调度和中级调度的队列模型" class="headerlink" title="具有进程调度和中级调度的队列模型"></a>具有进程调度和中级调度的队列模型</h2><p>在具有虚拟存储器的分时系统中，一般采用具有进程调度和中级调度的模型<br>该模型比仅有进程调度模型增加了中级调度:增加了静止就绪队列和静止阻塞队列</p>
+<h3 id="同时具有三级调度的队列模型"><a href="#同时具有三级调度的队列模型" class="headerlink" title="同时具有三级调度的队列模型"></a>同时具有三级调度的队列模型</h3><p>通用OS同时支持批处理、分时和实时处理，一般采用具有三级调度的调度队列模型.</p>
+<p>在OS引入中级调度后，人们可以把进程的状态分为内存就绪（表示进程在内存中就绪）和外存就绪（进程在外存中就绪），类似的阻塞状态也分成内存阻塞和外存阻塞，在中级调度的作用下又可以外存就绪转为内存就绪。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS7.png" alt=""></p>
+<h1 id="选择调度方式和调度算法的若干准则"><a href="#选择调度方式和调度算法的若干准则" class="headerlink" title="选择调度方式和调度算法的若干准则"></a>选择调度方式和调度算法的若干准则</h1><ul>
+<li>面向用户准则<ol>
+<li>周转时间短：指作业从被提交给系统开始到作业完成为止的这段时间间隔。</li>
+<li>响应时间快：提交请求到首次响应时间</li>
+<li>截止时间的保证：必须开始执行的最迟时间或者必须完成的最迟时间</li>
+<li>优先权准则：紧急作业得到处理</li>
+</ol>
+</li>
+<li>面向系统的准则：<ol>
+<li>系统吞吐量高：单位时间内系统完成作业数</li>
+<li>处理机利用率好：</li>
+<li>各类资源平衡利用</li>
+</ol>
+</li>
+</ul>
+<h1 id="调度算法"><a href="#调度算法" class="headerlink" title="调度算法"></a>调度算法</h1><p>根据系统的资源分配策略所规定的资源分配算法。对于不同的系统和目标通常采用不同的算法。如：批处理系统中，为了保证为数众多的短作业，短作业优先算法；分时系统中，为了保证系统有合理的响应时间，采用轮转法进行调度。</p>
+<h2 id="先来先服务调度算法（FCFS）"><a href="#先来先服务调度算法（FCFS）" class="headerlink" title="先来先服务调度算法（FCFS）"></a>先来先服务调度算法（FCFS）</h2><ul>
+<li>先来先服务First-Come-First-Served:<br> 最简单的调度算法<br> 可用于作业或进程调度<br> 算法的原则是按照作业到达后备作业队列（或进程进入就绪队列）的先后次序来选择作业（或进程）  </li>
+<li>FCFS算法属于非抢占方式:一旦一个进程占有处理机，它就一直运行下去，直到该进程完成或者因等待某事件而不能继续运行时才释放处理机。</li>
+<li>FCFS算法易于实现，表面上很公平，实际上有利于长作业，不利于短作业；有利于CPU繁忙型（科学计算），不利于I/O繁忙型（大多数事务）。</li>
+</ul>
+<h2 id="短进程（作业）优先调度算法"><a href="#短进程（作业）优先调度算法" class="headerlink" title="短进程（作业）优先调度算法"></a>短进程（作业）优先调度算法</h2><ul>
+<li>Shortest-Job-First (SJF) Scheduling<br> 根据每个作业下次要运行的估计时间，调度最短的作业</li>
+<li>SJF是最优的 – 对一组指定的进程而言，它给出了最短的平均等待时间</li>
+<li>采用SJF有利于系统减少平均周转时间,提高系统吞吐量。</li>
+<li>一般情况下SJF调度算法比FCFS调度算法的效率要高一些, 但实现相对要困难些。<br>缺点：</li>
+<li>有可能出现饥饿现象<br> 例如，系统中有一个运行时间很长的作业JN，和几个运行时间小的作业，然后，不断地有运行时间小于JN的作业的到来，这样，作业JN就因得不到调度而饿死。</li>
+<li>未完全考虑作业的紧迫程度</li>
+</ul>
+<h2 id="高优先权调度算法"><a href="#高优先权调度算法" class="headerlink" title="高优先权调度算法"></a>高优先权调度算法</h2><h3 id="静态优先权"><a href="#静态优先权" class="headerlink" title="静态优先权"></a>静态优先权</h3><p> 静态优先权在进程创建时确定，且在整个生命期中保持不变。</p>
+<ul>
+<li><p>确定进程优先权的依据有：</p>
+<ul>
+<li>进程类型，通常系统进程的优先权高于一般用户进程的优先权</li>
+<li>进程对资源的需求，如进程执行时间及内存需要少的进程应赋予较高的优先权；</li>
+<li>根据用户要求，由用户的紧迫程度及用户所付费用的多少来确定进程的优先权。</li>
+</ul>
+</li>
+<li><p>系统中有两类进程，系统进程和用户进程。<br> 系统进程的优先级比用户进程的优先级高，特别是某些系统进程，必须赋予它一种特权，当它需要处理机时，应尽快得到满足。例如，设备管理中的I/O进程便是如此。这不仅是为了保证I/O设备尽可能忙碌，以提高设备利用率，更主要的是为了避免由于响应不及时，造成信息的丢失。</p>
+</li>
+<li>在用户进程中，I/O繁忙的进程应优先于CPU繁忙的进程，以保证CPU和I/O设备之间的并行操作。</li>
+<li>在分时系统中，前台进程应优先于后台进程。</li>
+</ul>
+<p>采用静态优先权时, 高优先权的进程可能导致一个低优先权的进程长时间甚至永远得不到CPU。<br>或者那个低优先权的进程最终得到运行<br>或者某一时刻系统崩溃从而使所有低优先权的进程得不到运行。</p>
+<h3 id="动态优先权"><a href="#动态优先权" class="headerlink" title="动态优先权"></a>动态优先权</h3><p>动态优先权是指进程的优先权可以随进程的推进而改变，以便获得更好的调度性能</p>
+<ul>
+<li>改变优先权的因素<br> 进程的等待时间<br> 已使用处理机的时间<br> 资源使用情况</li>
+</ul>
+<h3 id="高响应比优先调度算法"><a href="#高响应比优先调度算法" class="headerlink" title="高响应比优先调度算法"></a>高响应比优先调度算法</h3><p>折衷了短作业和作业到达的先后次序，HRRN算法实际上是FCFS算法和SJF算法的折衷</p>
+<p>在每次选择作业投入运行时，先计算后备作业队列中每个作业的响应比RP,然后选择其值最大的作业投入运行。<br>RP值定义为：<br>    RP＝（已等待时间＋要求运行时间）／要求运行时间<br>       ＝1＋已等待时间／要求运行时间。</p>
+<p>优点：<br>    等待时间相同，则SJF；<br>    要求的服务时间相同，则FCFS；<br>    长作业的优先级随着等待时间的增加而提高，不会出现得不到响应的情况。<br>缺点:<br>    作业调度程序要统计作业的等待时间，作浮点运算（这是系统程序最忌讳的）浪费大量的计算时间。</p>
+<h2 id="基于时间片的轮转调度算法（Round-Robin）"><a href="#基于时间片的轮转调度算法（Round-Robin）" class="headerlink" title="基于时间片的轮转调度算法（Round-Robin）"></a>基于时间片的轮转调度算法（Round-Robin）</h2><p>分时系统为了保证响应用户的请求，必须采用基于时间片的轮转式进程调度算法。早期采用的是简单的时间片轮转法；90年代后采用多级反馈队列调度算法。</p>
+<h3 id="时间片轮转法"><a href="#时间片轮转法" class="headerlink" title="时间片轮转法"></a>时间片轮转法</h3><ul>
+<li>每个进程将得到小单位的CPU时间[时间片]，通常为10-100毫 秒。时间片用完后，该进程将被抢占并插入就绪队列末尾</li>
+<li>假定就绪队列中有n个进程、时间量为q, 则每个进程每次得到1/n的、不超过q单位的成块CPU时间，没有任何一个进程的等待时间会超过(n-1) q单位</li>
+<li>一般,RR的平均周转时间比SJF长，但响应时间要短一些）.</li>
+<li>q相对于切换上下文的时间而言应该足够长，否则将导致系统开销过大</li>
+<li>一组进程的平均周转时间并不一定随着时间片的增大而降低。一般来说，如果大多数（80%）进程能在一个时间片内完成，就会改善平均周转时间</li>
+</ul>
+<h3 id="多级反馈队列调度算法"><a href="#多级反馈队列调度算法" class="headerlink" title="多级反馈队列调度算法"></a>多级反馈队列调度算法</h3><p>按进程的属性来分类，如进程的类型、优先权、占用内存的多少,每类进程组成一个就绪队列，每个进程固定地处于某一个队列<br>    就绪队列分为:前台[交互式]， 后台[批处理]<br>    每个队列有自己的调度算法：前台–RR；后台–FCFS</p>
+<p>调度须在队列间进行:</p>
+<ul>
+<li>一种方案：不同队列间的调度为基于固定优先权的抢占式调度<br> 固定优先级调度，即前台运行完后再运行后台。有可能产生饥饿.</li>
+<li>另一种方案：队列间采用时间片调度<br> 给定时间片调度，即每个队列得到一定的CPU时间，进程在给定时间内执行；如，80%的时间执行前台的RR调度，20%的时间执行后台的FCFS调度<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS8.png" alt=""><ol>
+<li>存在多个就绪队列，具有不同的优先级，各自按时间片轮转法调度</li>
+<li>各个就绪队列中时间片的大小各不相同，优先级越高的队列时间片越小。</li>
+<li>当一个进程执行完一个完整的时间片后被抢占CPU，被抢占的进程优先级降低一级而进入下级就绪队列，如此继续，直至降到进程的基本优先级。而一个进程从阻塞态变为就绪态时要提高优先级<br>应用：<br>终端型作业<br>短批处理作业<br>长批处理作业</li>
+</ol>
+</li>
+</ul>
+<h2 id="对几种调度算法的评述"><a href="#对几种调度算法的评述" class="headerlink" title="对几种调度算法的评述"></a>对几种调度算法的评述</h2><ul>
+<li>时间片轮转调度算法：常用于分时系统的调度算法，只适用于一般实时信息处理系统，而不能用于实时要求严格的实时控制系统。</li>
+<li>非抢占的优先级调度算法：常用于多道批处理系统的调度算法，也可用于实时要求不太严格的实时控制系统。</li>
+<li>基于时钟中断抢占的优先级调度算法：用于大多数的实时系统中。<br>立即抢占的优先级调度算法：适用于实时要求比较严格的实时控制系统。</li>
+</ul>
+<h1 id="实时调度"><a href="#实时调度" class="headerlink" title="实时调度"></a>实时调度</h1><ul>
+<li>实时调度是为了完成实时处理任务而分配计算机处理器的调度方法。</li>
+<li>实时处理任务要求计算机在用户允许的时限范围内给出响应信号。</li>
+<li>实现:首先,系统要实现基于优先级的调度,实时进程须具有最高优先级,且不能随着时间的推移降低优先级; 其次,调度延迟必须很小.</li>
+</ul>
+<p>代表性的实时调度算法：<br>最早截止任务优先算法(EDF: Earliest Deadline First)：以满足用户要求时限为调度原则。<br>处理开始时限（开始截止时间）<br>处理结束时限（完成截止时间）<br>最短周期优先算法(RMS:rate monotonic scheduling)：广泛用于多周期性实时处理。其基本原理是周期越长的任务优先级越低。</p>
+<h1 id="线程调度"><a href="#线程调度" class="headerlink" title="线程调度"></a>线程调度</h1><p>用户级线程要运行的话,需通过LWP映射到某个内核级线程<br>局部调度– 线程库决定将哪个线程连至有效的LWP<br>全局调度 – 内核决定下一个运行的内核线程</p>
+<h1 id="各种操作系统采用的调度算法例子"><a href="#各种操作系统采用的调度算法例子" class="headerlink" title="各种操作系统采用的调度算法例子"></a>各种操作系统采用的调度算法例子</h1><h2 id="Solaris-Scheduling"><a href="#Solaris-Scheduling" class="headerlink" title="Solaris Scheduling"></a>Solaris Scheduling</h2><ul>
+<li>采用基于优先级的进程调度</li>
+<li>按调度的优先级定义了4类:实时、系统、分时、交互，对每一类有不同的优先级和调度算法</li>
+<li>默认的调度类是分时。分时调度动态地改变线程的优先级，赋予不同的时间片长度</li>
+<li>分时和交互采用相同的调度策略,但交互式线程有较高的优先级</li>
+<li>系统类的优先级是不会改变的,其调度策略是不分时的</li>
+<li>实时类具有最高的优先级</li>
+</ul>
+<h2 id="Windows-XP-Scheduling"><a href="#Windows-XP-Scheduling" class="headerlink" title="Windows XP Scheduling"></a>Windows XP Scheduling</h2><ul>
+<li>基于优级的,可抢占的调度算法</li>
+<li>线程按时间片来使用CPU</li>
+<li>32个优先级来确定线程的执行顺序，优先级相同的线程按RR调度</li>
+<li>非实时优先级是动态调整的<br> 线程从等待操作被唤醒时,提高其优先级(如I/O结束)<br> 延长时间片:给前台任务更长的时间片,以提高响应速度</li>
+<li>实时优先级是固定不变的</li>
+</ul>
+<h2 id="Linux-Scheduling"><a href="#Linux-Scheduling" class="headerlink" title="Linux Scheduling"></a>Linux Scheduling</h2><ul>
+<li>Linux提供二种进程调度算法<br> 分时:实现进程间的公平可抢占调度<br> 实时:按优先级调度</li>
+</ul>
+<h2 id="java线程调度"><a href="#java线程调度" class="headerlink" title="java线程调度"></a>java线程调度</h2><ul>
+<li>JVM使用基于优先级的抢占式调度算法</li>
+<li>对多个相同优先级的线程将使用FIFO队列来调度</li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/OS/">OS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Interview/">Interview</a><a href="/tags/OS/">OS</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/13/计算机操作系统_汤小丹_笔记2/" data-title="计算机操作系统（汤小丹）--处理机调度-笔记 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/13/计算机操作系统_汤小丹_笔记3/" title="计算机操作系统--进程同步-笔记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  计算机操作系统--进程同步-笔记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/12/计算机操作系统_汤小丹_笔记1/"  title="计算机操作系统（汤小丹）--进程线程--笔记">
+ <strong>下一篇：</strong><br/> 
+ <span>计算机操作系统（汤小丹）--进程线程--笔记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/13/计算机操作系统_汤小丹_笔记2/" data-title="计算机操作系统（汤小丹）--处理机调度-笔记" data-url="http://yoursite.com/2016/08/13/计算机操作系统_汤小丹_笔记2/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#衡量调度的标准"><span class="toc-number">1.</span> <span class="toc-text">衡量调度的标准</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#处理机调度的层次"><span class="toc-number">2.</span> <span class="toc-text">处理机调度的层次</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#高级调度–作业调度"><span class="toc-number">2.1.</span> <span class="toc-text">高级调度–作业调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#概念"><span class="toc-number">2.1.1.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#作业的状态"><span class="toc-number">2.1.2.</span> <span class="toc-text">作业的状态</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#低级调度–进程调度"><span class="toc-number">2.2.</span> <span class="toc-text">低级调度–进程调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#进程调度的功能"><span class="toc-number">2.2.1.</span> <span class="toc-text">进程调度的功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进程调度的三个基本机制"><span class="toc-number">2.2.2.</span> <span class="toc-text">进程调度的三个基本机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进程调度方式"><span class="toc-number">2.2.3.</span> <span class="toc-text">进程调度方式</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#中级调度–中程调度"><span class="toc-number">3.</span> <span class="toc-text">中级调度–中程调度</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#调度队列模型"><span class="toc-number">4.</span> <span class="toc-text">调度队列模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#仅有进程调度的队列模型"><span class="toc-number">4.1.</span> <span class="toc-text">仅有进程调度的队列模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#具有作业调度和进程调度的调度队列模型"><span class="toc-number">4.2.</span> <span class="toc-text">具有作业调度和进程调度的调度队列模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#具有进程调度和中级调度的队列模型"><span class="toc-number">4.3.</span> <span class="toc-text">具有进程调度和中级调度的队列模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#同时具有三级调度的队列模型"><span class="toc-number">4.3.1.</span> <span class="toc-text">同时具有三级调度的队列模型</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#选择调度方式和调度算法的若干准则"><span class="toc-number">5.</span> <span class="toc-text">选择调度方式和调度算法的若干准则</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#调度算法"><span class="toc-number">6.</span> <span class="toc-text">调度算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#先来先服务调度算法（FCFS）"><span class="toc-number">6.1.</span> <span class="toc-text">先来先服务调度算法（FCFS）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#短进程（作业）优先调度算法"><span class="toc-number">6.2.</span> <span class="toc-text">短进程（作业）优先调度算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高优先权调度算法"><span class="toc-number">6.3.</span> <span class="toc-text">高优先权调度算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#静态优先权"><span class="toc-number">6.3.1.</span> <span class="toc-text">静态优先权</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#动态优先权"><span class="toc-number">6.3.2.</span> <span class="toc-text">动态优先权</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#高响应比优先调度算法"><span class="toc-number">6.3.3.</span> <span class="toc-text">高响应比优先调度算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基于时间片的轮转调度算法（Round-Robin）"><span class="toc-number">6.4.</span> <span class="toc-text">基于时间片的轮转调度算法（Round-Robin）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#时间片轮转法"><span class="toc-number">6.4.1.</span> <span class="toc-text">时间片轮转法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多级反馈队列调度算法"><span class="toc-number">6.4.2.</span> <span class="toc-text">多级反馈队列调度算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对几种调度算法的评述"><span class="toc-number">6.5.</span> <span class="toc-text">对几种调度算法的评述</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#实时调度"><span class="toc-number">7.</span> <span class="toc-text">实时调度</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#线程调度"><span class="toc-number">8.</span> <span class="toc-text">线程调度</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#各种操作系统采用的调度算法例子"><span class="toc-number">9.</span> <span class="toc-text">各种操作系统采用的调度算法例子</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Solaris-Scheduling"><span class="toc-number">9.1.</span> <span class="toc-text">Solaris Scheduling</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows-XP-Scheduling"><span class="toc-number">9.2.</span> <span class="toc-text">Windows XP Scheduling</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux-Scheduling"><span class="toc-number">9.3.</span> <span class="toc-text">Linux Scheduling</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#java线程调度"><span class="toc-number">9.4.</span> <span class="toc-text">java线程调度</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

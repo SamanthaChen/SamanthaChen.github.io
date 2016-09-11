@@ -1,0 +1,637 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>统计学习方法（李航）- 第5章决策树笔记 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="决策树在分类问题中表示基于特征对实例进行分类的过程。它可以认为是if then规则的集合，也可以认为是定义在特征空间与类空间上的条件概率分布。其主要优点是模型具有可读性，分类速度快。学习时候，利用训练数据，根据损失函数最小化的原则建立决策树模型，预测时，对新的数据，利用决策树模型进行分类。决策树学习包括三个步骤：特征选择、决策树的生成和决策树的修剪。
+决策树模型与学习内部节点表示一个特征或者属性，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="统计学习方法（李航）- 第5章决策树笔记">
+<meta property="og:url" content="http://yoursite.com/2016/08/06/统计学习方法_李航_笔记5/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="决策树在分类问题中表示基于特征对实例进行分类的过程。它可以认为是if then规则的集合，也可以认为是定义在特征空间与类空间上的条件概率分布。其主要优点是模型具有可读性，分类速度快。学习时候，利用训练数据，根据损失函数最小化的原则建立决策树模型，预测时，对新的数据，利用决策树模型进行分类。决策树学习包括三个步骤：特征选择、决策树的生成和决策树的修剪。
+决策树模型与学习内部节点表示一个特征或者属性，">
+<meta property="og:image" content="http://img5.ph.126.net/KSwE2ajPWhV6e1kaoB6iNg==/6597142334424262775.jpg">
+<meta property="og:image" content="http://img8.ph.126.net/cJNtM8L-hK0UONeTjCGi8A==/6597351241633404728.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/cartR.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/Gini.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/cartJianzhi.png">
+<meta property="og:updated_time" content="2016-08-07T05:33:59.918Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="统计学习方法（李航）- 第5章决策树笔记">
+<meta name="twitter:description" content="决策树在分类问题中表示基于特征对实例进行分类的过程。它可以认为是if then规则的集合，也可以认为是定义在特征空间与类空间上的条件概率分布。其主要优点是模型具有可读性，分类速度快。学习时候，利用训练数据，根据损失函数最小化的原则建立决策树模型，预测时，对新的数据，利用决策树模型进行分类。决策树学习包括三个步骤：特征选择、决策树的生成和决策树的修剪。
+决策树模型与学习内部节点表示一个特征或者属性，">
+<meta name="twitter:image" content="http://img5.ph.126.net/KSwE2ajPWhV6e1kaoB6iNg==/6597142334424262775.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/06/统计学习方法_李航_笔记5/" title="统计学习方法（李航）- 第5章决策树笔记" itemprop="url">统计学习方法（李航）- 第5章决策树笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-06T14:42:28.787Z" itemprop="datePublished"> Published 2016-08-06</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#决策树模型与学习"><span class="toc-number">1.</span> <span class="toc-text">决策树模型与学习</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#决策树与if-then规则"><span class="toc-number">1.1.</span> <span class="toc-text">决策树与if-then规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#决策树与条件概率分布"><span class="toc-number">1.2.</span> <span class="toc-text">决策树与条件概率分布</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#学习"><span class="toc-number">1.3.</span> <span class="toc-text">学习</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#特征选择"><span class="toc-number">2.</span> <span class="toc-text">特征选择</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#信息增益"><span class="toc-number">2.1.</span> <span class="toc-text">信息增益</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#信息增益比"><span class="toc-number">2.2.</span> <span class="toc-text">信息增益比</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#决策树的生成"><span class="toc-number">3.</span> <span class="toc-text">决策树的生成</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ID3算法"><span class="toc-number">3.1.</span> <span class="toc-text">ID3算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C4-5算法"><span class="toc-number">3.2.</span> <span class="toc-text">C4.5算法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#决策树的剪枝"><span class="toc-number">4.</span> <span class="toc-text">决策树的剪枝</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CART算法"><span class="toc-number">5.</span> <span class="toc-text">CART算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CART生成"><span class="toc-number">5.1.</span> <span class="toc-text">CART生成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#回归树生成"><span class="toc-number">5.1.1.</span> <span class="toc-text">回归树生成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分类树的生成"><span class="toc-number">5.1.2.</span> <span class="toc-text">分类树的生成</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CART剪枝"><span class="toc-number">5.2.</span> <span class="toc-text">CART剪枝</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>决策树在分类问题中表示基于特征对实例进行分类的过程。它可以认为是if then规则的集合，也可以认为是定义在特征空间与类空间上的条件概率分布。其主要优点是模型具有可读性，分类速度快。<br>学习时候，利用训练数据，根据损失函数最小化的原则建立决策树模型，预测时，对新的数据，利用决策树模型进行分类。<br>决策树学习包括三个步骤：特征选择、决策树的生成和决策树的修剪。</p>
+<h1 id="决策树模型与学习"><a href="#决策树模型与学习" class="headerlink" title="决策树模型与学习"></a>决策树模型与学习</h1><p>内部节点表示一个特征或者属性，叶节点表示一个类。</p>
+<h2 id="决策树与if-then规则"><a href="#决策树与if-then规则" class="headerlink" title="决策树与if-then规则"></a>决策树与if-then规则</h2><p>将决策树转换成if-then规则：</p>
+<ul>
+<li>从决策树的根节点到叶节点的每一条路径构建一条规则</li>
+<li>路径上内部节点对应规则的条件，叶节点对应结论<br>决策树与ifthen集合性质：互斥且完备<br>每一个实例都被一条路径或者一条规则覆盖，而且只被一条路径或者一条规则覆盖。<h2 id="决策树与条件概率分布"><a href="#决策树与条件概率分布" class="headerlink" title="决策树与条件概率分布"></a>决策树与条件概率分布</h2>决策树海表示给定特征条件下的条件概率分布。这一条件概率分布定义在特征空间的一个划分。将特征空间划分为互不相交的单元或者区域，并在每个单元定义一个类的概率分布就构成了一个条件概率分布。决策树的一条路径对应于划分的一个单元。决策树所表示的概率分布由条件下类的条件概率分布组成。<h2 id="学习"><a href="#学习" class="headerlink" title="学习"></a>学习</h2>决策树本质上式从训练数据中归纳出一组分类规则。与训练数据集不相矛盾的据册数可能有多个，也可能一个也没有。我们需要一个与训练数据集矛盾较小的决策树同时泛化能力好。<br>从另一个角度看，决策树学习是由训练数据集估计条件概率模型。基于特征空间划分的类条件概率模型有无穷多个，我们选择的条件概率应该拟合好，预测也好。</li>
+</ul>
+<p>决策树损失函数通常是正则化的极大似然函数。当损失函数确定后，选最优决策树是NP完全问题，因此常采用启发算法，近似求解。</p>
+<p><strong>决策树的生成对应于模型的局部选择，决策树的修建对应着模型的全局选择</strong></p>
+<h1 id="特征选择"><a href="#特征选择" class="headerlink" title="特征选择"></a>特征选择</h1><p>选取具有分类能力的特征，可以提高学习效率。<br>熵只依赖于X的分布，与X的取值无关，熵越大，随机变量不确定性越大。</p>
+<h2 id="信息增益"><a href="#信息增益" class="headerlink" title="信息增益"></a>信息增益</h2><h2 id="信息增益比"><a href="#信息增益比" class="headerlink" title="信息增益比"></a>信息增益比</h2><h1 id="决策树的生成"><a href="#决策树的生成" class="headerlink" title="决策树的生成"></a>决策树的生成</h1><h2 id="ID3算法"><a href="#ID3算法" class="headerlink" title="ID3算法"></a>ID3算法</h2><p>以信息增益来选择特征，递归构建决策树。</p>
+<h2 id="C4-5算法"><a href="#C4-5算法" class="headerlink" title="C4.5算法"></a>C4.5算法</h2><p>对ID3进行改进，用信息增益比来选择特征。</p>
+<h1 id="决策树的剪枝"><a href="#决策树的剪枝" class="headerlink" title="决策树的剪枝"></a>决策树的剪枝</h1><p>$$C_\alpha (T) = C(T)+\alpha|T|$$<br>第一项是训练误差，第二项是模型复杂度。<br>可以看出，决策树生成只考虑了提高信息增益对训练数据进行更好的你和，而剪枝过程还考虑了减小模型复杂度。生成学习局部非模型而剪枝学习整体的模型。</p>
+<h1 id="CART算法"><a href="#CART算法" class="headerlink" title="CART算法"></a>CART算法</h1><p>既可以用于分类也可以用于回归。<br>两步：</p>
+<ol>
+<li>决策树生成，由训练数据生成决策树，树尽量大</li>
+<li>用验证数据集对树进行剪枝并选择最优子树，用损失函数最小作为剪枝标准。</li>
+</ol>
+<h2 id="CART生成"><a href="#CART生成" class="headerlink" title="CART生成"></a>CART生成</h2><p>决策树的生成就是递归的构建二叉决策树的过程。<br><strong>对回归树用平方误差准则，对分类树用基尼指数最小化准则，进行特征选择。</strong></p>
+<p>CART算法采用一种二分递归分割的技术，算法总是将当前样本集分割为两个子样本集，使得生成的决策树的每个非叶结点都只有两个分枝。因此CART算法生成的决策树是结构简洁的二叉树。因此CART算法适用于样本特征的取值为是或非的场景，对于连续特征的处理则与C4.5算法相似。</p>
+<h3 id="回归树生成"><a href="#回归树生成" class="headerlink" title="回归树生成"></a>回归树生成</h3><p>假设X和Y是输入和输出。一个回归树对应着输入空间（特征空间）的一个划分以及在划分的输出值。假设已将输入空间划分为M个单元R1,R2,…,Rm，并且在每个单元有一个固定输出值，回归树模型可以表示为<br>$$f(x) = \sum_{m=1}^M c_m I(x\in R_m)$$<br>用平方误差表示回归树的训练误差，平方误差最小准则求解每个单元上的最优输出。单元上cm最优值是Rm上所有输入实例对应的输出均值。对输入空间的划分采用启发式算法，选择（j，s）作为切分变量和切分点，并定义它的左右两个区域，然后在两个区域上找最优切分变量和切分点。<br>第一步，搜索分裂变量和分裂点，分裂点(j,s)<br><img src="http://img5.ph.126.net/KSwE2ajPWhV6e1kaoB6iNg==/6597142334424262775.jpg" alt=""><br>搜索的分离变量j和分裂点s的目标函数;<br><img src="http://img8.ph.126.net/cJNtM8L-hK0UONeTjCGi8A==/6597351241633404728.jpg" alt=""></p>
+<p>这样的回归树通常称作最小二乘回归树。</p>
+<p><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/cartR.png" alt=""></p>
+<h3 id="分类树的生成"><a href="#分类树的生成" class="headerlink" title="分类树的生成"></a>分类树的生成</h3><p>分类树选择基尼指数做特征选择，同时决定该特征的最优二分切分点。</p>
+<p>数据集D的纯度可以用基尼值来衡量：<br>$$Gini(D) = \sum_{k=1}^{|\mathcal{Y}|} \sum_{k’ \neq k} p_k p_{k’} = 1-  \sum_{k=1}^{|\mathcal{Y}|} p_k^2$$<br>直观地说，Gini(D)反映了从数据集D中随机抽取两个样本，其类别标记不一致的概率，因此Gini越小则数据D的纯度越高。<br>属性a的基尼指数定义为：<br>$$Gini_index(D,a) = \sum_{v=1}^V \frac{|D^v|}{|D|}Gini(D^v)$$<br>于是我们在候选属性集A中，选择哪个使得划分后基尼指数最小的属性作为最优划分属性，即$a_* = argmin_{a\in A} (Gini_index(D,q))$</p>
+<p>Gini(D)表示集合D的不确定性，基尼指数Gini(D,A)表示经A = a分割后D的不确定性，Gini越大，不确定性越大，与熵相似。</p>
+<p>基尼指数，熵之半和分类误差率曲线都和接近，都可以近似代表分类误差。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/Gini.png" alt=""></p>
+<h2 id="CART剪枝"><a href="#CART剪枝" class="headerlink" title="CART剪枝"></a>CART剪枝</h2><blockquote>
+<p> 剪枝过程特别重要，所以在最优决策树生成过程中占有重要地位。有研究表明，剪枝过程的重要性要比树生成过程更为重要，对于不同的划分标准生成的最大树(Maximum Tree)，在剪枝之后都能够保留最重要的属性划分，差别不大。反而是剪枝方法对于最优树的生成更为关键。</p>
+</blockquote>
+<p>CART剪枝算法从“完全生长”的决策树底端剪去一些子树，使得模型边检大，从而能够对未知数据有更准确的预测。</p>
+<p>算法分成两个步骤：首先从生成算法产生的决策树底端T0开始不断剪枝，知道T0根节点，形成一个子树序列{T0，T1，…,Tn}；然后通过交叉验证法在独立的验证数据集上对子树进行测试，从中选择最优子树。</p>
+<p>损失函数：<br>$$C_\alpha (T) = C(T)+\alpha|T|$$<br>对于固定的$\alpha$，一定存在唯一的使得损失函数最小的最优子树。$\alpha$大，最优子树偏小，反之，$\alpha$小，最优子树偏大。<br>已经有证明可以用递归的方法对树进行剪枝。</p>
+<p>具体的，从整体树T0开始剪枝，对T0内任意内部节点t，以t为单节点的损失函数是<br>$$C_\alpha (t) = C(T)+\alpha$$<br>以t为根的子树Tt损失函数是<br>$$C_\alpha (T_t) = C(T_t)+\alpha|T_t|$$<br>（|T_t|难道&lt;1?）<br>当 alpha = 0或者充分小的时候,有<br>$$C_\alpha (T_t) &lt; C_\alpha (t)$$<br>alpha 仔增发，只要$\alpha  = \frac{C(t)-C(T_t)}{|T_t|-1}$，Tt与t有相同损失函数，而t的节点更少，因此t比Tt更可取，对Tt进行剪枝。<br>因此对T0中每个内部节点t计算<br>$$g(t)  = \frac{C(t)-C(T_t)}{|T_t|-1}$$<br>表示剪枝后整体损失函数减少的程度。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/cartJianzhi.png" alt=""></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/MachineLearning/">MachineLearning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/MachineLearning/">MachineLearning</a><a href="/tags/Notes/">Notes</a><a href="/tags/统计学习/">统计学习</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/06/统计学习方法_李航_笔记5/" data-title="统计学习方法（李航）- 第5章决策树笔记 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/07/统计学习方法_李航_笔记6/" title="统计学习方法（李航）- 第6章逻辑回归与最大熵模型笔记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  统计学习方法（李航）- 第6章逻辑回归与最大熵模型笔记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/06/统计学习方法_李航_笔记3/"  title="统计学习方法（李航）- 第3章k近邻法笔记">
+ <strong>下一篇：</strong><br/> 
+ <span>统计学习方法（李航）- 第3章k近邻法笔记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/06/统计学习方法_李航_笔记5/" data-title="统计学习方法（李航）- 第5章决策树笔记" data-url="http://yoursite.com/2016/08/06/统计学习方法_李航_笔记5/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#决策树模型与学习"><span class="toc-number">1.</span> <span class="toc-text">决策树模型与学习</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#决策树与if-then规则"><span class="toc-number">1.1.</span> <span class="toc-text">决策树与if-then规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#决策树与条件概率分布"><span class="toc-number">1.2.</span> <span class="toc-text">决策树与条件概率分布</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#学习"><span class="toc-number">1.3.</span> <span class="toc-text">学习</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#特征选择"><span class="toc-number">2.</span> <span class="toc-text">特征选择</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#信息增益"><span class="toc-number">2.1.</span> <span class="toc-text">信息增益</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#信息增益比"><span class="toc-number">2.2.</span> <span class="toc-text">信息增益比</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#决策树的生成"><span class="toc-number">3.</span> <span class="toc-text">决策树的生成</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ID3算法"><span class="toc-number">3.1.</span> <span class="toc-text">ID3算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C4-5算法"><span class="toc-number">3.2.</span> <span class="toc-text">C4.5算法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#决策树的剪枝"><span class="toc-number">4.</span> <span class="toc-text">决策树的剪枝</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CART算法"><span class="toc-number">5.</span> <span class="toc-text">CART算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CART生成"><span class="toc-number">5.1.</span> <span class="toc-text">CART生成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#回归树生成"><span class="toc-number">5.1.1.</span> <span class="toc-text">回归树生成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分类树的生成"><span class="toc-number">5.1.2.</span> <span class="toc-text">分类树的生成</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CART剪枝"><span class="toc-number">5.2.</span> <span class="toc-text">CART剪枝</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

@@ -1,0 +1,641 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>一致哈希算法 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="来源：http://blog.csdn.net/cywosp/article/details/23397179/
+问题来源tencent2012笔试题附加题问题描述： 例如手机朋友网有n个服务器，为了方便用户的访问会在服务器上缓存数据，因此用户每次访问的时候最好能保持同一台服务器。已有的做法是根据ServerIPIndex[QQNUM%n]得到请求的服务器，这种方法很方便将用户分到不同的服务器上去">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一致哈希算法">
+<meta property="og:url" content="http://yoursite.com/2016/08/03/一致哈希/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="来源：http://blog.csdn.net/cywosp/article/details/23397179/
+问题来源tencent2012笔试题附加题问题描述： 例如手机朋友网有n个服务器，为了方便用户的访问会在服务器上缓存数据，因此用户每次访问的时候最好能保持同一台服务器。已有的做法是根据ServerIPIndex[QQNUM%n]得到请求的服务器，这种方法很方便将用户分到不同的服务器上去">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E4%B8%80%E8%87%B4%E5%93%88%E5%B8%8C/hash1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E4%B8%80%E8%87%B4%E5%93%88%E5%B8%8C/hash2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E4%B8%80%E8%87%B4%E5%93%88%E5%B8%8C/hash3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E4%B8%80%E8%87%B4%E5%93%88%E5%B8%8C/hash4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E4%B8%80%E8%87%B4%E5%93%88%E5%B8%8C/hash5.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E4%B8%80%E8%87%B4%E5%93%88%E5%B8%8C/hash4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E4%B8%80%E8%87%B4%E5%93%88%E5%B8%8C/hash6.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E4%B8%80%E8%87%B4%E5%93%88%E5%B8%8C/hash7.png">
+<meta property="og:updated_time" content="2016-08-03T01:13:54.515Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一致哈希算法">
+<meta name="twitter:description" content="来源：http://blog.csdn.net/cywosp/article/details/23397179/
+问题来源tencent2012笔试题附加题问题描述： 例如手机朋友网有n个服务器，为了方便用户的访问会在服务器上缓存数据，因此用户每次访问的时候最好能保持同一台服务器。已有的做法是根据ServerIPIndex[QQNUM%n]得到请求的服务器，这种方法很方便将用户分到不同的服务器上去">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E4%B8%80%E8%87%B4%E5%93%88%E5%B8%8C/hash1.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/03/一致哈希/" title="一致哈希算法" itemprop="url">一致哈希算法</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-03T00:18:31.566Z" itemprop="datePublished"> Published 2016-08-03</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#问题来源"><span class="toc-number">1.</span> <span class="toc-text">问题来源</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#应用场景"><span class="toc-number">2.</span> <span class="toc-text">应用场景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#简介"><span class="toc-number">3.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#算法原理"><span class="toc-number">4.</span> <span class="toc-text">算法原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#环形空间"><span class="toc-number">4.1.</span> <span class="toc-text">环形空间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#把数据通过一定的hash算法处理后映射到环上"><span class="toc-number">4.2.</span> <span class="toc-text">把数据通过一定的hash算法处理后映射到环上</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#将机器通过hash算法映射到环上"><span class="toc-number">4.3.</span> <span class="toc-text">将机器通过hash算法映射到环上</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#机器的删除与添加"><span class="toc-number">4.4.</span> <span class="toc-text">机器的删除与添加</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-节点（机器）的删除"><span class="toc-number">4.4.1.</span> <span class="toc-text">1.节点（机器）的删除</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-节点（机器）的添加"><span class="toc-number">4.4.2.</span> <span class="toc-text">2.节点（机器）的添加</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#平衡性"><span class="toc-number">4.5.</span> <span class="toc-text">平衡性</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#附录：常用的hash算法"><span class="toc-number">5.</span> <span class="toc-text">附录：常用的hash算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#代码实现"><span class="toc-number">6.</span> <span class="toc-text">代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#简介-1"><span class="toc-number">6.1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现类"><span class="toc-number">6.2.</span> <span class="toc-text">实现类</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>来源：<a href="http://blog.csdn.net/cywosp/article/details/23397179/" target="_blank" rel="external">http://blog.csdn.net/cywosp/article/details/23397179/</a></p>
+<h1 id="问题来源"><a href="#问题来源" class="headerlink" title="问题来源"></a>问题来源</h1><p>tencent2012笔试题附加题<br>问题描述： 例如手机朋友网有n个服务器，为了方便用户的访问会在服务器上缓存数据，因此用户每次访问的时候最好能保持同一台服务器。<br>已有的做法是根据ServerIPIndex[QQNUM%n]得到请求的服务器，这种方法很方便将用户分到不同的服务器上去。但是如果一台服务器死掉了，那么n就变为了n-1，那么ServerIPIndex[QQNUM%n]与ServerIPIndex[QQNUM%（n-1）]基本上都不一样了，所以大多数用户的请求都会转到其他服务器，这样会发生大量访问错误。</p>
+<p>问： 如何改进或者换一种方法，使得：</p>
+<p>(1) 一台服务器死掉后，不会造成大面积的访问错误，<br>(2)原有的访问基本还是停留在同一台服务器上；+<br>(3)尽量考虑负载均衡。（思路：往<strong>分布式一致哈希算法</strong>方面考虑。）</p>
+<h1 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h1><p>在做服务器负载均衡时候可供选择的负载均衡的算法有很多，包括： 轮循算法（Round Robin）、哈希算法（HASH）、最少连接算法（Least Connection）、响应速度算法（Response Time）、加权法（Weighted ）等。其中哈希算法是最为常用的算法.<br>典型的应用场景是： 有N台服务器提供缓存服务，需要对服务器进行负载均衡，将请求平均分发到每台服务器上，每台机器负责1/N的服务。</p>
+<p>常用的算法是对hash结果取余数 (hash() mod N)：对机器编号从0到N-1，按照自定义的hash()算法，对每个请求的hash()值按N取模，得到余数i，然后将请求分发到编号为i的机器。但这样的算法方法存在致命问题，如果某一台机器宕机，那么应该落在该机器的请求就无法得到正确的处理，这时需要将当掉的服务器从算法从去除，此时候会有(N-1)/N的服务器的缓存数据需要重新进行计算；如果新增一台机器，会有N /(N+1)的服务器的缓存数据需要进行重新计算。对于系统而言，这通常是不可接受的颠簸（因为这意味着大量缓存的失效或者数据需要转移）。</p>
+<p>那么，如何设计一个负载均衡策略，使得受到影响的请求尽可能的少呢？<br>在Memcached、Key-Value Store、Bittorrent DHT、LVS中都采用了Consistent Hashing算法，可以说Consistent Hashing 是分布式系统负载均衡的首选算法。</p>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>一致性哈希算法在1997年由麻省理工学院提出的一种分布式哈希（DHT）实现算法，设计目标是为了解决因特网中的热点(Hot spot)问题，初衷和CARP十分类似。一致性哈希修正了CARP使用的简 单哈希算法带来的问题，使得分布式哈希（DHT）可以在P2P环境中真正得到应用。<br> 一致性hash算法提出了在动态变化的Cache环境中，判定哈希算法好坏的四个定义：</p>
+<pre><code>1. 平衡性(Balance)：平衡性是指哈希的结果能够尽可能分布到所有的缓冲中去，这样可以使得所有的缓冲空间都得到利用。很多哈希算法都能够满足这一条件。
+
+2. 单调性(Monotonicity)：单调性是指如果已经有一些内容通过哈希分派到了相应的缓冲中，又有新的缓冲加入到系统中。哈希的结果应能够保证原有已分配的内容可以被映射到原有的或者新的缓冲中去，而不会被映射到旧的缓冲集合中的其他缓冲区。 
+
+3. 分散性(Spread)：在分布式环境中，终端有可能看不到所有的缓冲，而是只能看到其中的一部分。当终端希望通过哈希过程将内容映射到缓冲上时，由于不同终端所见的缓冲范围有可能不同，从而导致哈希的结果不一致，最终的结果是相同的内容被不同的终端映射到不同的缓冲区中。这种情况显然是应该避免的，因为它导致相同内容被存储到不同缓冲中去，降低了系统存储的效率。分散性的定义就是上述情况发生的严重程度。好的哈希算法应能够尽量避免不一致的情况发生，也就是尽量降低分散性。 
+
+4. 负载(Load)：负载问题实际上是从另一个角度看待分散性问题。既然不同的终端可能将相同的内容映射到不同的缓冲区中，那么对于一个特定的缓冲区而言，也可能被不同的用户映射为不同 的内容。与分散性一样，这种情况也是应当避免的，因此好的哈希算法应能够尽量降低缓冲的负荷。
+</code></pre><h1 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h1><p>分布式集群中，对机器的添加删除，或者机器故障后自动脱离集群这些操作是分布式集群管理最基本的功能。如果采用常用的hash(object)%N算法，那么在有机器添加或者删除后，很多原有的数据就无法找到了，这样严重的违反了单调性原则。接下来主要讲解一下一致性哈希算法是如何设计的：</p>
+<h2 id="环形空间"><a href="#环形空间" class="headerlink" title="环形空间"></a>环形空间</h2><p>按照常用的hash算法来将对应的key哈希到一个具有2^32次方个桶的空间中，即0~(2^32)-1的数字空间中。现在我们可以将这些数字头尾相连，想象成一个闭合的环形。如下图<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E4%B8%80%E8%87%B4%E5%93%88%E5%B8%8C/hash1.png" alt=""></p>
+<h2 id="把数据通过一定的hash算法处理后映射到环上"><a href="#把数据通过一定的hash算法处理后映射到环上" class="headerlink" title="把数据通过一定的hash算法处理后映射到环上"></a>把数据通过一定的hash算法处理后映射到环上</h2><p>现在我们将object1、object2、object3、object4四个对象通过特定的哈希函数计算出响应的key值，然后散列到Hash环上<br>Hash(Object1) = key1<br>Hash(Object2) = key2<br>Hash(Object3) = key3<br>Hash(Object4) = key4<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E4%B8%80%E8%87%B4%E5%93%88%E5%B8%8C/hash2.png" alt=""></p>
+<h2 id="将机器通过hash算法映射到环上"><a href="#将机器通过hash算法映射到环上" class="headerlink" title="将机器通过hash算法映射到环上"></a>将机器通过hash算法映射到环上</h2><p>在采用一致性哈希算法的分布式集群中将新的机器加入，其原理是通过使用与对象储存一样的hash算法将机器也映射到环中（一般情况下对机器的hash计算是采用机器的<strong>IP</strong>或者机器<strong>唯一的别名</strong>作为输入值），然后以顺时针方向计算，将所有的对象存储到离自己最近的机器中。<br>假设现在有NODE1，NODE2，NODE3三台机器，通过Hash算法得到对应的KEY值，映射到环中，其示意图如下：<br>Hash(NODE1) = KEY1;<br>Hash(NODE2) = KEY2;<br>Hash(NODE3) = KEY3;<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E4%B8%80%E8%87%B4%E5%93%88%E5%B8%8C/hash3.png" alt=""><br>通过上图可以看出对象与机器处于同一哈希空间中，这样按顺时针转动object1存储到了NODE1中，object3存储到了NODE2中，object2、object4存储到了NODE3中。在这样的部署环境中，hash环是不会变更的，因此，通过算出对象的hash值就能快速的定位到对应的机器中，这样就能找到对象真正的存储位置了。</p>
+<h2 id="机器的删除与添加"><a href="#机器的删除与添加" class="headerlink" title="机器的删除与添加"></a>机器的删除与添加</h2><p>普通hash求余算法最为不妥的地方就是在有机器的添加或者删除之后会照成大量的对象存储位置失效，这样就大大的不满足单调性了。下面来分析一下一致性哈希算法是如何处理的。</p>
+<h3 id="1-节点（机器）的删除"><a href="#1-节点（机器）的删除" class="headerlink" title="1.节点（机器）的删除"></a>1.节点（机器）的删除</h3><p>以上面的分布为例，如果NODE2出现故障被删除了，那么按照顺时针迁移的方法，object3将会被迁移到NODE3中，这样仅仅是object3的映射位置发生了变化，其它的对象没有任何的改动。如下图：<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E4%B8%80%E8%87%B4%E5%93%88%E5%B8%8C/hash4.png" alt=""></p>
+<h3 id="2-节点（机器）的添加"><a href="#2-节点（机器）的添加" class="headerlink" title="2.节点（机器）的添加"></a>2.节点（机器）的添加</h3><p>如果往集群中添加一个新的节点NODE4，通过对应的哈希算法得到KEY4，并映射到环中，如下图：<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E4%B8%80%E8%87%B4%E5%93%88%E5%B8%8C/hash5.png" alt=""><br>通过按顺时针迁移的规则，那么object2被迁移到了NODE4中，其它对象还保持这原有的存储位置。通过对节点的添加和删除的分析，一致性哈希算法在保持了单调性的同时，还是数据的迁移达到了最小，这样的算法对分布式集群来说是非常合适的，避免了大量数据迁移，减小了服务器的的压力。</p>
+<h2 id="平衡性"><a href="#平衡性" class="headerlink" title="平衡性"></a>平衡性</h2><p>根据上面的图解分析，一致性哈希算法满足了单调性和负载均衡的特性以及一般hash算法的分散性，但这还并不能当做其被广泛应用的原由，因为还缺少了平衡性。下面将分析一致性哈希算法是如何满足平衡性的。hash算法是不保证平衡的，如上面只部署了NODE1和NODE3的情况（NODE2被删除的图），object1存储到了NODE1中，而object2、object3、object4都存储到了NODE3中，这样就照成了非常不平衡的状态。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E4%B8%80%E8%87%B4%E5%93%88%E5%B8%8C/hash4.png" alt=""><br>在一致性哈希算法中，为了尽可能的满足平衡性，其引入了<strong>虚拟节点</strong>。</p>
+<pre><code>“虚拟节点”（ virtual node ）是实际节点（机器）在 hash 空间的复制品（ replica ）。
+实际个节点（机器）对应了若干个“虚拟节点”，这个对应个数也成为“复制个数”，“虚拟节点”在 hash 空间中以hash值排列。
+</code></pre><p>以上面只部署了NODE1和NODE3的情况（NODE2被删除的图）为例，之前的对象在机器上的分布很不均衡，现在我们以2个副本（复制个数）为例，这样整个hash环中就存在了4个虚拟节点，最后对象映射的关系图如下：<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E4%B8%80%E8%87%B4%E5%93%88%E5%B8%8C/hash6.png" alt=""></p>
+<p>根据上图可知对象的映射关系：object1-&gt;NODE1-1，object2-&gt;NODE1-2，object3-&gt;NODE3-2，object4-&gt;NODE3-1。通过虚拟节点的引入，对象的分布就比较均衡了。那么在实际操作中，正真的对象查询是如何工作的呢？对象从hash到虚拟节点到实际节点的转换如下图：<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E4%B8%80%E8%87%B4%E5%93%88%E5%B8%8C/hash7.png" alt=""><br>“虚拟节点”的hash计算可以采用对应节点的IP地址加数字后缀的方式。例如假设NODE1的IP地址为192.168.1.100。引入“虚拟节点”前，计算 cache A 的 hash 值：<br>Hash(“192.168.1.100”);<br>引入“虚拟节点”后，计算“虚拟节”点NODE1-1和NODE1-2的hash值：<br>Hash(“192.168.1.100#1”); // NODE1-1<br>Hash(“192.168.1.100#2”); // NODE1-2</p>
+<h1 id="附录：常用的hash算法"><a href="#附录：常用的hash算法" class="headerlink" title="附录：常用的hash算法"></a>附录：常用的hash算法</h1><ul>
+<li>Jenkins <a href="http://burtleburtle.net/bob/hash/doobs.html" target="_blank" rel="external">http://burtleburtle.net/bob/hash/doobs.html</a></li>
+<li>MurMur，比较常用hadoop中使用 <a href="http://murmurhash.googlepages.com/" target="_blank" rel="external">http://murmurhash.googlepages.com/</a></li>
+<li>更多：<a href="http://www.partow.net/programming/hashfunctions/" target="_blank" rel="external">http://www.partow.net/programming/hashfunctions/</a><br>  RS Hash Function<br> JS Hash Function<br> PJW Hash Function<br> ELF Hash Function<br> BKDR Hash Function<br> SDBM Hash Function<br> DJB Hash Function<br> DEK Hash Function<br> AP Hash Function</li>
+</ul>
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><p>来源：<a href="http://sgq0085.iteye.com/blog/2230528" target="_blank" rel="external">http://sgq0085.iteye.com/blog/2230528</a><br><a href="http://www.blogjava.net/hello-yun/archive/2012/10/10/389289.html" target="_blank" rel="external">http://www.blogjava.net/hello-yun/archive/2012/10/10/389289.html</a></p>
+<h2 id="简介-1"><a href="#简介-1" class="headerlink" title="简介"></a>简介</h2><p>MurmurHash算法：高运算性能，低碰撞率，由Austin Appleby创建于2008年，现已应用到Hadoop、libstdc++、nginx、libmemcached等开源系统。2011年Appleby被Google雇佣，随后Google推出其变种的CityHash算法。官方只提供了C语言的实现版本。<br>Java界中Redis，Memcached，Cassandra，HBase，Lucene都用它。<br>在Java的实现，Guava的Hashing类里有，上面提到的Jedis，Cassandra里都有Util类。<br>但存在的问题是由于Java的数据类型long与C语言中无符号长整型uint64_t有区别，导致Java输出版本存在负数，针对这个问题进行了修改；另外需要注意的是中文不同编码（UTF-8或GBK）会导致输出结果的不同，使用中需要统一编码。</p>
+<h2 id="实现类"><a href="#实现类" class="headerlink" title="实现类"></a>实现类</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Shard</span>&lt;<span class="title">S</span>&gt; </span>&#123; <span class="comment">// S类封装了机器节点的信息 ，如name、password、ip、port等   </span></div><div class="line">  </div><div class="line">    <span class="keyword">private</span> TreeMap&lt;Long, S&gt; nodes; <span class="comment">// 虚拟节点   </span></div><div class="line">    <span class="keyword">private</span> List&lt;S&gt; shards; <span class="comment">// 真实机器节点   </span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> NODE_NUM = <span class="number">100</span>; <span class="comment">// 每个机器节点关联的虚拟节点个数   </span></div><div class="line">  </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Shard</span><span class="params">(List&lt;S&gt; shards)</span> </span>&#123;  </div><div class="line">        <span class="keyword">super</span>();  </div><div class="line">        <span class="keyword">this</span>.shards = shards;  </div><div class="line">        init();  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123; <span class="comment">// 初始化一致性hash环   </span></div><div class="line">        nodes = <span class="keyword">new</span> TreeMap&lt;Long, S&gt;();  </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i != shards.size(); ++i) &#123; <span class="comment">// 每个真实机器节点都需要关联虚拟节点   </span></div><div class="line">            <span class="keyword">final</span> S shardInfo = shards.get(i);  </div><div class="line">  </div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> n = <span class="number">0</span>; n &lt; NODE_NUM; n++)  </div><div class="line">                <span class="comment">// 一个真实机器节点关联NODE_NUM个虚拟节点   </span></div><div class="line">                nodes.put(hash(<span class="string">"SHARD-"</span> + i + <span class="string">"-NODE-"</span> + n), shardInfo);  </div><div class="line">  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    <span class="function"><span class="keyword">public</span> S <span class="title">getShardInfo</span><span class="params">(String key)</span> </span>&#123;  </div><div class="line">        SortedMap&lt;Long, S&gt; tail = nodes.tailMap(hash(key)); <span class="comment">// 沿环的顺时针找到一个虚拟节点   </span></div><div class="line">        <span class="keyword">if</span> (tail.size() == <span class="number">0</span>) &#123;  </div><div class="line">            <span class="keyword">return</span> nodes.get(nodes.firstKey());  </div><div class="line">        &#125;  </div><div class="line">        <span class="keyword">return</span> tail.get(tail.firstKey()); <span class="comment">// 返回该虚拟节点对应的真实机器节点的信息   </span></div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    <span class="comment">/** </span></div><div class="line">     *  MurMurHash算法，是非加密HASH算法，性能很高， </div><div class="line">     *  比传统的CRC32,MD5，SHA-1（这两个算法都是加密HASH算法，复杂度本身就很高，带来的性能上的损害也不可避免） </div><div class="line">     *  等HASH算法要快很多，而且据说这个算法的碰撞率很低. </div><div class="line">     *  http://murmurhash.googlepages.com/ </div><div class="line">     */  </div><div class="line">    <span class="function"><span class="keyword">private</span> Long <span class="title">hash</span><span class="params">(String key)</span> </span>&#123;  </div><div class="line">          </div><div class="line">        ByteBuffer buf = ByteBuffer.wrap(key.getBytes());  </div><div class="line">        <span class="keyword">int</span> seed = <span class="number">0x1234ABCD</span>;  </div><div class="line">          </div><div class="line">        ByteOrder byteOrder = buf.order();  </div><div class="line">        buf.order(ByteOrder.LITTLE_ENDIAN);  </div><div class="line">  </div><div class="line">        <span class="keyword">long</span> m = <span class="number">0xc6a4a7935bd1e995L</span>;  </div><div class="line">        <span class="keyword">int</span> r = <span class="number">47</span>;  </div><div class="line">  </div><div class="line">        <span class="keyword">long</span> h = seed ^ (buf.remaining() * m);  </div><div class="line">  </div><div class="line">        <span class="keyword">long</span> k;  </div><div class="line">        <span class="keyword">while</span> (buf.remaining() &gt;= <span class="number">8</span>) &#123;  </div><div class="line">            k = buf.getLong();  </div><div class="line">  </div><div class="line">            k *= m;  </div><div class="line">            k ^= k &gt;&gt;&gt; r;  </div><div class="line">            k *= m;  </div><div class="line">  </div><div class="line">            h ^= k;  </div><div class="line">            h *= m;  </div><div class="line">        &#125;  </div><div class="line">  </div><div class="line">        <span class="keyword">if</span> (buf.remaining() &gt; <span class="number">0</span>) &#123;  </div><div class="line">            ByteBuffer finish = ByteBuffer.allocate(<span class="number">8</span>).order(  </div><div class="line">                    ByteOrder.LITTLE_ENDIAN);  </div><div class="line">            <span class="comment">// for big-endian version, do this first:   </span></div><div class="line">            <span class="comment">// finish.position(8-buf.remaining());   </span></div><div class="line">            finish.put(buf).rewind();  </div><div class="line">            h ^= finish.getLong();  </div><div class="line">            h *= m;  </div><div class="line">        &#125;  </div><div class="line">  </div><div class="line">        h ^= h &gt;&gt;&gt; r;  </div><div class="line">        h *= m;  </div><div class="line">        h ^= h &gt;&gt;&gt; r;  </div><div class="line">  </div><div class="line">        buf.order(byteOrder);  </div><div class="line">        <span class="keyword">return</span> h;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Interview/">Interview</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/03/一致哈希/" data-title="一致哈希算法 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/03/后缀树/" title="后缀树">
+  <strong>上一篇：</strong><br/>
+  <span>
+  后缀树</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/02/TrieTree/"  title="Trie树">
+ <strong>下一篇：</strong><br/> 
+ <span>Trie树
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/03/一致哈希/" data-title="一致哈希算法" data-url="http://yoursite.com/2016/08/03/一致哈希/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#问题来源"><span class="toc-number">1.</span> <span class="toc-text">问题来源</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#应用场景"><span class="toc-number">2.</span> <span class="toc-text">应用场景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#简介"><span class="toc-number">3.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#算法原理"><span class="toc-number">4.</span> <span class="toc-text">算法原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#环形空间"><span class="toc-number">4.1.</span> <span class="toc-text">环形空间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#把数据通过一定的hash算法处理后映射到环上"><span class="toc-number">4.2.</span> <span class="toc-text">把数据通过一定的hash算法处理后映射到环上</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#将机器通过hash算法映射到环上"><span class="toc-number">4.3.</span> <span class="toc-text">将机器通过hash算法映射到环上</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#机器的删除与添加"><span class="toc-number">4.4.</span> <span class="toc-text">机器的删除与添加</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-节点（机器）的删除"><span class="toc-number">4.4.1.</span> <span class="toc-text">1.节点（机器）的删除</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-节点（机器）的添加"><span class="toc-number">4.4.2.</span> <span class="toc-text">2.节点（机器）的添加</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#平衡性"><span class="toc-number">4.5.</span> <span class="toc-text">平衡性</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#附录：常用的hash算法"><span class="toc-number">5.</span> <span class="toc-text">附录：常用的hash算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#代码实现"><span class="toc-number">6.</span> <span class="toc-text">代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#简介-1"><span class="toc-number">6.1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现类"><span class="toc-number">6.2.</span> <span class="toc-text">实现类</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

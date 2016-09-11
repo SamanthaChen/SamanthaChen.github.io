@@ -1,0 +1,669 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>后缀树 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="来源;http://blog.csdn.net/fanzitao/article/details/8042015
+引入Amazon的面试题：找出给定字符串里的最长回文。例子：输入XMADAMYX。则输出MADAM。这道题的流行解法是用后缀树（Suffix Tree)。这个数据结构最酷的地方是用它能高效解决一大票复杂的字符串编程问题： 
+
+在文本T里查询T是否包含子串P（复杂度同流行的KMP相当）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="后缀树">
+<meta property="og:url" content="http://yoursite.com/2016/08/03/后缀树/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="来源;http://blog.csdn.net/fanzitao/article/details/8042015
+引入Amazon的面试题：找出给定字符串里的最长回文。例子：输入XMADAMYX。则输出MADAM。这道题的流行解法是用后缀树（Suffix Tree)。这个数据结构最酷的地方是用它能高效解决一大票复杂的字符串编程问题： 
+
+在文本T里查询T是否包含子串P（复杂度同流行的KMP相当）。">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E5%90%8E%E7%BC%80%E6%A0%91/%E5%89%8D%E7%BC%80%E6%A0%91.gif">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E5%90%8E%E7%BC%80%E6%A0%91/suffixTree1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E5%90%8E%E7%BC%80%E6%A0%91/suffixTree2.gif">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E5%90%8E%E7%BC%80%E6%A0%91/suffix_tree3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E5%90%8E%E7%BC%80%E6%A0%91/palindrome.png">
+<meta property="og:updated_time" content="2016-08-03T02:11:44.670Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="后缀树">
+<meta name="twitter:description" content="来源;http://blog.csdn.net/fanzitao/article/details/8042015
+引入Amazon的面试题：找出给定字符串里的最长回文。例子：输入XMADAMYX。则输出MADAM。这道题的流行解法是用后缀树（Suffix Tree)。这个数据结构最酷的地方是用它能高效解决一大票复杂的字符串编程问题： 
+
+在文本T里查询T是否包含子串P（复杂度同流行的KMP相当）。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E5%90%8E%E7%BC%80%E6%A0%91/%E5%89%8D%E7%BC%80%E6%A0%91.gif">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/03/后缀树/" title="后缀树" itemprop="url">后缀树</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-03T01:12:42.916Z" itemprop="datePublished"> Published 2016-08-03</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#引入"><span class="toc-number">1.</span> <span class="toc-text">引入</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#先回顾一下前缀树（字典树）"><span class="toc-number">2.</span> <span class="toc-text">先回顾一下前缀树（字典树）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#后缀树"><span class="toc-number">3.</span> <span class="toc-text">后缀树</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#广义后缀树"><span class="toc-number">4.</span> <span class="toc-text">广义后缀树</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#如何解决回文问题"><span class="toc-number">5.</span> <span class="toc-text">如何解决回文问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#后缀树的应用"><span class="toc-number">6.</span> <span class="toc-text">后缀树的应用</span></a></li></ol>
+		
+		</div>
+		
+		<p>来源;<a href="http://blog.csdn.net/fanzitao/article/details/8042015" target="_blank" rel="external">http://blog.csdn.net/fanzitao/article/details/8042015</a></p>
+<h1 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h1><p>Amazon的面试题：找出给定字符串里的最长回文。例子：输入XMADAMYX。则输出MADAM。这道题的流行解法是用后缀树（Suffix Tree)。这个数据结构最酷的地方是用它能高效解决一大票复杂的字符串编程问题： </p>
+<ol>
+<li>在文本T里查询T是否包含子串P（复杂度同流行的KMP相当）。</li>
+<li>文本T里找出最长重复子串。比如abcdabcefda里abc同da都重复出现，而最长重复子串是abc。</li>
+<li>找出字符串S1同S2的最长公共子串。注意不是常用作动态规划例子的LCS哈。比如字符串acdfg同akdfc的最长公共子串为df，而他们的LCS是adf。</li>
+<li>Ziv-Lampel无损压缩算法。</li>
+<li>还有就是这道面试题问的最长回文了。</li>
+<li>另外后缀树在生物信息学里应该应用广泛。碱基匹配和选取的计算本质上就是操作超长的{C, T, A, G, U}*字符串嘛。</li>
+</ol>
+<h1 id="先回顾一下前缀树（字典树）"><a href="#先回顾一下前缀树（字典树）" class="headerlink" title="先回顾一下前缀树（字典树）"></a>先回顾一下前缀树（字典树）</h1><p>Trie是个简单但实用的数据结构，通常用于实现字典查询。我们做即时响应用户输入的AJAX搜索框时，就是Trie开始。本质上，Trie是一颗存储多个字符串的树。相邻节点间的边代表一个字符，这样树的每条分支代表一则子串，而树的叶节点则代表完整的字符串。和普通树不同的地方是，相同的字符串前缀共享同一条分支。还是例子最清楚。给出一组单词，inn, int, at, age, adv, ant, 我们可以得到下面的Trie：<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E5%90%8E%E7%BC%80%E6%A0%91/%E5%89%8D%E7%BC%80%E6%A0%91.gif" alt=""><br>可以看出：</p>
+<ul>
+<li>每条边对应一个字母。</li>
+<li>每个节点对应一项前缀。叶节点对应最长前缀，即单词本身。</li>
+<li>单词inn与单词int有共同的前缀“in”, 因此他们共享左边的一条分支，root-&gt;i-&gt;in。同理，ate, age, adv, 和ant共享前缀”a”，所以他们共享从根节点到节点”a”的边。</li>
+<li>查询非常简单。比如要查找int，顺着路径i -&gt; in -&gt; int就找到了。</li>
+<li>搭建Trie的基本算法也很简单，无非是逐一把每则单词的每个字母插入Trie。插入前先看前缀是否存在。如果存在，就共享，否则创建对应的节点和边。比如要插入单词add，就有下面几步：<ul>
+<li>考察前缀”a”，发现边a已经存在。于是顺着边a走到节点a。</li>
+<li>考察剩下的字符串”dd”的前缀”d”，发现从节点a出发，已经有边d存在。于是顺着边d走到节点ad</li>
+<li>考察最后一个字符”d”，这下从节点ad出发没有边d了，于是创建节点ad的子节点add，并把边ad-&gt;add标记为d。</li>
+</ul>
+</li>
+</ul>
+<h1 id="后缀树"><a href="#后缀树" class="headerlink" title="后缀树"></a>后缀树</h1><p>所谓后缀树，就是包含一则字符串所有后缀的压缩了的字典树。先说说后缀的定义。给定一长度为n的字符串S=S1S2..Si..Sn，和整数i，1 &lt;= i &lt;= n，子串SiSi+1…Sn都是字符串S的后缀。以字符串S=XMADAMYX为例，它的长度为8，所以S[1..8], S[2..8], … , S[8..8]都算S的后缀，我们一般还把空字串也算成后缀。这样，我们一共有如下后缀。对于后缀S[i..n]，我们说这项后缀起始于i。</p>
+<pre><code>S[1..8], XMADAMYX， 也就是字符串本身，起始位置为1
+S[2..8], MADAMYX，起始位置为2
+S[3..8], ADAMYX，起始位置为3
+S[4..8], DAMYX，起始位置为4
+S[5..8], AMYX，起始位置为5
+S[6..8], MYX，起始位置为6
+S[7..8], YX，起始位置为7
+S[8..8], X，起始位置为8
+空字串。记为$。
+</code></pre><p>所有这些后缀字符串组成一棵字典树：<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E5%90%8E%E7%BC%80%E6%A0%91/suffixTree1.png" alt=""><br>仔细观察上图，我们可以看到不少值得压缩的地方。比如蓝框标注的分支都是独苗，没有必要用单独的节点同边表示。如果我们允许任意一条边里包含多个字母，就可以把这种没有分叉的路径压缩到一条边。另外每条边已经包含了足够的后缀信息，我们就不用再给节点标注字符串信息了。我们只需要在叶节点上标注上每项后缀的起始位置。于是我们得到下图：<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E5%90%8E%E7%BC%80%E6%A0%91/suffixTree2.gif" alt=""><br>这样的结构丢失了某些后缀。比如后缀X在上图中消失了，因为它正好是字符串XMADAMYX的前缀。为了避免这种情况，我们也规定每项后缀不能是其它后缀的前缀。要解决这个问题其实挺简单，在待处理的子串后加一个空字串就行了。例如我们处理XMADAMYX前，先把XMADAMYX变为 XMADAMYX$，于是就得到suffix tree。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E5%90%8E%E7%BC%80%E6%A0%91/suffix_tree3.png" alt=""><br>这就形成一棵后缀树了。关于如何建立一棵后缀树，已有很成熟的算法，能在o(n)时间内解决。</p>
+<h1 id="广义后缀树"><a href="#广义后缀树" class="headerlink" title="广义后缀树"></a>广义后缀树</h1><p>传统的后缀树只能处理一个单词的所有后缀。广义后缀树存储任意多个单词的所有后缀。例如字符串“abab”和“baba”，首先将它们使用特殊结束符链接起来，如表示成“abab$baba#”,然后求连接后的新字符的后缀树，遍历所得后缀树，如遇到特殊字符，如“$”,”#”等则去掉以该节点为跟的子树，最后所得后缀树即为原字符串组的广义后缀树。其实质是将两个字符串的所有后缀，即：abab$,bab$,ab$,b$,baba#,aba#,ba#,a#,组成字典树，再进行压缩处理。广义后缀树的一个常应用就是判断两个字符串的相识度。</p>
+<h1 id="如何解决回文问题"><a href="#如何解决回文问题" class="headerlink" title="如何解决回文问题"></a>如何解决回文问题</h1><p>那后缀树同最长回文有什么关系呢？我们得先知道两个简单概念：</p>
+<ul>
+<li><p>最低共有祖先，LCA（Lowest Common Ancestor)，也就是任意两节点（多个也行）最长的共有前缀。比如下图中，节点7同节点10的共同祖先是节点1与借点，但最低共同祖先是5。 查找LCA的算法是O(1)的复杂度，这年头少见。代价是需要对后缀树做复杂度为O(n)的预处理。 </p>
+</li>
+<li><p>广义后缀树(Generalized Suffix Tree)。传统的后缀树处理一坨单词的所有后缀。广义后缀树存储任意多个单词的所有后缀。例如下图是单词XMADAMYX与XYMADAMX的广义后缀 树。注意我们需要区分不同单词的后缀，所以叶节点用不同的特殊符号与后缀位置配对。</p>
+</li>
+</ul>
+<p>例如下图是单词XMADAMYX与XYMADAMX的广义后缀树。注意我们需要区分不同单词的后缀，所以叶节点用不同的特殊符号与后缀位置配对。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/%E5%90%8E%E7%BC%80%E6%A0%91/palindrome.png" alt=""><br>有了上面的概念，查找最长回文相对简单了。思维的突破点在于考察回文的半径，而不是回文本身。所谓半径，就是回文对折后的字串。比如回文MADAM 的半径为MAD，半径长度为3，半径的中心是字母D。显然，最长回文必有最长半径，且两条半径相等。还是以MADAM为例，以D为中心往左，我们得到半径 DAM；以D为中心向右，我们得到半径DAM。二者肯定相等。因为MADAM已经是单词XMADAMYX里的最长回文，我们可以肯定从D往左数的字串 DAMX与从D往右数的子串DAMYX共享最长前缀DAM。而这，正是解决回文问题的关键。现在我们有后缀树，怎么把从D向左数的字串DAMX变成后缀 呢？到这个地步，答案应该明显：把单词XMADAMYX翻转就行了。于是我们把寻找回文的问题转换成了寻找两个后缀的LCA的问题。当然，我们还需要知道 到底查询那些后缀间的LCA。这也简单，给定字符串S，如果最长回文的中心在i，那从位置i向右数的后缀刚好是S(i)，而向左数的字符串刚好是翻转S后 得到的字符串S‘的后缀S’(n-i+1)。这里的n是字符串S的长度。有了这套直观解释，算法自然呼之欲出：</p>
+<ul>
+<li>预处理后缀树，使得查询LCA的复杂度为O(1)。这步的开销是O(N)，N是单词S的长度</li>
+<li>对单词的每一位置i(也就是从0到N-1)，获取LCA(S(i), S(N-i+1)) 以及LCA(S(i+1), S(n-i+1))。查找两次的原因是我们需要考虑奇数回文和偶数回文的情况。这步要考察每坨i，所以复杂度是O(N)</li>
+<li>找到最大的LCA，我们也就得到了回文的中心i以及回文的半径长度，自然也就得到了最长回文。总的复杂度O(n)。<br>用上图做例子，i为3时，LCA(3$, 4#)为DAM，正好是最长半径。当然，这只是直观的叙述。</li>
+</ul>
+<p>这篇帖子只大致描述了后缀树的基本思路。要想写出实用代码，至少还得知道下面的知识：</p>
+<p>创建后缀树的O(n)算法。至于是Peter Weiner的73年年度最佳算法，还是Edward McCreight1976的改进算法，还是1995年E. Ukkonen大幅简化的算法，还是Juha Kärkkäinen 和 Peter Sanders2003年进一步简化的线性算法，各位老大随喜。</p>
+<p>实现后缀树用的数据结构。比如常用的子结点加兄弟节点列表，Directed</p>
+<p>优化后缀树空间的办法。比如不存储子串，而存储读取子串必需的位置。以及Directed Acyclic Word Graph，常缩写为DAWG。</p>
+<h1 id="后缀树的应用"><a href="#后缀树的应用" class="headerlink" title="后缀树的应用"></a>后缀树的应用</h1><p>(1). 查找字符串o是否在字符串S中。 </p>
+<p>方案：用S构造后缀树，按在trie中搜索字串的方法搜索o即可。<br>原理：若o在S中，则o必然是S的某个后缀的前缀。<br>例如S: leconte，查找o: con是否在S中,则o(con)必然是S(leconte)的后缀之一conte的前缀.有了这个前提，采用trie搜索的方法就不难理解了。 </p>
+<p>(2). 指定字符串T在字符串S中的重复次数。 </p>
+<p>方案：用S+’$’构造后缀树，搜索T节点下的叶节点数目即为重复次数<br>原理：如果T在S中重复了两次，则S应有两个后缀以T为前缀，重复次数就自然统计出来了。 </p>
+<p>(3). 字符串S中的最长重复子串 </p>
+<p>方案：原理同2，具体做法就是找到最深的非叶节点。<br>这个深是指从root所经历过的字符个数，最深非叶节点所经历的字符串起来就是最长重复子串。<br>为什么要非叶节点呢?因为既然是要重复，当然叶节点个数要&gt;=2。 </p>
+<p>(4). 两个字符串S1，S2的最长公共部分 </p>
+<p>方案：将S1#S2$作为字符串压入后缀树，找到最深的非叶节点，且该节点的叶节点既有#也有$(无#)。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Interview/">Interview</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/03/后缀树/" data-title="后缀树 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/03/机器学习_周志华_笔记1/" title="机器学习（周志华）- 第1章绪论笔记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  机器学习（周志华）- 第1章绪论笔记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/03/一致哈希/"  title="一致哈希算法">
+ <strong>下一篇：</strong><br/> 
+ <span>一致哈希算法
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/03/后缀树/" data-title="后缀树" data-url="http://yoursite.com/2016/08/03/后缀树/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#引入"><span class="toc-number">1.</span> <span class="toc-text">引入</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#先回顾一下前缀树（字典树）"><span class="toc-number">2.</span> <span class="toc-text">先回顾一下前缀树（字典树）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#后缀树"><span class="toc-number">3.</span> <span class="toc-text">后缀树</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#广义后缀树"><span class="toc-number">4.</span> <span class="toc-text">广义后缀树</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#如何解决回文问题"><span class="toc-number">5.</span> <span class="toc-text">如何解决回文问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#后缀树的应用"><span class="toc-number">6.</span> <span class="toc-text">后缀树的应用</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

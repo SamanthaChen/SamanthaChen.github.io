@@ -1,0 +1,680 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>统计学习方法（李航）- 第3章k近邻法笔记 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="k-NN是一种基本的分类和回归方法。k近邻法的输入是实例的特征向量，对应于特征空间的点；输出是实例的类别，可以取多类。k近邻法假设给定一个训练数据集，其中的实例类别已定。分类是对于新的类别，根据其k个最近邻的训练实例的类别，通过多数表决法等方式进行预测。因此k近邻法不具有显性的学习过程，k近邻法实际上利用训练数据集对特征空间进行划分，并作为其分类的模型。
+k值的选择、距离度量以及分类决策规则是k近">
+<meta property="og:type" content="article">
+<meta property="og:title" content="统计学习方法（李航）- 第3章k近邻法笔记">
+<meta property="og:url" content="http://yoursite.com/2016/08/06/统计学习方法_李航_笔记3/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="k-NN是一种基本的分类和回归方法。k近邻法的输入是实例的特征向量，对应于特征空间的点；输出是实例的类别，可以取多类。k近邻法假设给定一个训练数据集，其中的实例类别已定。分类是对于新的类别，根据其k个最近邻的训练实例的类别，通过多数表决法等方式进行预测。因此k近邻法不具有显性的学习过程，k近邻法实际上利用训练数据集对特征空间进行划分，并作为其分类的模型。
+k值的选择、距离度量以及分类决策规则是k近">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/kd1.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/kd2.jpg">
+<meta property="og:image" content="http://img.my.csdn.net/uploads/201212/24/1356352628_9385.jpg">
+<meta property="og:image" content="http://img.my.csdn.net/uploads/201212/24/1356352671_1629.jpg">
+<meta property="og:updated_time" content="2016-08-07T05:34:02.021Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="统计学习方法（李航）- 第3章k近邻法笔记">
+<meta name="twitter:description" content="k-NN是一种基本的分类和回归方法。k近邻法的输入是实例的特征向量，对应于特征空间的点；输出是实例的类别，可以取多类。k近邻法假设给定一个训练数据集，其中的实例类别已定。分类是对于新的类别，根据其k个最近邻的训练实例的类别，通过多数表决法等方式进行预测。因此k近邻法不具有显性的学习过程，k近邻法实际上利用训练数据集对特征空间进行划分，并作为其分类的模型。
+k值的选择、距离度量以及分类决策规则是k近">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/kd1.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/06/统计学习方法_李航_笔记3/" title="统计学习方法（李航）- 第3章k近邻法笔记" itemprop="url">统计学习方法（李航）- 第3章k近邻法笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-06T08:05:40.584Z" itemprop="datePublished"> Published 2016-08-06</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#k近邻模型"><span class="toc-number">1.</span> <span class="toc-text">k近邻模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#距离度量"><span class="toc-number">1.1.</span> <span class="toc-text">距离度量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k值的选择"><span class="toc-number">1.2.</span> <span class="toc-text">k值的选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分类决策规则"><span class="toc-number">1.3.</span> <span class="toc-text">分类决策规则</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#k近邻算法的实现：kd树"><span class="toc-number">2.</span> <span class="toc-text">k近邻算法的实现：kd树</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#构造kd树"><span class="toc-number">2.1.</span> <span class="toc-text">构造kd树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#构造平衡kd树的算法："><span class="toc-number">2.2.</span> <span class="toc-text">构造平衡kd树的算法：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#搜索kd树"><span class="toc-number">2.3.</span> <span class="toc-text">搜索kd树</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>k-NN是一种基本的分类和回归方法。k近邻法的输入是实例的特征向量，对应于特征空间的点；输出是实例的类别，可以取多类。k近邻法假设给定一个训练数据集，其中的实例类别已定。分类是对于新的类别，根据其k个最近邻的训练实例的类别，通过多数表决法等方式进行预测。因此k近邻法不具有显性的学习过程，k近邻法实际上利用训练数据集对特征空间进行划分，并作为其分类的模型。</p>
+<p>k值的选择、距离度量以及分类决策规则是k近邻的三个基本要素。</p>
+<h1 id="k近邻模型"><a href="#k近邻模型" class="headerlink" title="k近邻模型"></a>k近邻模型</h1><h2 id="距离度量"><a href="#距离度量" class="headerlink" title="距离度量"></a>距离度量</h2><p>最常用的“闵可夫斯基距离”:<br>$$dist = {(\sum\limits_{k = 1}^n {|{p_k} - {q_k}{|^r}} )^{\frac{1}{r}}}$$</p>
+<ul>
+<li>r = 2 , 即欧式距离</li>
+<li>r = 1 , 即曼哈顿距离</li>
+<li>r = $\infty $ ， 即切比雪夫距离，各个坐标距离的最大值</li>
+</ul>
+<p><strong>由不同的距离度量确定的最近邻点是不同的</strong></p>
+<h2 id="k值的选择"><a href="#k值的选择" class="headerlink" title="k值的选择"></a>k值的选择</h2><p>k值的选择会对k近邻算法产生重大影响。</p>
+<p>如果k较小，学些的近似误差会减小，只有输入与实例较近的训练实例才会对决策结果起作用。缺点是预测结果会对近邻的实例点十分敏感，如果近邻的实例点恰好是噪音预测就会出错。<br>k小意味着模型变复杂，容易过拟合。</p>
+<p>k较大，可以减少学习的估计误差，但是近似误差会增大。模型变简单。</p>
+<p>k=N，简单预测实例在训练集中最多的类。</p>
+<p>一般k取一个较小的值，通常用交叉验证法来选取。</p>
+<h2 id="分类决策规则"><a href="#分类决策规则" class="headerlink" title="分类决策规则"></a>分类决策规则</h2><p>往往是多数表决。多数表决的规则等价于经验风险最小化。</p>
+<h1 id="k近邻算法的实现：kd树"><a href="#k近邻算法的实现：kd树" class="headerlink" title="k近邻算法的实现：kd树"></a>k近邻算法的实现：kd树</h1><p>k近邻算法最简单的实现是线性扫描，但是训练集很大的时候十分耗时。<br>为了提高k近邻搜索效率，考虑用特殊的结构存储训练数据，减少计算距离的次数。</p>
+<h2 id="构造kd树"><a href="#构造kd树" class="headerlink" title="构造kd树"></a>构造kd树</h2><p>kd树是一种对k为空间中的实例进行存储以便对齐进行快速检索的属性数据结构。kd树是二叉树，表示对k为空间的一个划分。构造kd树相当于不断地垂直于坐标轴的超平面将k为空间划分。构成一系列的k为超矩形区域。kd树的每个节点对应于一个k维超矩形区域。</p>
+<p>构造kd树的方法：<br>构造根节点，使根节点对应于k维空间中包含所有实例点的超矩形区域；<br>通过下面的递归方法，不断的对k为空间进行切分，生成子节点。<br>在超矩形区域（结点）上选择一个坐标轴和此坐标轴上的一个且分点，确定一个超平面，这个超平面通过选定的且分点并垂直于选定的坐标轴，将当前超矩形区域切分为左右两个子区域（子结点）；这时，实例被分到两个子区域，这个过程知道区域内没有实例时终止（终止时的结点是叶节点）。在此过程，将实例保存在响应的结点上。</p>
+<p>通常情况下。依次选择坐标轴对空间切分，选择训练实例点在选定坐标轴上的中位数为且分点，这样得到的kd树是平衡的。（平衡的kd树搜索效率未必最优）</p>
+<h2 id="构造平衡kd树的算法："><a href="#构造平衡kd树的算法：" class="headerlink" title="构造平衡kd树的算法："></a>构造平衡kd树的算法：</h2><p>下面给出构造kd树的数据结构：</p>
+<table>
+<thead>
+<tr>
+<th>域名</th>
+<th style="text-align:left">数据类型</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Node-data</td>
+<td style="text-align:left">数据矢量</td>
+<td style="text-align:left">数据集中某个数据点，是k位矢量</td>
+</tr>
+<tr>
+<td>Range</td>
+<td style="text-align:left">空间矢量</td>
+<td style="text-align:left">该点所表示的空间范围</td>
+</tr>
+<tr>
+<td>split</td>
+<td style="text-align:left">整数</td>
+<td style="text-align:left">垂直于分割超平面的方向轴序号</td>
+</tr>
+<tr>
+<td>left</td>
+<td style="text-align:left">kd树</td>
+<td style="text-align:left">左子树</td>
+</tr>
+<tr>
+<td>right</td>
+<td style="text-align:left">kd树</td>
+<td style="text-align:left">右子树</td>
+</tr>
+</tbody>
+</table>
+<p>从上面对k-d树节点的数据类型的描述可以看出构建k-d树是一个逐级展开的递归过程。下面给出的是构建k-d树的伪码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">算法：构建k-d树（createKDTree）  </div><div class="line">输入：数据点集Dataset和其所在的空间Range  </div><div class="line">输出：Kd，类型为k-d tree  </div><div class="line"><span class="number">1.</span>If Data-set为空，则返回空的k-d tree  </div><div class="line"><span class="number">2.</span>调用节点生成程序：  </div><div class="line">　　（<span class="number">1</span>）确定split域：对于所有描述子数据（特征矢量），统计它们在每个维上的数据方差。假设每条数据记录为<span class="number">64</span>维，可计算<span class="number">64</span>个方差。挑选出最大值，对应的维就是split域的值。数据方差大表明沿该坐标轴方向上的数据分散得比较开，在这个方向上进行数据分割有较好的分辨率；  </div><div class="line">　　（<span class="number">2</span>）确定Node-data域：数据点集Data-set按其第split域的值排序。位于正中间的那个数据点被选为Node-data。此时新的Dataset = Dataset / Node-data（除去其中Node-data这一点）。  </div><div class="line"><span class="number">3.</span>dataleft = &#123;d属于Dataset &amp;&amp; d[split] ≤ Node-data[split]&#125;  </div><div class="line">   Left_Range = &#123;Range &amp;&amp; dataleft&#125;  </div><div class="line">  dataright = &#123;d属于Dataset &amp;&amp; d[split] &gt; Node-data[split]&#125;  </div><div class="line">   Right_Range = &#123;Range &amp;&amp; dataright&#125;  </div><div class="line"><span class="number">4.l</span>eft = 由（dataleft，Left_Range）建立的k-d tree，即递归调用createKDTree（dataleft，Left_Range）。并设置left的parent域为Kd；  </div><div class="line">   right = 由（dataright，Right_Range）建立的k-d tree，即调用createKDTree（dataleft，Left_Range）。并设置right的parent域为Kd。</div></pre></td></tr></table></figure>
+<p>以上述举的实例来看，过程如下：<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/kd1.jpg" alt=""><br>由于此例简单，数据维度只有2维，所以可以简单地给x，y两个方向轴编号为0,1，也即split={0,1}。</p>
+<p>（1）确定split域的首先该取的值。分别计算x，y方向上数据的方差得知x方向上的方差最大，所以split域值首先取0，也就是x轴方向；</p>
+<p>（2）确定Node-data的域值。根据x轴方向的值2,5,9,4,8,7排序选出中值为7，所以Node-data = （7,2）。这样，该节点的分割超平面就是通过（7,2）并垂直于split = 0（x轴）的直线x = 7；</p>
+<p>（3）确定左子空间和右子空间。分割超平面x = 7将整个空间分为两部分，如下图所示。x &lt;= 7的部分为左子空间，包含3个节点{（2,3），（5,4），（4,7）}；另一部分为右子空间，包含2个节点{（9,6），（8,1）}。</p>
+<p>如算法所述，k-d树的构建是一个递归的过程。然后对左子空间和右子空间内的数据重复根节点的过程就可以得到下一级子节点（5,4）和（9,6）（也就是左右子空间的’根’节点），同时将空间和数据集进一步细分。如此反复直到空间中只包含一个数据点，如下图所示。最后生成的k-d树如下图所示。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/kd2.jpg" alt=""></p>
+<p>对于n个实例的k维数据来说，建立kd-tree的时间复杂度为O(k<em> n</em> logn)。</p>
+<h2 id="搜索kd树"><a href="#搜索kd树" class="headerlink" title="搜索kd树"></a>搜索kd树</h2><p>下面叙述用kd树的最近邻搜索算法，KNN的类似：</p>
+<ol>
+<li>在kd树中找出包含目标点x的叶节点：从根节点出发，递归地向下访问kd树。若目标点x当前维的坐标小于切分点的坐标，则移动到左子点，否咋移动到右子点，直到子节点为叶节点为止。</li>
+<li>以此叶节点为“当前最近点”</li>
+<li>递归的向上回退，在每个节点进行如下操作：<br> a. 如果该节点保存的实例点比当前最近点距离目标点更近，则以当前点为“当前最近点”<br> b. 当前最近点一定存在于该节点一个子节点对应的区域，检查该子节点的父节点的另一子节点对应的区域知否有更近的点。具体的，检查另一子节点对应的区域是否以目标点为球心、以目标点与“当前最近点”的距离为半径的超球体相交。<br> 如果相交，可能在另一个子节点对应的区域neutral存在距目标点更近的点，移动到另一个子节点，接着，递归的进行最近邻搜索。<br> 若不相交，向上回退。</li>
+<li>当回退到根节点的时候，搜索结束，最后的“当前最近点”即为x的最近邻点。</li>
+</ol>
+<p>如若数据随机分布，kd树搜索平均复杂度O(logN)，N是训练实例树。<br><strong>kd树更适用于训练实例数远大于空间维度数时的k近邻搜索</strong></p>
+<p>在k-d树中进行数据的查找也是特征匹配的重要环节，其目的是检索在k-d树中与查询点距离最近的数据点。这里先以一个简单的实例来描述最邻近查找的基本思路。</p>
+<p>星号表示要查询的点（2.1,3.1）。通过二叉搜索，顺着搜索路径很快就能找到最邻近的近似点，也就是叶子节点（2,3）。而找到的叶子节点并不一定就是最邻近的，最邻近肯定距离查询点更近，应该位于以查询点为圆心且通过叶子节点的圆域内。为了找到真正的最近邻，还需要进行’回溯’操作：算法沿搜索路径反向查找是否有距离查询点更近的数据点。此例中先从（7,2）点开始进行二叉查找，然后到达（5,4），最后到达（2,3），此时搜索路径中的节点为小于（7,2）和（5,4），大于（2,3），首先以（2,3）作为当前最近邻点，计算其到查询点（2.1,3.1）的距离为0.1414，然后回溯到其父节点（5,4），并判断在该父节点的其他子节点空间中是否有距离查询点更近的数据点。以（2.1,3.1）为圆心，以0.1414为半径画圆，如下图所示。发现该圆并不和超平面y = 4交割，因此不用进入（5,4）节点右子空间中去搜索。<br><img src="http://img.my.csdn.net/uploads/201212/24/1356352628_9385.jpg" alt=""></p>
+<p>再回溯到（7,2），以（2.1,3.1）为圆心，以0.1414为半径的圆更不会与x = 7超平面交割，因此不用进入（7,2）右子空间进行查找。至此，搜索路径中的节点已经全部回溯完，结束整个搜索，返回最近邻点（2,3），最近距离为0.1414。</p>
+<p>一个复杂点了例子如查找点为（2，4.5）。同样先进行二叉查找，先从（7,2）查找到（5,4）节点，在进行查找时是由y = 4为分割超平面的，由于查找点为y值为4.5，因此进入右子空间查找到（4,7），形成搜索路径&lt;（7,2），（5,4），（4,7）&gt;，取（4,7）为当前最近邻点，计算其与目标查找点的距离为3.202。然后回溯到（5,4），计算其与查找点之间的距离为3.041。以（2，4.5）为圆心，以3.041为半径作圆，如下图左所示。可见该圆和y = 4超平面交割，所以需要进入（5,4）左子空间进行查找。此时需将（2,3）节点加入搜索路径中得&lt;（7,2），（2,3）&gt;。回溯至（2,3）叶子节点，（2,3）距离（2,4.5）比（5,4）要近，所以最近邻点更新为（2，3），最近距离更新为1.5。回溯至（7,2），以（2,4.5）为圆心1.5为半径作圆，并不和x = 7分割超平面交割，如下图右所示。至此，搜索路径回溯完。返回最近邻点（2,3），最近距离1.5。<br><img src="http://img.my.csdn.net/uploads/201212/24/1356352671_1629.jpg" alt=""></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">法：k-d树最邻近查找  </div><div class="line">输入：Kd，    //k-d tree类型  </div><div class="line">     target  //查询数据点  </div><div class="line">输出：nearest， //最邻近数据点  </div><div class="line">     dist      //最邻近数据点和查询点间的距离  </div><div class="line">1. If Kd为NULL，则设dist为infinite并返回  </div><div class="line">2. //进行二叉查找，生成搜索路径  </div><div class="line">   Kd_point = &amp;Kd；                   //Kd-point中保存k-d tree根节点地址  </div><div class="line">   nearest = Kd_point -&gt; Node-data；  //初始化最近邻点  </div><div class="line">   while（Kd_point）  </div><div class="line">   　　push（Kd_point）到search_path中； //search_path是一个堆栈结构，存储着搜索路径节点指针  </div><div class="line"> /*** If Dist（nearest，target） &gt; Dist（Kd_point -&gt; Node-data，target） </div><div class="line">   　　　　nearest  = Kd_point -&gt; Node-data；    //更新最近邻点 </div><div class="line">   　　　　Max_dist = Dist(Kd_point，target）；  //更新最近邻点与查询点间的距离  ***/  </div><div class="line">   　　s = Kd_point -&gt; split；                       //确定待分割的方向  </div><div class="line">   　　If target[s] &lt;= Kd_point -&gt; Node-data[s]     //进行二叉查找  </div><div class="line">   　　　　Kd_point = Kd_point -&gt; left；  </div><div class="line">   　　else  </div><div class="line">   　　　　Kd_point = Kd_point -&gt;right；  </div><div class="line">   nearest = search_path中最后一个叶子节点； //注意：二叉搜索时不比计算选择搜索路径中的最邻近点，这部分已被注释  </div><div class="line">   Max_dist = Dist（nearest，target）；    //直接取最后叶子节点作为回溯前的初始最近邻点  </div><div class="line">  </div><div class="line">3. //回溯查找  </div><div class="line">   while（search_path != NULL）  </div><div class="line">   　　back_point = 从search_path取出一个节点指针；   //从search_path堆栈弹栈  </div><div class="line">   　　s = back_point -&gt; split；                   //确定分割方向  </div><div class="line">   　　If Dist（target[s]，back_point -&gt; Node-data[s]） &lt; Max_dist   //判断还需进入的子空间  </div><div class="line">   　　　　If target[s] &lt;= back_point -&gt; Node-data[s]  </div><div class="line">   　　　　　　Kd_point = back_point -&gt; right；  //如果target位于左子空间，就应进入右子空间  </div><div class="line">   　　　　else  </div><div class="line">   　　　　　　Kd_point = back_point -&gt; left;    //如果target位于右子空间，就应进入左子空间  </div><div class="line">   　　　　将Kd_point压入search_path堆栈；  </div><div class="line">   　　If Dist（nearest，target） &gt; Dist（Kd_Point -&gt; Node-data，target）  </div><div class="line">   　　　　nearest  = Kd_point -&gt; Node-data；                 //更新最近邻点  </div><div class="line">   　　　　Min_dist = Dist（Kd_point -&gt; Node-data,target）；  //更新最近邻点与查询点间的距离</div></pre></td></tr></table></figure>
+<p>当维数较大时，直接利用k-d树快速检索的性能急剧下降。假设数据集的维数为D，一般来说要求数据的规模N满足条件：N远大于2的D次方，才能达到高效的搜索。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/MachineLearning/">MachineLearning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/MachineLearning/">MachineLearning</a><a href="/tags/Notes/">Notes</a><a href="/tags/统计学习/">统计学习</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/06/统计学习方法_李航_笔记3/" data-title="统计学习方法（李航）- 第3章k近邻法笔记 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/06/统计学习方法_李航_笔记5/" title="统计学习方法（李航）- 第5章决策树笔记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  统计学习方法（李航）- 第5章决策树笔记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/06/统计学习方法_李航_笔记2/"  title="统计学习方法（李航）- 第2章感知学习笔记">
+ <strong>下一篇：</strong><br/> 
+ <span>统计学习方法（李航）- 第2章感知学习笔记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/06/统计学习方法_李航_笔记3/" data-title="统计学习方法（李航）- 第3章k近邻法笔记" data-url="http://yoursite.com/2016/08/06/统计学习方法_李航_笔记3/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#k近邻模型"><span class="toc-number">1.</span> <span class="toc-text">k近邻模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#距离度量"><span class="toc-number">1.1.</span> <span class="toc-text">距离度量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k值的选择"><span class="toc-number">1.2.</span> <span class="toc-text">k值的选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分类决策规则"><span class="toc-number">1.3.</span> <span class="toc-text">分类决策规则</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#k近邻算法的实现：kd树"><span class="toc-number">2.</span> <span class="toc-text">k近邻算法的实现：kd树</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#构造kd树"><span class="toc-number">2.1.</span> <span class="toc-text">构造kd树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#构造平衡kd树的算法："><span class="toc-number">2.2.</span> <span class="toc-text">构造平衡kd树的算法：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#搜索kd树"><span class="toc-number">2.3.</span> <span class="toc-text">搜索kd树</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

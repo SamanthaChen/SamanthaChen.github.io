@@ -1,0 +1,806 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>计算机网络-应用层-笔记 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="应用程序: 具有通信功能的分布式进程
+- 用户访问网络的接口
+- 例如：email, file transfer, the Web
+应用层协议:
+- 应用程序的一部分
+- 定义信息格式
+- 定义通信规则
+- 访问下层提供的服务
+常见的一些应用层协议：文件传输
+    ●FTP、TFTP、NFS
+电子邮件
+    ●SMTP、POP3
+WWW应用
+    ●HTTP
+远程登录
+    ●Telnet">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络-应用层-笔记">
+<meta property="og:url" content="http://yoursite.com/2016/08/15/计算机网络4/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="应用程序: 具有通信功能的分布式进程
+- 用户访问网络的接口
+- 例如：email, file transfer, the Web
+应用层协议:
+- 应用程序的一部分
+- 定义信息格式
+- 定义通信规则
+- 访问下层提供的服务
+常见的一些应用层协议：文件传输
+    ●FTP、TFTP、NFS
+电子邮件
+    ●SMTP、POP3
+WWW应用
+    ●HTTP
+远程登录
+    ●Telnet">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network26.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network27.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network28.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network29.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network30.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network31.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network34.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network35.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network36.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network37.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network38.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network39.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network40.png">
+<meta property="og:updated_time" content="2016-08-16T04:52:15.002Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计算机网络-应用层-笔记">
+<meta name="twitter:description" content="应用程序: 具有通信功能的分布式进程
+- 用户访问网络的接口
+- 例如：email, file transfer, the Web
+应用层协议:
+- 应用程序的一部分
+- 定义信息格式
+- 定义通信规则
+- 访问下层提供的服务
+常见的一些应用层协议：文件传输
+    ●FTP、TFTP、NFS
+电子邮件
+    ●SMTP、POP3
+WWW应用
+    ●HTTP
+远程登录
+    ●Telnet">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network26.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/15/计算机网络4/" title="计算机网络-应用层-笔记" itemprop="url">计算机网络-应用层-笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-15T13:33:07.828Z" itemprop="datePublished"> Published 2016-08-15</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#常见的一些应用层协议："><span class="toc-number">1.</span> <span class="toc-text">常见的一些应用层协议：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#常见的网络应用模型"><span class="toc-number">2.</span> <span class="toc-text">常见的网络应用模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#域名系统-DNS-Domain-Name-System"><span class="toc-number">3.</span> <span class="toc-text">域名系统 DNS (Domain Name System)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#域名服务器"><span class="toc-number">3.1.</span> <span class="toc-text">域名服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#域名的解析过程"><span class="toc-number">3.2.</span> <span class="toc-text">域名的解析过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#名字的高速缓存"><span class="toc-number">3.3.</span> <span class="toc-text">名字的高速缓存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS资源记录"><span class="toc-number">3.4.</span> <span class="toc-text">DNS资源记录</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#文件传送协议FTP"><span class="toc-number">4.</span> <span class="toc-text">文件传送协议FTP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#FTP工作步骤"><span class="toc-number">4.1.</span> <span class="toc-text">FTP工作步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#两次链接"><span class="toc-number">4.2.</span> <span class="toc-text">两次链接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#两个不同的端口号"><span class="toc-number">4.3.</span> <span class="toc-text">两个不同的端口号</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#简单文件传送协议-TFTP-Trivial-File-Transfer-Protocol"><span class="toc-number">5.</span> <span class="toc-text">简单文件传送协议 TFTP(Trivial File Transfer Protocol)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#远程终端协议-TELNET"><span class="toc-number">6.</span> <span class="toc-text">远程终端协议 TELNET</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#万维网WWW"><span class="toc-number">7.</span> <span class="toc-text">万维网WWW</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#超媒体与超文本"><span class="toc-number">7.1.</span> <span class="toc-text">超媒体与超文本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#万维网必须解决的问题"><span class="toc-number">7.2.</span> <span class="toc-text">万维网必须解决的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#统一资源定位符-URL"><span class="toc-number">7.3.</span> <span class="toc-text">统一资源定位符 URL</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#URL-的一般形式"><span class="toc-number">7.3.1.</span> <span class="toc-text">URL 的一般形式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#超文本传送协议-HTTP"><span class="toc-number">7.4.</span> <span class="toc-text">超文本传送协议 HTTP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#万维网工作过程"><span class="toc-number">7.5.</span> <span class="toc-text">万维网工作过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代理服务器-proxy-server"><span class="toc-number">7.6.</span> <span class="toc-text">代理服务器(proxy server)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-请求报文的一些方法"><span class="toc-number">7.7.</span> <span class="toc-text">HTTP 请求报文的一些方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#http-响应状态码和短语"><span class="toc-number">7.8.</span> <span class="toc-text">http 响应状态码和短语</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在服务器上存放用户的信息Cookie"><span class="toc-number">7.9.</span> <span class="toc-text">在服务器上存放用户的信息Cookie</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#万维网的文档"><span class="toc-number">7.10.</span> <span class="toc-text">万维网的文档</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#超文本标记语言-HTML"><span class="toc-number">7.10.1.</span> <span class="toc-text">超文本标记语言 HTML</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#动态万维网文档"><span class="toc-number">7.10.2.</span> <span class="toc-text">动态万维网文档</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通用网关接口-CGI-Common-Gateway-Interface-："><span class="toc-number">7.10.3.</span> <span class="toc-text">通用网关接口 CGI(Common Gateway Interface) ：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#浏览器的结构"><span class="toc-number">7.10.4.</span> <span class="toc-text">浏览器的结构</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#电子邮件"><span class="toc-number">8.</span> <span class="toc-text">电子邮件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#电子邮件一些标准"><span class="toc-number">8.1.</span> <span class="toc-text">电子邮件一些标准</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用户代理UA（User-Agent）"><span class="toc-number">8.2.</span> <span class="toc-text">用户代理UA（User Agent）</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>应用程序: 具有通信功能的分布式进程</p>
+<pre><code>- 用户访问网络的接口
+- 例如：email, file transfer, the Web
+</code></pre><p>应用层协议:</p>
+<pre><code>- 应用程序的一部分
+- 定义信息格式
+- 定义通信规则
+- 访问下层提供的服务
+</code></pre><h1 id="常见的一些应用层协议："><a href="#常见的一些应用层协议：" class="headerlink" title="常见的一些应用层协议："></a>常见的一些应用层协议：</h1><pre><code>文件传输
+    ●FTP、TFTP、NFS
+电子邮件
+    ●SMTP、POP3
+WWW应用
+    ●HTTP
+远程登录
+    ●Telnet、rlogin
+网络管理
+    ●SNMP
+名字管理
+    ●DNS 
+</code></pre><p><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network26.png" alt=""></p>
+<h1 id="常见的网络应用模型"><a href="#常见的网络应用模型" class="headerlink" title="常见的网络应用模型"></a>常见的网络应用模型</h1><p>一、客户/服务器模型<br>客户方主动地发起通信请求，服务器方被动地等待通信的建立。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network27.png" alt=""></p>
+<p>二、浏览器/服务器模型<br>B/S模式下客户通过WWW浏览器实现对服务器的访问；<br>一部分事务逻辑在前端实现，但是主要事务逻辑在服务器端实现，形成所谓的三层（3-tier）结构<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network28.png" alt=""></p>
+<p>三、P2P模型<br>点对点（P2P）模型特点是网络中的任何节点都可以作为服务器或者客户端。<br>P2P模型优势在于降低了对服务器的依赖以及它的分布式的控制能力。</p>
+<p>四、Socket编程<br>Socket是从UNIX的I/O命令集发展而来的。Socket为上层实体提供一种透明的访问网络的能力，本质上说是传输层的服务原语。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network29.png" alt=""></p>
+<p>TCP 中的套接字系统调用：<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network30.png" alt=""></p>
+<h1 id="域名系统-DNS-Domain-Name-System"><a href="#域名系统-DNS-Domain-Name-System" class="headerlink" title="域名系统 DNS (Domain Name System)"></a>域名系统 DNS (Domain Name System)</h1><p>产生原因：</p>
+<ul>
+<li>32比特的IP地址难于记忆</li>
+<li>当网络规模比较小时，每台主机只需查找一个列出了主机与IP地址的对应关系的文件。</li>
+<li>当网络规模很大时，产生了域名系统DNS（Domain Name System）。</li>
+</ul>
+<p>域名系统是一个多层次的命名系统<br>域名的结构由若干个分量组成，各分量之间用点隔开：<br>              … .三级域名.二级域名.顶级域名<br>各分量分别代表不同级别的域名。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network31.png" alt=""></p>
+<h2 id="域名服务器"><a href="#域名服务器" class="headerlink" title="域名服务器"></a>域名服务器</h2><p>域名空间被划分为许多无重叠的区域(zone) ，每个设有域名服务器管理本区域域名。<br>每个区域有一个主域名服务器和若干个备份域名服务器，比如：edu.cn  xjtu.edu.cn  cs.xjtu.edu.cn是三个不同的区域，分别有各自的域名服务器。</p>
+<p>域名服务器有以下四种类型：</p>
+<pre><code> - 根域名服务器 
+ - 顶级域名服务器 
+ - 权限域名服务器 
+ - 本地域名服务器 
+![](https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network32.png)
+</code></pre><p>根域名服务器是最重要的域名服务器。所有的根域名服务器都知道所有的顶级域名服务器的域名和 IP 地址。<br>不管是哪一个本地域名服务器，若要对因特网上任何一个域名进行解析，只要自己无法解析，就首先求助于根域名服务器。<br>根域名服务器并不直接把域名直接转换成 IP 地址。<br>在使用迭代查询时，根域名服务器把下一步应当找的顶级域名服务器的IP地址告诉本地域名服务器。</p>
+<p>这些域名服务器负责管理在该顶级域名服务器注册的所有二级域名。<br>当收到 DNS 查询请求时，就给出相应的回答（可能是最后的结果，也可能是下一步应当找的域名服务器的 IP 地址）</p>
+<p>这就是前面已经讲过的负责一个区的域名服务器。<br>当一个权限域名服务器还不能给出最后的查询回答时，就会告诉发出查询请求的 DNS 客户，下一步应当找哪一个权限域名服务器。 </p>
+<p>本地域名服务器对域名系统非常重要。<br>当一个主机发出 DNS 查询请求时，这个查询请求报文就发送给本地域名服务器。<br>每一个因特网服务提供者 ISP，或一个大学，甚至一个大学里的系，都可以拥有一个本地域名服务器，<br>这种域名服务器有时也称为默认域名服务器。 </p>
+<h2 id="域名的解析过程"><a href="#域名的解析过程" class="headerlink" title="域名的解析过程"></a>域名的解析过程</h2><p>主机向本地域名服务器的查询一般都是采用递归查询。如果主机所询问的本地域名服务器不知道被查询域名的 IP 地址，那么本地域名服务器就以 DNS 客户的身份，向其他根域名服务器继续发出查询请求报文。<br>本地域名服务器向根域名服务器的查询通常是采用迭代查询。当根域名服务器收到本地域名服务器的迭代查询请求报文时，要么给出所要查询的 IP 地址，要么告诉本地域名服务器：“你下一步应当向哪一个域名服务器进行查询”。然后让本地域名服务器进行后续的查询。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network34.png" alt=""></p>
+<h2 id="名字的高速缓存"><a href="#名字的高速缓存" class="headerlink" title="名字的高速缓存"></a>名字的高速缓存</h2><p>为了提高DNS查询效率，并减轻跟域名服务器的负荷和减少因特网上的DNS查询报文数量，在域名服务器中广泛的使用了高速缓存。告诉缓存用来存放最近查询过的域名以及从何处获得域名映射的记录。</p>
+<p>一旦 (任何) 域名服务器得知了某个映射, 就将其 缓存<br>在一定的时间间隔后缓存的条目将会过期(自动消除)</p>
+<p>更新/通知 机制由 IETF负责设计</p>
+<ul>
+<li>RFC 2136</li>
+<li><a href="http://www.ietf.org/html.charters/dnsind-charter.html" target="_blank" rel="external">http://www.ietf.org/html.charters/dnsind-charter.html</a></li>
+</ul>
+<h2 id="DNS资源记录"><a href="#DNS资源记录" class="headerlink" title="DNS资源记录"></a>DNS资源记录</h2><p>DNS: 存储资源记录 (RR)的分布式数据库<br>RR 格式: (name, value, type,ttl)</p>
+<p>Type=A<br>name = 主机名<br>value = IP 地址</p>
+<p>Type=NS<br>name = 域 (e.g. foo.com)<br>value =该域授权域名服务器的 IP 地址</p>
+<p>Type=CNAME<br>Name= 别名<br>  www.ibm.com is really  servereast.backup2.ibm.com<br>value =真名</p>
+<p>Type=MX<br>value = 与 name相关的邮件服务器域名</p>
+<h1 id="文件传送协议FTP"><a href="#文件传送协议FTP" class="headerlink" title="文件传送协议FTP"></a>文件传送协议FTP</h1><p>文件传送协议 FTP (File Transfer Protocol) 是因特网上使用得最广泛的文件传送协议。<br>FTP 提供交互式的访问，允许客户指明文件的类型与格式，并允许文件具有存取权限。<br>FTP 屏蔽了各计算机系统的细节，因而适合于在异构网络中任意计算机之间传送文件。</p>
+<p>FTP 使用客户服务器方式。一个 FTP 服务器进程可同时为多个客户进程提供服务。FTP 的服务器进程由两大部分组成：一个主进程，负责接受新的请求；另外有若干个从属进程，负责处理单个请求。</p>
+<p>端口21，20</p>
+<h2 id="FTP工作步骤"><a href="#FTP工作步骤" class="headerlink" title="FTP工作步骤"></a>FTP工作步骤</h2><ul>
+<li>打开熟知端口（端口号为 21），使客户进程能够连接上。</li>
+<li>等待客户进程发出连接请求。</li>
+<li>启动从属进程来处理客户进程发来的请求。从属进程对客户进程的请求处理完毕后即终止，但从属进程在运行期间根据需要还可能创建其他一些子进程。</li>
+<li>回到等待状态，继续接受其他客户进程发来的请求。主进程与从属进程的处理是并发地进行。 </li>
+</ul>
+<h2 id="两次链接"><a href="#两次链接" class="headerlink" title="两次链接"></a>两次链接</h2><p>FTP传输文件时，客户机与服务器之间要建立两次TCP连接<br>1) 控制连接（Control Connection）<br>    客户程序主动与端口为21的FTP服务器连接。服务程序被动地打开一个FTP的应用端口（21），等待客户程序的FTP连接。传输TCP命令和服务器回送信息。<br>2) 数据连接（Data Connection）<br>    二者之间，每传输一个文件，建立一个连接。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network35.png" alt=""></p>
+<h2 id="两个不同的端口号"><a href="#两个不同的端口号" class="headerlink" title="两个不同的端口号"></a>两个不同的端口号</h2><p> 当客户进程向服务器进程发出建立连接请求时，要寻找连接服务器进程的熟知端口(21)，同时还要告诉服务器进程自己的另一个端口号码，用于建立数据传送连接。<br>接着，服务器进程用自己传送数据的熟知端口(20)与客户进程所提供的端口号码建立数据传送连接。<br>由于 FTP 使用了两个不同的端口号，所以数据连接与控制连接不会发生混乱。</p>
+<p>好处：<br>使协议更加简单和更容易实现。<br>在传输文件时还可以利用控制连接（例如，客户发送请求终止传输）</p>
+<h1 id="简单文件传送协议-TFTP-Trivial-File-Transfer-Protocol"><a href="#简单文件传送协议-TFTP-Trivial-File-Transfer-Protocol" class="headerlink" title="简单文件传送协议 TFTP(Trivial File Transfer Protocol)"></a>简单文件传送协议 TFTP(Trivial File Transfer Protocol)</h1><p>TFTP 是一个很小且易于实现的文件传送协议。<br>TFTP 使用客户服务器方式和使用 UDP 数据报，因此 TFTP 需要有自己的差错改正措施。<br>TFTP 只支持文件传输而不支持交互。<br>TFTP 没有一个庞大的命令集，没有列目录的功能，也不能对用户进行身份鉴别。 </p>
+<h1 id="远程终端协议-TELNET"><a href="#远程终端协议-TELNET" class="headerlink" title="远程终端协议 TELNET"></a>远程终端协议 TELNET</h1><p>TELNET 是一个简单的远程终端协议，也是因特网的正式标准。<br>用户用 TELNET 就可在其所在地通过 TCP 连接注册（即登录）到远地的另一个主机上（使用主机名或 IP 地址）。<br>TELNET 能将用户的击键传到远地主机，同时也能将远地主机的输出通过 TCP 连接返回到用户屏幕。这种服务是透明的，因为用户感觉到好像键盘和显示器是直接连在远地主机上。 </p>
+<h1 id="万维网WWW"><a href="#万维网WWW" class="headerlink" title="万维网WWW"></a>万维网WWW</h1><p>万维网 WWW (World Wide Web)并非某种特殊的计算机网络。<br>万维网是一个大规模的、联机式的信息储藏所。<br>万维网用链接的方法能非常方便地从因特网上的一个站点访问另一个站点，从而主动地按需获取丰富的信息。<br>这种访问方式称为“链接”。</p>
+<h2 id="超媒体与超文本"><a href="#超媒体与超文本" class="headerlink" title="超媒体与超文本"></a>超媒体与超文本</h2><p>万维网是分布式超媒体(hypermedia)系统，它是超文本(hypertext)系统的扩充。<br>一个超文本由多个信息源链接成。利用一个链接可使用户找到另一个文档。这些文档可以位于世界上任何一个接在因特网上的超文本系统中。超文本是万维网的基础。<br>超媒体与超文本的区别是文档内容不同。超文本文档仅包含文本信息，而超媒体文档还包含其他表示方式的信息，如图形、图像、声音、动画，甚至活动视频图像。</p>
+<h2 id="万维网必须解决的问题"><a href="#万维网必须解决的问题" class="headerlink" title="万维网必须解决的问题"></a>万维网必须解决的问题</h2><p>(1) 怎样标志分布在整个因特网上的万维网文档？<br>使用统一资源定位符 URL (Uniform Resource Locator)来标志万维网上的各种文档。<br>使每一个文档在整个因特网的范围内具有唯一的标识符 URL。</p>
+<p>(2) 用何协议实现万维网上各种超链的链接？<br>在万维网客户程序与万维网服务器程序之间进行交互所使用的协议，是超文本传送协议 HTTP (HyperText Transfer Protocol)。<br>HTTP 是一个应用层协议，它使用 TCP 连接进行可靠的传送。 </p>
+<p>(3) 怎样使各种万维网文档都能在因特网上的各种计算机上显示出来，同时使用户清楚地知道在什么地方存在着超链？<br>超文本标记语言 HTML (HyperText Markup Language)使得万维网页面的设计者可以很方便地用一个超链从本页面的某处链接到因特网上的任何一个万维网页面，并且能够在自己的计算机屏幕上将这些页面显示出来。 </p>
+<p>(4) 怎样使用户能够很方便地找到所需的信息？<br>为了在万维网上方便地查找信息，用户可使用各种的搜索工具（即搜索引擎）。 </p>
+<h2 id="统一资源定位符-URL"><a href="#统一资源定位符-URL" class="headerlink" title="统一资源定位符 URL"></a>统一资源定位符 URL</h2><p>URL 相当于一个文件名在网络范围的扩展。因此 URL 是与因特网相连的机器上的任何可访问对象的一个指针。  </p>
+<h3 id="URL-的一般形式"><a href="#URL-的一般形式" class="headerlink" title="URL 的一般形式"></a>URL 的一般形式</h3><p>由以冒号隔开的两大部分组成，并且在 URL 中的字符对大写或小写没有要求。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network36.png" alt=""><br>&lt;主机&gt; 是存放资源的主机在因特网中的域名<br>&lt;端口&gt;/&lt;路径&gt;有时可省略，若再省略文件的&lt;路径&gt;项，则 URL 就指到因特网上的某个主页(home page)。 </p>
+<p><a href="http://www.xjtu.edu.cn:80/index.htm" target="_blank" rel="external">http://www.xjtu.edu.cn:80/index.htm</a></p>
+<h2 id="超文本传送协议-HTTP"><a href="#超文本传送协议-HTTP" class="headerlink" title="超文本传送协议 HTTP"></a>超文本传送协议 HTTP</h2><p>为了使超文本的链接能够高效率地完成，需要用 HTTP 协议来传送一切必须的信息。<br>从层次的角度看，HTTP 是面向事务的(transaction-oriented)应用层协议，它是万维网上能够可靠地交换文件（包括文本、声音、图像等各种多媒体文件）的重要基础。\</p>
+<h2 id="万维网工作过程"><a href="#万维网工作过程" class="headerlink" title="万维网工作过程"></a>万维网工作过程</h2><p><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network37.png" alt=""></p>
+<h2 id="代理服务器-proxy-server"><a href="#代理服务器-proxy-server" class="headerlink" title="代理服务器(proxy server)"></a>代理服务器(proxy server)</h2><p>代理服务器(proxy server)又称为万维网高速缓存(Web cache)，它代表浏览器发出 HTTP 请求。<br>万维网高速缓存把最近的一些请求和响应暂存在本地磁盘中。<br>当与暂时存放的请求相同的新请求到达时，万维网高速缓存就把暂存的响应发送出去，而不需要按 URL 的地址再去因特网访问该资源。  </p>
+<h2 id="HTTP-请求报文的一些方法"><a href="#HTTP-请求报文的一些方法" class="headerlink" title="HTTP 请求报文的一些方法"></a>HTTP 请求报文的一些方法</h2><table>
+<thead>
+<tr>
+<th>方法（操作）</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OPTION</td>
+<td>请求一些选项的信息</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>请求读取由 URL所标志的信息</td>
+</tr>
+<tr>
+<td>HEAD</td>
+<td>请求读取由 URL所标志的信息的首部</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>给服务器添加信息（例如，注释）</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td>在指明的 URL下存储一个文档</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td>删除指明的 URL所标志的资源</td>
+</tr>
+<tr>
+<td>TRACE</td>
+<td>用来进行环回测试的请求报文</td>
+</tr>
+<tr>
+<td>CONNECT</td>
+<td>用于代理服务器</td>
+</tr>
+</tbody>
+</table>
+<h2 id="http-响应状态码和短语"><a href="#http-响应状态码和短语" class="headerlink" title="http 响应状态码和短语"></a>http 响应状态码和短语</h2><p>位于（服务器-&gt;客户端）响应报文的第一行<br>状态码都是三位数字 。</p>
+<p>1xx 表示通知信息的，如请求收到了或正在进行处理。<br>2xx 表示成功，如接受或知道了。<br>3xx 表示重定向，表示要完成请求还必须采取进一步的行动。<br>4xx 表示客户的差错，如请求中有错误的语法或不能完成。<br>5xx 表示服务器的差错，如服务器失效无法完成请求。</p>
+<p>200 OK</p>
+<ul>
+<li>请求成功, 被请求的对象在报文中<br>301 Moved Permanently</li>
+<li>被请求的对象被移动过, 新的位置在报文中有说明 (Location:)<br>400 Bad Request</li>
+<li>服务器不懂请求报文<br>404 Not Found</li>
+<li>服务器上找不到请求的对象<br>505 HTTP Version Not Supported</li>
+</ul>
+<h2 id="在服务器上存放用户的信息Cookie"><a href="#在服务器上存放用户的信息Cookie" class="headerlink" title="在服务器上存放用户的信息Cookie"></a>在服务器上存放用户的信息Cookie</h2><p>万维网站点使用 Cookie 来跟踪用户。<br>Cookie 表示在 HTTP 服务器和客户之间传递的状态信息。<br>使用 Cookie 的网站服务器为用户产生一个唯一的识别码。利用此识别码，网站就能够跟踪该用户在该网站的活动。  </p>
+<h2 id="万维网的文档"><a href="#万维网的文档" class="headerlink" title="万维网的文档"></a>万维网的文档</h2><h3 id="超文本标记语言-HTML"><a href="#超文本标记语言-HTML" class="headerlink" title="超文本标记语言 HTML"></a>超文本标记语言 HTML</h3><p>HTML 定义了许多用于排版的命令（即标签）。<br>HTML 把各种标签嵌入到万维网的页面中。这样就构成了所谓的 HTML 文档。HTML 文档是一种可以用任何文本编辑器创建的 ASCII 码文件。   </p>
+<p>仅当 HTML 文档是以.html 或 .htm 为后缀时，浏览器才对此 文档的各种标签进行解释。<br>当浏览器从服务器读取 HTML 文档后，就按照 HTML 文档中的各种标签，根据浏览器所使用的显示器的尺寸和分辨率大小，重新进行排版并恢复出所读取的页面。</p>
+<p>两种不同的链接：<br>远程链接：超链的终点是其他网点上的页面。<br>本地链接：超链指向本计算机中的某个文件。</p>
+<h3 id="动态万维网文档"><a href="#动态万维网文档" class="headerlink" title="动态万维网文档"></a>动态万维网文档</h3><ul>
+<li>静态文档是指该文档创作完毕后就存放在万维网服务器中，在被用户浏览的过程中，内容不会改变。 </li>
+<li>动态文档是指文档的内容是在浏览器访问万维网服务器时才由应用程序动态创建。</li>
+<li>动态文档和静态文档之间的主要差别体现在服务器一端。这主要是文档内容的生成方法不同。而从浏览器的角度看，这两种文档并没有区别。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network38.png" alt=""></li>
+</ul>
+<h3 id="通用网关接口-CGI-Common-Gateway-Interface-："><a href="#通用网关接口-CGI-Common-Gateway-Interface-：" class="headerlink" title="通用网关接口 CGI(Common Gateway Interface) ："></a>通用网关接口 CGI(Common Gateway Interface) ：</h3><p>CGI 是一种标准，它定义了动态文档应如何创建，输入数据应如何提供给应用程序，以及输出结果应如何使用。</p>
+<p>CGI 程序的正式名字是 CGI 脚本(script)<br>“脚本”指的是一个程序，它被另一个程序（解释程序）而不是计算机的处理机来解释或执行。<br>脚本运行起来要比一般的编译程序要慢，因为它的每一条指令先要被另一个程序来处理（这就要一些附加的指令），而不是直接被指令处理器来处理。  </p>
+<h3 id="浏览器的结构"><a href="#浏览器的结构" class="headerlink" title="浏览器的结构"></a>浏览器的结构</h3><p><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network39.png" alt=""></p>
+<h1 id="电子邮件"><a href="#电子邮件" class="headerlink" title="电子邮件"></a>电子邮件</h1><h2 id="电子邮件一些标准"><a href="#电子邮件一些标准" class="headerlink" title="电子邮件一些标准"></a>电子邮件一些标准</h2><ul>
+<li>发送邮件的协议：SMTP</li>
+<li>读取邮件的协议：POP3 和 IMAP</li>
+<li>MIME 在其邮件首部中说明了邮件的数据类型(如文本、声音、图像、视像等)，使用 MIME 可在邮件中同时传送多种类型的数据。 </li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network40.png" alt=""><br> 发件人调用 PC 机中的用户代理撰写和编辑要发送的邮件。<br> 发件人的用户代理把邮件用 SMTP 协议发给发送方邮件服务器，<br> SMTP 服务器把邮件临时存放在邮件缓存队列中，等待发送。<br> 发送方邮件服务器的 SMTP 客户与接收方邮件服务器的 SMTP 服务器建立 TCP 连接，然后就把邮件缓存队列中的邮件依次发送出去<br> 运行在接收方邮件服务器中的SMTP服务器进 程收到邮件后，把邮件放入收件人的用户邮箱中，等待收件人进行读取。<br> 收件人在打算收信时，就运行 PC 机中的用户代理，使用 POP3（或 IMAP）协议读取发送给自己的邮件。<br>请注意，POP3 服务器和 POP3 客户之间的通信是由 POP3 客户发起的。 </p>
+<h2 id="用户代理UA（User-Agent）"><a href="#用户代理UA（User-Agent）" class="headerlink" title="用户代理UA（User Agent）"></a>用户代理UA（User Agent）</h2><p>用户代理 UA 就是用户与电子邮件系统的接口，是电子邮件客户端软件。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Network/">Network</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Interview/">Interview</a><a href="/tags/Network/">Network</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/15/计算机网络4/" data-title="计算机网络-应用层-笔记 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/16/计算机网络5/" title="计算机网络-网络安全-笔记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  计算机网络-网络安全-笔记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/15/计算机网络3/"  title="计算机网络-运输层-笔记">
+ <strong>下一篇：</strong><br/> 
+ <span>计算机网络-运输层-笔记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/15/计算机网络4/" data-title="计算机网络-应用层-笔记" data-url="http://yoursite.com/2016/08/15/计算机网络4/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#常见的一些应用层协议："><span class="toc-number">1.</span> <span class="toc-text">常见的一些应用层协议：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#常见的网络应用模型"><span class="toc-number">2.</span> <span class="toc-text">常见的网络应用模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#域名系统-DNS-Domain-Name-System"><span class="toc-number">3.</span> <span class="toc-text">域名系统 DNS (Domain Name System)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#域名服务器"><span class="toc-number">3.1.</span> <span class="toc-text">域名服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#域名的解析过程"><span class="toc-number">3.2.</span> <span class="toc-text">域名的解析过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#名字的高速缓存"><span class="toc-number">3.3.</span> <span class="toc-text">名字的高速缓存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS资源记录"><span class="toc-number">3.4.</span> <span class="toc-text">DNS资源记录</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#文件传送协议FTP"><span class="toc-number">4.</span> <span class="toc-text">文件传送协议FTP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#FTP工作步骤"><span class="toc-number">4.1.</span> <span class="toc-text">FTP工作步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#两次链接"><span class="toc-number">4.2.</span> <span class="toc-text">两次链接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#两个不同的端口号"><span class="toc-number">4.3.</span> <span class="toc-text">两个不同的端口号</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#简单文件传送协议-TFTP-Trivial-File-Transfer-Protocol"><span class="toc-number">5.</span> <span class="toc-text">简单文件传送协议 TFTP(Trivial File Transfer Protocol)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#远程终端协议-TELNET"><span class="toc-number">6.</span> <span class="toc-text">远程终端协议 TELNET</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#万维网WWW"><span class="toc-number">7.</span> <span class="toc-text">万维网WWW</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#超媒体与超文本"><span class="toc-number">7.1.</span> <span class="toc-text">超媒体与超文本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#万维网必须解决的问题"><span class="toc-number">7.2.</span> <span class="toc-text">万维网必须解决的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#统一资源定位符-URL"><span class="toc-number">7.3.</span> <span class="toc-text">统一资源定位符 URL</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#URL-的一般形式"><span class="toc-number">7.3.1.</span> <span class="toc-text">URL 的一般形式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#超文本传送协议-HTTP"><span class="toc-number">7.4.</span> <span class="toc-text">超文本传送协议 HTTP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#万维网工作过程"><span class="toc-number">7.5.</span> <span class="toc-text">万维网工作过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代理服务器-proxy-server"><span class="toc-number">7.6.</span> <span class="toc-text">代理服务器(proxy server)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-请求报文的一些方法"><span class="toc-number">7.7.</span> <span class="toc-text">HTTP 请求报文的一些方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#http-响应状态码和短语"><span class="toc-number">7.8.</span> <span class="toc-text">http 响应状态码和短语</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在服务器上存放用户的信息Cookie"><span class="toc-number">7.9.</span> <span class="toc-text">在服务器上存放用户的信息Cookie</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#万维网的文档"><span class="toc-number">7.10.</span> <span class="toc-text">万维网的文档</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#超文本标记语言-HTML"><span class="toc-number">7.10.1.</span> <span class="toc-text">超文本标记语言 HTML</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#动态万维网文档"><span class="toc-number">7.10.2.</span> <span class="toc-text">动态万维网文档</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通用网关接口-CGI-Common-Gateway-Interface-："><span class="toc-number">7.10.3.</span> <span class="toc-text">通用网关接口 CGI(Common Gateway Interface) ：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#浏览器的结构"><span class="toc-number">7.10.4.</span> <span class="toc-text">浏览器的结构</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#电子邮件"><span class="toc-number">8.</span> <span class="toc-text">电子邮件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#电子邮件一些标准"><span class="toc-number">8.1.</span> <span class="toc-text">电子邮件一些标准</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#用户代理UA（User-Agent）"><span class="toc-number">8.2.</span> <span class="toc-text">用户代理UA（User Agent）</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

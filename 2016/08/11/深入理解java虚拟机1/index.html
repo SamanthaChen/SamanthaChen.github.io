@@ -1,0 +1,675 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>深入理解Java虚拟机--第2章自动内存管理机制 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="java技术体系
+java程序设计语言
+各种硬件平台上的java虚拟机
+Class文件格式
+Java API类库
+来自商业机构或者开源社区的第三方java类库
+我们可以把Java程序设计语言、java虚拟机、java API类库这三部分统称为JDK（Java Development Kit）,JDK是用于支持java程序开发的而最小环境。把java API类库中的Java SE API子集和jav">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解Java虚拟机--第2章自动内存管理机制">
+<meta property="og:url" content="http://yoursite.com/2016/08/11/深入理解java虚拟机1/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="java技术体系
+java程序设计语言
+各种硬件平台上的java虚拟机
+Class文件格式
+Java API类库
+来自商业机构或者开源社区的第三方java类库
+我们可以把Java程序设计语言、java虚拟机、java API类库这三部分统称为JDK（Java Development Kit）,JDK是用于支持java程序开发的而最小环境。把java API类库中的Java SE API子集和jav">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/java/JVM/jvm_1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/java/JVM/jvm_2-1.png">
+<meta property="og:image" content="http://images2015.cnblogs.com/blog/682679/201602/682679-20160219131847456-1977752325.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/java/JVM/jvm_2-2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/java/JVM/jvm_2-3.png">
+<meta property="og:updated_time" content="2016-08-12T01:23:40.001Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解Java虚拟机--第2章自动内存管理机制">
+<meta name="twitter:description" content="java技术体系
+java程序设计语言
+各种硬件平台上的java虚拟机
+Class文件格式
+Java API类库
+来自商业机构或者开源社区的第三方java类库
+我们可以把Java程序设计语言、java虚拟机、java API类库这三部分统称为JDK（Java Development Kit）,JDK是用于支持java程序开发的而最小环境。把java API类库中的Java SE API子集和jav">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/java/JVM/jvm_1.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/11/深入理解java虚拟机1/" title="深入理解Java虚拟机--第2章自动内存管理机制" itemprop="url">深入理解Java虚拟机--第2章自动内存管理机制</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-11T03:28:11.434Z" itemprop="datePublished"> Published 2016-08-11</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#java技术体系"><span class="toc-number">1.</span> <span class="toc-text">java技术体系</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#运行时数据区域"><span class="toc-number">2.</span> <span class="toc-text">运行时数据区域</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#程序计数器（program-counter-register）"><span class="toc-number">2.1.</span> <span class="toc-text">程序计数器（program counter register）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#java虚拟机栈（java-vitual-machine-stacks）"><span class="toc-number">2.2.</span> <span class="toc-text">java虚拟机栈（java vitual machine stacks）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#本地方法栈（native-method-stack）"><span class="toc-number">2.3.</span> <span class="toc-text">本地方法栈（native method stack）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#java堆（heap）"><span class="toc-number">2.4.</span> <span class="toc-text">java堆（heap）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法区（method-area）"><span class="toc-number">2.5.</span> <span class="toc-text">方法区（method area）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#运行时常量池（runtime-constant-pool）"><span class="toc-number">2.6.</span> <span class="toc-text">运行时常量池（runtime constant pool）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#直接内存（direct-memeory）"><span class="toc-number">2.7.</span> <span class="toc-text">直接内存（direct memeory）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HosSpot虚拟机对象探秘"><span class="toc-number">3.</span> <span class="toc-text">HosSpot虚拟机对象探秘</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#对象的创建"><span class="toc-number">3.1.</span> <span class="toc-text">对象的创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对象的内存布局"><span class="toc-number">3.2.</span> <span class="toc-text">对象的内存布局</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对象访问的定位"><span class="toc-number">3.3.</span> <span class="toc-text">对象访问的定位</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#实战：OutOfMemoryError异常"><span class="toc-number">4.</span> <span class="toc-text">实战：OutOfMemoryError异常</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#java堆溢出"><span class="toc-number">4.1.</span> <span class="toc-text">java堆溢出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#虚拟机栈和本地方法栈溢出"><span class="toc-number">4.2.</span> <span class="toc-text">虚拟机栈和本地方法栈溢出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法区和运行时常量池溢出"><span class="toc-number">4.3.</span> <span class="toc-text">方法区和运行时常量池溢出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#本机直接内存溢出"><span class="toc-number">4.4.</span> <span class="toc-text">本机直接内存溢出</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="java技术体系"><a href="#java技术体系" class="headerlink" title="java技术体系"></a>java技术体系</h1><ul>
+<li>java程序设计语言</li>
+<li>各种硬件平台上的java虚拟机</li>
+<li>Class文件格式</li>
+<li>Java API类库</li>
+<li><p>来自商业机构或者开源社区的第三方java类库</p>
+<p>我们可以把Java程序设计语言、java虚拟机、java API类库这三部分统称为JDK（Java Development Kit）,JDK是用于支持java程序开发的而最小环境。<br>把java API类库中的Java SE API子集和java虚拟机这两部分统称为JRE（java runtime environment），JRE是支持java程序运行的标准环境。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/java/JVM/jvm_1.png" alt=""></p>
+</li>
+</ul>
+<h1 id="运行时数据区域"><a href="#运行时数据区域" class="headerlink" title="运行时数据区域"></a>运行时数据区域</h1><p>java虚拟机在执行java程序的过程中会把他所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途，以及创建和销毁的而时间，有的区域随着虚拟机的进程的启动而存在，有些区域则依赖于用户线程的启动和借宿而建立和销毁。根据Java SE 7版本的规定，java虚拟机所管理的内存将会包括以下几个运行时的数据区域：<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/java/JVM/jvm_2-1.png" alt=""><br>详细的图如下图：<br><img src="http://images2015.cnblogs.com/blog/682679/201602/682679-20160219131847456-1977752325.png" alt=""></p>
+<h2 id="程序计数器（program-counter-register）"><a href="#程序计数器（program-counter-register）" class="headerlink" title="程序计数器（program counter register）"></a>程序计数器（program counter register）</h2><p>程序计数器是一块较小的内存空间，可以看做是当前线程做执行的字节码的行号指示器。在虚拟机的概念模型里（仅仅是概念模型，各种虚拟机可能会通过一些更高效的方式去实现），字节码解释器工作时就是通过改变这个计数器的值来选取下一跳需要执行的字节码，分支、循环、跳转、异常处理、线程恢复等基础功能都需要依赖这个计数器来完成。</p>
+<p>由于java虚拟机的多线程是通过线程轮流切换并分配处理器执行时间的方式来实现的，在任何一个确定的时刻，一个处理器（对于多核处理器来说是一个内核）都只会执行一条线程中的指令。因此，为了线程切换后能够恢复到正确的执行位置，每条线程都需要一个独立的程序计数器。各条线程之间的计数器互不影响，独立储存，我们称这类内存区域为“线程独有”的内存。</p>
+<p>如果线程正在执行的是java方法，这个计数器记录的是正在执行的虚拟字节码指令的地址；如果正在执行的是native方法，这个计数器值则为空（undefined）。此内存区域值是唯一一个在java虚拟机规范中没有规定任何OutofMemoryError情况的区域。</p>
+<h2 id="java虚拟机栈（java-vitual-machine-stacks）"><a href="#java虚拟机栈（java-vitual-machine-stacks）" class="headerlink" title="java虚拟机栈（java vitual machine stacks）"></a>java虚拟机栈（java vitual machine stacks）</h2><p>与程序计数器一样，也是线程私有的，它的生命周期与线程相同。虚拟机栈描述的是java方法执行的内存模型：每个方法在执行的同时都会创建一个栈帧（stack fram）用于存储局部变量表、操作栈数、动态链接、方法出口等信息。每一个方法从调用直至执行完成的过程，就对应着一个栈帧在虚拟机栈中入栈到出栈的过程。</p>
+<p>经常有人把java内存区分为堆内存（Heap）和栈内存（Stack）,这种分法比较粗糙，java内存区域划分比这还复杂。这种划分方式的流行只能说明大多数程序员最关注的与对象内存分配关系最密切的内存区域是这两块。其中“栈”是虚拟机栈，或者说虚拟机栈中局部变量表部分。</p>
+<p>局部变量表存放了编译器可知的各种基本数据类型（boolean、byte、char、short、int、float、long。double），对象引用（reference类型，<em>它不等同于对象本身</em>，可能只是一个指向对象其实地址的引用地址，也可能是一个代表对象的句柄或其他与此对象相关的位置）和returnAdress类型（指向了一条字节码指令的地址）。</p>
+<p>其中64位长度的long和double会占用两个局部变量空间（slot），其余数据类型只占用一个。局部变量表所需要的内存空间在编译期间完成分配，当进入一个方法时，这个方法需要在帧中分配多大的局部变量空间是完全确定的，在方法运行期间不会改变局部变量表的大小。</p>
+<p>在java虚拟机规范中，对这个区域规定了两种异常情况：如果线程请求的栈深度大于虚拟机所允许的深度，将抛出StackOverflowError异常；如果虚拟机可以动态扩展（当前大部分java虚拟机都可以动态扩展，只不过java虚拟机规范中也循序固定长度的虚拟机栈）如果扩展时无法申请到足够的内存，就会抛出OutofMemorError异常。</p>
+<h2 id="本地方法栈（native-method-stack）"><a href="#本地方法栈（native-method-stack）" class="headerlink" title="本地方法栈（native method stack）"></a>本地方法栈（native method stack）</h2><p>本地方法栈与虚拟机栈所发挥的作用是非常相似的，他们之间的区别不过是虚拟机栈为虚拟机执行的java方法（也就是字节码）服务，而本地方法则为虚拟机使用到的native方法服务。在虚拟机规范中对本地方法栈中方法使用的语言、使用的方式与数据结构并没有强制规定，因此具体的虚拟机可以自由实现它。甚至有的虚拟机（例如sun Hotspot）直接就把本地方法栈和虚拟机栈合二为一。与虚拟机栈一样，本地方法栈区域也会抛出StackOverFlowError和OutOfMemoryError异常。</p>
+<h2 id="java堆（heap）"><a href="#java堆（heap）" class="headerlink" title="java堆（heap）"></a>java堆（heap）</h2><p>对大多数应用来说，java堆是java虚拟机所管理内存中最大的一块，java堆是被所有线程贡献的一块内存区域，在虚拟机启动时创建。此内存的唯一目的就是存放对象实例，几乎所有的对象实例都在这里分配内存。这一点在java虚拟机规范中描述的是：所有的对象实例以及数组都要在堆上分配，但是随着JIT编译器的发展与陶艺分析技术的逐渐成熟，栈上分配、标量替换优化技术将导致一些微妙的变化发生，所有的对象都分配在堆上也渐渐变得不那么“绝对”了。</p>
+<p>java堆是垃圾回收器管理的主要区域，因此很多时候也被称作“GC堆”。<br>从内存回收的角度看，由于现在收集器基本采用分代手机算法，所以java中还可以细分为：新生代和老年代：再细致一点有Eden空间、 From Survivor空间、 To Survivor空间等。<br>从内存分配的角度来看，线程共享的Java堆中可能划分出多个线程私有的分配缓冲区（Thread Local Allocation Buffer，TLAB）。<br>不过无论如何划分，都与存放内容无关，无论哪个区域，存储的都是对象实例，进一步划分只是为了更好的回收内存或者更快的分配内存。</p>
+<p>根据java虚拟机规范的规定，java堆可以处于物理上不连续的内存空间中宏，只要逻辑上式连续的即可，就像我们的磁盘空间一样。在实现的时候，既可以实现成固定大小，也可以是扩展的，不过当前主流的虚拟机都是按照可扩展来实现的（-Xmx和-Xms控制）。如果堆中没有内存完成实例分配，并且堆也无法再扩展的时候，将会抛出OutOfMemoryError异常。</p>
+<h2 id="方法区（method-area）"><a href="#方法区（method-area）" class="headerlink" title="方法区（method area）"></a>方法区（method area）</h2><p>与java堆一样，是各个线程共享的内存区域，用于存储已经被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等。虽然java虚拟机规范把方法区描述为堆的一个逻辑部分，但是它却有一个别名叫Non-heap（非堆），目的应该是与java堆区分开来。</p>
+<p>java虚拟机规范对方法区的限制非常宽松，除了和java堆一样不需要连续的内存和可以选择固定大小或者可扩展外，还可以选择不实现垃圾回收。相对而言，垃圾收集行为在这个区域是较少出现的，但并非数据进入了方法区就永久存在了。这区域垃圾回收目标主要针对常量池的回收和对类型的卸载，一般来说这个区域回收成绩比较难以令人满意，但是回收确实是必要的。Sun公式的若干个严重bug就是由于低版本虚拟机对此区域未完全回收而导致内存泄露。</p>
+<p>按照虚拟机规范，当方法区无法满足内存分配需求时，将抛出outofMemoryError异常。</p>
+<h2 id="运行时常量池（runtime-constant-pool）"><a href="#运行时常量池（runtime-constant-pool）" class="headerlink" title="运行时常量池（runtime constant pool）"></a>运行时常量池（runtime constant pool）</h2><p>运行时常量池是方法区的一部分。Class文件中除了有类的版本、字段、方法、接口等描述信息外，还有一项信息是常量池，用于存放编译期生成的各种字面量和符号引用，这部分内容将在类加载后进入方法区的运行时常量池中存放。</p>
+<p>java虚拟机对Class文件的每一部分（自然也包括常量池）的格式都有严格规定，每一个字节用于存储哪些数据都必须符合规范上的要求才会被虚拟机认可。装载和执行，但是对运行时常量池没有做任何细节的要求。</p>
+<p>运行时常量池对于class文件常量池的另外一个重要特征是具备动态性，java语言不要求常量一定只有编译期才能产生，也就是并非与之如Class文件中的常量池内容才能进入方法运行时常量池，运行期间也可能将新的常量放入池内，这种特性被用的比较多就是String类的intern()方法。</p>
+<p>无法申请内存OutOfMemoryError.</p>
+<h2 id="直接内存（direct-memeory）"><a href="#直接内存（direct-memeory）" class="headerlink" title="直接内存（direct memeory）"></a>直接内存（direct memeory）</h2><p>直接内存不是虚拟机运行时数据区的不部分，也不是java虚拟机规范中定义的内存区域，但是这部分内存被频繁使用，而且也会导致OutOfMemoryError。<br>本机直接内存的分配不会受到java堆大小的限制，但是会受到本机总内存（RAM以及SWAP或者分页文件）大小以及处理器寻址空间的限制。</p>
+<h1 id="HosSpot虚拟机对象探秘"><a href="#HosSpot虚拟机对象探秘" class="headerlink" title="HosSpot虚拟机对象探秘"></a>HosSpot虚拟机对象探秘</h1><h2 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h2><p>（对象仅限于普通java对象，不包括数组和class对象）<br>虚拟机遇到一条new指令时，首先检查这个指令的参数能否在常量池中定位到一个类的符号引用，并检查这个符号引用代表的类是否已被加载、解析和初始化过。如果没有，必须执行类的加载过程。</p>
+<p>当类加载检查通过后，接下来虚拟机将为新生对象分配内存。对象所需内存大小在类加载完成后遍可以完全确定。为内存分配空间的任务等同于把一块确定大小的内存从java堆中划分出来。</p>
+<p>假设java堆中内存是绝对规整的，所有用过的内存都放一边，空闲的另一边，中间指针做分界点指示器，那么分配内存就仅仅把指针进行移动，这种方式叫“指针碰撞”。如果java堆中内存并不是规整的，已经使用的内存和空闲内存相互交错，需要维护一个列表，叫“空闲列表”。选择那种方式由java堆是否规整以及GC是否带有压缩功能决定。例如Serial，parnew等compact过程的收集器采用指针碰撞，CMS基于Mark-Sweep算法的收集器采用空闲列表。</p>
+<p>除了如何划分可用空间外，还需要考虑并发情况下线程安全问题。解决方案有，一是对空间中的动作进行同步处理，实际上虚拟机采用CAS配上失败重试方法保证更新操作的原子性；二是把内存分配动作按照线程划分在不同空间中进行，即每个线程在java堆中分配一小块区域，称为本地线程分配缓冲（Thread Local Allocation Buffer，TLAB）。</p>
+<p>内存分配完成后，虚拟机需要将分配到的内存空间都初始化为零值（不包括对象头）。保证了对象实例字段在java代码中可以不赋初值就直接使用。</p>
+<p>接下来，虚拟机对对象进行必要设置，例如这个对象时那个类的实例、如何才能找到类的元数据信息、对象的哈希码、对象的GC分代年龄等，这些信息存放在对象头中。</p>
+<p>在上面工作都完成以后，从虚拟机视角看一个新的对象已经产生，但从java程序看，对象才创建。执行new后执行<init>方法，把对象按照程序员医院进行初始化。</init></p>
+<h2 id="对象的内存布局"><a href="#对象的内存布局" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h2><p>对象在内存中存储布局分为3块：对象头、实例对象和对头填充。</p>
+<p>HotSpot虚拟机对象头包括两部分信息，第一部分用于存储对象自身运行时的数据，如哈希码、GC分代年龄、锁状态标识、线程持有的锁、偏向线程ID、偏向时间戳等，官方称为Mark Word。对象头的另一部分是类型指针，即对象指向它的类元数据指针，虚拟机通过这个指针来确定这个对象时哪个类的实例。<br>另一部分是类型指针，即对象指向它的类元数据的指针，虚拟机通过这个指针来确定这个对象时哪个类的实例。（但是并不是所有虚拟机实现都必须在对象数据上保留类型指针）如果对象时一个java数组还需要有一块记录数组长度的数据。</p>
+<p>接下来的实例数据部分是对象真正存储的有效信息，也是程序代码中所定义的各种类型的字段内容，无论从父类继承下来还是在子类中定义的都需要记录起来。这部分存储顺序会受到虚拟机分配策略参数和字段在java源码中定义顺序的影响。HotSpot默认分配策略是longs/doubles、ints、shorts/chars、bytes/booleans、oops(object object pointers)。相同宽度的字段总是分配到一起，在满足这个前提下，父类变量总会出现在子类之前。（也有子类较窄变量插入到父类变量缝隙中）</p>
+<p>第三部分对齐填充必然存在，但是没有特别含义，仅仅起到占位符的作用。HotSpot要求对象起始大小必须是8字节整数倍，因此对象实例部分没有对齐时，需要通过对齐填充来补全。</p>
+<h2 id="对象访问的定位"><a href="#对象访问的定位" class="headerlink" title="对象访问的定位"></a>对象访问的定位</h2><p>java程序需要通过栈上的reference数据来操作堆上的具体对象。<br>对象访问方式取决于虚拟机，目前主要两种</p>
+<ul>
+<li><p>如果是使用句柄访问，java堆中会翻出一块内存作为句柄池，reference中存储的就是对象的句柄地址，而句柄中包含了对象实例数据与类型数据各自的具体信息。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/java/JVM/jvm_2-2.png" alt=""></p>
+</li>
+<li><p>如果使用直接指针访问，那么java堆对象的布局中就必须考虑如何放置访问类型数据相关的信息，而reference中存储的直接就是对象地址。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/java/JVM/jvm_2-3.png" alt=""></p>
+</li>
+</ul>
+<p>这两种方法各有优势，使用句柄访问最大好处是reference中存储的是稳定的句柄地址，在对象被移动的时候只会改变句柄中实例数据的指针，而reference本身不需要改变。<br>使用直接指针访问的好处是速度更快，节省了一次指针定位的时间开销。HotSpot采用第二章。</p>
+<h1 id="实战：OutOfMemoryError异常"><a href="#实战：OutOfMemoryError异常" class="headerlink" title="实战：OutOfMemoryError异常"></a>实战：OutOfMemoryError异常</h1><h2 id="java堆溢出"><a href="#java堆溢出" class="headerlink" title="java堆溢出"></a>java堆溢出</h2><p>对象数量达到最大堆容量限制后悔产生内存溢出异常。<br>异常：java.lang.OutOfMemoryError:java heap space<br>一般的手段是先通过内存映像分析工具对Dump出来的堆转储快照进行分析，重点确认内存中对象是否是必要的，也就是内存泄露（Memory Leak）还是内存溢出（Memory Overflow）。<br>如果是内存泄露，可以检查泄露对象到GC Roots的引用链。定位泄露代码位置<br>如果不存在泄露，检查虚拟机的堆参数与机器物理内存是否可以调大（-Xms，-Xmx），从代码上检查某些对象生命周期过长的。。</p>
+<h2 id="虚拟机栈和本地方法栈溢出"><a href="#虚拟机栈和本地方法栈溢出" class="headerlink" title="虚拟机栈和本地方法栈溢出"></a>虚拟机栈和本地方法栈溢出</h2><p>栈内存只由-Xss参数设置。两种异常：</p>
+<ul>
+<li>如果线程请求的栈深度大于虚拟机所允许的最大深度，将抛出StackOverflowError异常</li>
+<li>如果虚拟机在扩展栈时无法申请到足够的内存空间，抛出OutOfMemoryError。</li>
+</ul>
+<h2 id="方法区和运行时常量池溢出"><a href="#方法区和运行时常量池溢出" class="headerlink" title="方法区和运行时常量池溢出"></a>方法区和运行时常量池溢出</h2><p>java.lang.OutOfMemoryError：PermGen space</p>
+<h2 id="本机直接内存溢出"><a href="#本机直接内存溢出" class="headerlink" title="本机直接内存溢出"></a>本机直接内存溢出</h2><p>直接内存可以通过 -XX：MaxDirectMemorySize指定。<br>一个明显特征是Heap Dump文件不会看见明显的异常。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java/">Java</a>►<a class="article-category-link" href="/categories/Java/JVM/">JVM</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Interview/">Interview</a><a href="/tags/Java/">Java</a><a href="/tags/Notes/">Notes</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/11/深入理解java虚拟机1/" data-title="深入理解Java虚拟机--第2章自动内存管理机制 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/11/深入理解java虚拟机3/" title="深入理解Java虚拟机--第3章垃圾收集器与内存分配策略">
+  <strong>上一篇：</strong><br/>
+  <span>
+  深入理解Java虚拟机--第3章垃圾收集器与内存分配策略</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/11/JVM学习2/"  title="JVM学习（2）--Java堆和栈">
+ <strong>下一篇：</strong><br/> 
+ <span>JVM学习（2）--Java堆和栈
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/11/深入理解java虚拟机1/" data-title="深入理解Java虚拟机--第2章自动内存管理机制" data-url="http://yoursite.com/2016/08/11/深入理解java虚拟机1/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#java技术体系"><span class="toc-number">1.</span> <span class="toc-text">java技术体系</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#运行时数据区域"><span class="toc-number">2.</span> <span class="toc-text">运行时数据区域</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#程序计数器（program-counter-register）"><span class="toc-number">2.1.</span> <span class="toc-text">程序计数器（program counter register）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#java虚拟机栈（java-vitual-machine-stacks）"><span class="toc-number">2.2.</span> <span class="toc-text">java虚拟机栈（java vitual machine stacks）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#本地方法栈（native-method-stack）"><span class="toc-number">2.3.</span> <span class="toc-text">本地方法栈（native method stack）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#java堆（heap）"><span class="toc-number">2.4.</span> <span class="toc-text">java堆（heap）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法区（method-area）"><span class="toc-number">2.5.</span> <span class="toc-text">方法区（method area）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#运行时常量池（runtime-constant-pool）"><span class="toc-number">2.6.</span> <span class="toc-text">运行时常量池（runtime constant pool）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#直接内存（direct-memeory）"><span class="toc-number">2.7.</span> <span class="toc-text">直接内存（direct memeory）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HosSpot虚拟机对象探秘"><span class="toc-number">3.</span> <span class="toc-text">HosSpot虚拟机对象探秘</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#对象的创建"><span class="toc-number">3.1.</span> <span class="toc-text">对象的创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对象的内存布局"><span class="toc-number">3.2.</span> <span class="toc-text">对象的内存布局</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对象访问的定位"><span class="toc-number">3.3.</span> <span class="toc-text">对象访问的定位</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#实战：OutOfMemoryError异常"><span class="toc-number">4.</span> <span class="toc-text">实战：OutOfMemoryError异常</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#java堆溢出"><span class="toc-number">4.1.</span> <span class="toc-text">java堆溢出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#虚拟机栈和本地方法栈溢出"><span class="toc-number">4.2.</span> <span class="toc-text">虚拟机栈和本地方法栈溢出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法区和运行时常量池溢出"><span class="toc-number">4.3.</span> <span class="toc-text">方法区和运行时常量池溢出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#本机直接内存溢出"><span class="toc-number">4.4.</span> <span class="toc-text">本机直接内存溢出</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

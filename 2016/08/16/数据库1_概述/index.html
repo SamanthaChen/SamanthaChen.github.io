@@ -1,0 +1,785 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>数据库-第1-5章-概述SQL-笔记 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="概述数据定义语言(DDL)定义数据库结构和存储结构；定义数据库中数据之间的联系；定义数据完整性约束条件和保证完整性的触发机制等。
+数据操纵语言(DML)完成对数据库中数据的操作：插入、删除、修改；重新组织数据库的存储结构；完成对数据库的备份/恢复等。
+数据模型的三个层次：
+
+概念数据模型   也称信息模型，它是按用户的观点来对数据和信息建模。面向用户、面向现实世界的数据模型，反映现实世界的对象及其">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库-第1-5章-概述SQL-笔记">
+<meta property="og:url" content="http://yoursite.com/2016/08/16/数据库1_概述/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="概述数据定义语言(DDL)定义数据库结构和存储结构；定义数据库中数据之间的联系；定义数据完整性约束条件和保证完整性的触发机制等。
+数据操纵语言(DML)完成对数据库中数据的操作：插入、删除、修改；重新组织数据库的存储结构；完成对数据库的备份/恢复等。
+数据模型的三个层次：
+
+概念数据模型   也称信息模型，它是按用户的观点来对数据和信息建模。面向用户、面向现实世界的数据模型，反映现实世界的对象及其">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db5.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db6.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db7.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db8.png">
+<meta property="og:updated_time" content="2016-08-18T23:48:38.228Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据库-第1-5章-概述SQL-笔记">
+<meta name="twitter:description" content="概述数据定义语言(DDL)定义数据库结构和存储结构；定义数据库中数据之间的联系；定义数据完整性约束条件和保证完整性的触发机制等。
+数据操纵语言(DML)完成对数据库中数据的操作：插入、删除、修改；重新组织数据库的存储结构；完成对数据库的备份/恢复等。
+数据模型的三个层次：
+
+概念数据模型   也称信息模型，它是按用户的观点来对数据和信息建模。面向用户、面向现实世界的数据模型，反映现实世界的对象及其">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db2.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/16/数据库1_概述/" title="数据库-第1-5章-概述SQL-笔记" itemprop="url">数据库-第1-5章-概述SQL-笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-16T08:35:47.322Z" itemprop="datePublished"> Published 2016-08-16</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#关系数据库"><span class="toc-number">2.</span> <span class="toc-text">关系数据库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#码-键"><span class="toc-number">2.1.</span> <span class="toc-text">码(键)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关系运算"><span class="toc-number">2.2.</span> <span class="toc-text">关系运算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL"><span class="toc-number">2.3.</span> <span class="toc-text">SQL</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#关系数据库设计"><span class="toc-number">3.</span> <span class="toc-text">关系数据库设计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#目标"><span class="toc-number">3.1.</span> <span class="toc-text">目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关系模式的规范形式"><span class="toc-number">3.2.</span> <span class="toc-text">关系模式的规范形式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SQL语言"><span class="toc-number">4.</span> <span class="toc-text">SQL语言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#数据定义"><span class="toc-number">4.1.</span> <span class="toc-text">数据定义</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create"><span class="toc-number">4.1.1.</span> <span class="toc-text">Create</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Alter"><span class="toc-number">4.1.2.</span> <span class="toc-text">Alter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Drop"><span class="toc-number">4.1.3.</span> <span class="toc-text">Drop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#索引"><span class="toc-number">4.1.4.</span> <span class="toc-text">索引</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#建立索引"><span class="toc-number">4.1.4.1.</span> <span class="toc-text">建立索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#删除索引"><span class="toc-number">4.1.4.2.</span> <span class="toc-text">删除索引</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据查询"><span class="toc-number">4.2.</span> <span class="toc-text">数据查询</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Select"><span class="toc-number">4.2.1.</span> <span class="toc-text">Select</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#集函数"><span class="toc-number">4.2.2.</span> <span class="toc-text">集函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#嵌套查询"><span class="toc-number">4.2.3.</span> <span class="toc-text">嵌套查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EXISTS谓词"><span class="toc-number">4.2.4.</span> <span class="toc-text">EXISTS谓词</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#集合查询"><span class="toc-number">4.2.5.</span> <span class="toc-text">集合查询</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据更新"><span class="toc-number">4.3.</span> <span class="toc-text">数据更新</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#插入数据"><span class="toc-number">4.3.1.</span> <span class="toc-text">插入数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改数据"><span class="toc-number">4.3.2.</span> <span class="toc-text">修改数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除数据"><span class="toc-number">4.3.3.</span> <span class="toc-text">删除数据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据控制（DCL）"><span class="toc-number">4.4.</span> <span class="toc-text">数据控制（DCL）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#完整性"><span class="toc-number">4.4.1.</span> <span class="toc-text">完整性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#并发控制"><span class="toc-number">4.4.2.</span> <span class="toc-text">并发控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#恢复"><span class="toc-number">4.4.3.</span> <span class="toc-text">恢复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安全性"><span class="toc-number">4.4.4.</span> <span class="toc-text">安全性</span></a></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>数据定义语言(DDL)<br>定义数据库结构和存储结构；<br>定义数据库中数据之间的联系；<br>定义数据完整性约束条件和保证完整性的触发机制等。</p>
+<p>数据操纵语言(DML)<br>完成对数据库中数据的操作：插入、删除、修改；<br>重新组织数据库的存储结构；<br>完成对数据库的备份/恢复等。</p>
+<p>数据模型的三个层次：</p>
+<ol>
+<li>概念数据模型   也称信息模型，它是按用户的观点来对数据和信息建模。面向用户、面向现实世界的数据模型，反映现实世界的对象及其联系。</li>
+<li>逻辑数据模型   它是按计算机系统的观点对数据建模。主要包括网状模型、层次模型、关系模型等。</li>
+<li>物理数据模型(DBMS/OS相关)  反映数据的存储结构。</li>
+</ol>
+<p>数据库的三级模式：<br>一、内模式（Internal Schema）<br>是数据物理结构和存储方式的描述；<br>是数据在数据库内部的表示方式，即对数据的物理结构/存储方式的描述，是低级描述，一般由DBMS提供的语言或工具完成<br>一个数据库只有一个内模式</p>
+<p>二、（逻辑）模式（Schema）<br>模式（也称逻辑模式）<br>数据库中全体数据的逻辑结构和特征的描述<br>所有用户的公共数据视图，综合了所有用户的需求<br>一个数据库只有一个模式<br>模式的地位：是数据库系统模式结构的中间层<br>与数据的物理存储细节和硬件环境无关<br>与具体的应用程序、开发工具及高级程序设计语言无关<br>模式的定义，DBMS提供数据定义语言DDL来描述逻辑模式，严格定义：<br>数据的逻辑结构（数据项的名字、类型、取值范围等）<br>数据之间的联系<br>数据有关的安全性、完整性要求</p>
+<p>三、外模式（External Schema）<br>外模式（也称子模式或用户模式）<br>数据库用户（包括应用程序员和最终用户）使用的局部数据的逻辑结构和特征的描述<br>数据库用户的数据视图，是模式的子集或变形，是与某一应用有关的数据的逻辑表示<br>不同用户需求不同，看待数据的方式也可以不同，对数据保密的要求也可以不同，使用的程序设计语言也可以不同，因此不同用户的外模式的描述可以使不同</p>
+<p>在三级模式中提供了两级映象，保证了数据库系统的数据独立性，既物理独立性与逻辑独立性。</p>
+<p>保证数据的逻辑独立性<br>当模式改变时，数据库管理员修改有关的外模式／模式映象，使外模式保持不变<br>应用程序是依据数据的外模式编写的，从而应用程序不必修改，保证了数据与程序的逻辑独立性，简称数据的逻辑独立性。</p>
+<p>保证数据的物理独立性<br>当数据库的存储结构改变了（例如选用了另一种存储结构），数据库管理员修改模式／内模式映象，使模式保持不变<br>应用程序不受影响。保证了数据与程序的物理独立性，简称数据的物理独立性。</p>
+<h1 id="关系数据库"><a href="#关系数据库" class="headerlink" title="关系数据库"></a>关系数据库</h1><p>D1×D2×…×Dn的子集叫作在域D1, D2, …, Dn上的关系，表示为 R(D1, D2, …, Dn)</p>
+<h2 id="码-键"><a href="#码-键" class="headerlink" title="码(键)"></a>码(键)</h2><p>若关系中的某一组属性的值能唯一地标识该关系中的一个元组，则称该属性组为候选码。<br>候选码之一可被选作主码(Primary Key, PK)，或称为主键、关键字。</p>
+<p>主码是关系模型中的一个重要概念。每个关系必需选择一个主码，选定以后，不能随意改变。关系的元组不能重复，因此，每个关系必须有且仅有一个主码。至少关系的所有属性的组合可作为主码。<br>极端情况下，关系的所有属性组是这个关系的候选码，称为全码(All-key)。</p>
+<p>外部键：设X是关系模式R(U)的一个属性集合。如果X是另一个关系模式R’(U’)的主键，则称X是R(U)关于R’(U’)的外部键，或简称外键。</p>
+<p>关联完整性约束说明，任何关系的一个元组只能通过外部键与另一个关系中存在的元组相关联。 </p>
+<h2 id="关系运算"><a href="#关系运算" class="headerlink" title="关系运算"></a>关系运算</h2><p>基于代数的定义：关系代数<br>基本操作（5个）：并、差、笛卡尔积、投影、选择<br>附加操作：交、连接、商、……<br>附加操作可由基本操作的组合表示</p>
+<p>条件连接：从R×S的结果集中，选取在指定的属性集上满足θ条件的元组，组成新的关系<br>自然连接：从R×S的结果集中，选取在某些公共属性上具有相同值的元组，组成新的关系<br>除运算：设两个关系R和S的属性分别为r和s(设r&gt;s&gt;0)，那么R除S是一个(r-s)元的元组的集合。它是满足下列条件的最大关系：其中每个元组t与S中的每个元组u组成的新元组<t, u="">必在关系R中。<br>除运算是笛卡尔积的逆运算。</t,></p>
+<h2 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h2><p>SQL语言 (Structured Query Language)<br>由SEQUEL发展而来<br>介于关系代数与元组演算</p>
+<h1 id="关系数据库设计"><a href="#关系数据库设计" class="headerlink" title="关系数据库设计"></a>关系数据库设计</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>满足用户的完整性和安全性要求。<br>动态关系至少具有第三规范形式，静态关系至少具有第一规范形式。<br>能够在逻辑级上高效率地支持各种数据库事务的运行。<br>存储空间利用率高。</p>
+<h2 id="关系模式的规范形式"><a href="#关系模式的规范形式" class="headerlink" title="关系模式的规范形式"></a>关系模式的规范形式</h2><p>满足这些范式条件的关系模式可以在不同程度上避免本节开始提到的冗余问题、插入问题、更新问题和删除问题。</p>
+<ul>
+<li><p>第一范式(1NF)<br>设R是一个关系模式。如果R的每个属性的值域都是不可分的简单数据项的集合，则称这个关系模式为第一范式关系模式，记作1NF。</p>
+</li>
+<li><p>第二范式(2NF)<br>若关系模式R是1NF，而且每一个非主属性都完全函数依赖于R的键，则R称为第二范式关系模式，记作2NF。 </p>
+</li>
+<li><p>第三范式(3NF)<br>如果关系模式R是2NF, 而且它的任何一个非键属性都不传递地依赖于任何候选键，则R称为第三范式关系模式，记作3NF。</p>
+</li>
+</ul>
+<p>传递地函数依赖定义：<br> 设Ｒ是一个具有属性集合Ｕ的关系模式，X属于Ｕ,Y属于Ｕ,Z属于Ｕ，Y→X不成立，Z-X、Z-Y和Y-X不空。如果X→Y，Y→Z，则称Z传递地函数依赖于X。 </p>
+<ul>
+<li>BCNF范式(Boyce Codd Normal Form)<br>设关系模式R是1NF。如果对于R的每个函数依赖X→Y，则X必为候选键，则R是BCNF范式。</li>
+</ul>
+<p>每个BCNF关系模式都具有如下三个性质：<br>所有非键属性都完全函数依赖于每个候选键。<br>所有键属性都完全函数依赖于每个不包含它的候选键。<br>没有任何属性完全函数依赖于非键的任何一组属性。</p>
+<ul>
+<li>第四范式关系模式<br>设R是一个关系模式，D是R上的多值依赖集。如果对于R的每个多值依赖X→→Y(Y-X=非空集, XY未包含R的全部属性)，X都含有R的候选键，则R是第四范式关系模式，简记4NF。</li>
+</ul>
+<p>(多值依赖)：<br>设R是一个具有属性集合Ｕ的关系模式，X、Y和Z是U的子集，并且Z = U – X - Y，多值依赖X→→Y成立当且仅当对R的任一关系r，r在(X, Z)上的每个值对应一组Y的值，这组值仅仅决定于X值而与Z值无关。</p>
+<h1 id="SQL语言"><a href="#SQL语言" class="headerlink" title="SQL语言"></a>SQL语言</h1><p>SQL是结构化查询语言（Structured Query Language）的缩写，其功能包括数据查询、数据操纵、数据定义和数据控制四个部分。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db2.png" alt=""></p>
+<h2 id="数据定义"><a href="#数据定义" class="headerlink" title="数据定义"></a>数据定义</h2><p><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db3.png" alt=""></p>
+<h3 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h3><p>CREATE TABLE &lt;表名&gt;<br>            (&lt;列名&gt; &lt;数据类型&gt;[ &lt;列级完整性约束条件&gt; ]<br>            [，&lt;列名&gt; &lt;数据类型&gt;[ &lt;列级完整性约束条件&gt;] ] …<br>            [，&lt;表级完整性约束条件&gt; ]);</p>
+<p>常用完整性约束</p>
+<ul>
+<li>主码约束：    primary key (A1, …, An )</li>
+<li>唯一性约束：UNIQUE</li>
+<li>非空值约束：NOT NULL</li>
+<li>参照完整性约束：FOREIGN KEY</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">create</span> <span class="keyword">table</span> branch</div><div class="line">        (branch_name   <span class="built_in">char</span>(<span class="number">15</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>  <span class="keyword">UNIQUE</span>,</div><div class="line">        branch_city    <span class="built_in">char</span>(<span class="number">30</span>),</div><div class="line">        assets         <span class="built_in">int</span>,</div><div class="line">        primary <span class="keyword">key</span> (branch_name));</div></pre></td></tr></table></figure>
+<h3 id="Alter"><a href="#Alter" class="headerlink" title="Alter"></a>Alter</h3><p>ALTER TABLE &lt;表名&gt;<br>            [ ADD &lt;新列名&gt; &lt;数据类型&gt; [ 完整性约束 ] ]<br>            [ DROP &lt;完整性约束名&gt; ]<br>            [ MODIFY &lt;列名&gt; &lt;数据类型&gt; ];<br>&lt;表名&gt;：要修改的基本表<br>ADD子句：增加新列和新的完整性约束条件<br>DROP子句：删除指定的完整性约束条件<br>MODIFY子句：用于修改列名和数据类型</p>
+<p>例;<br>alter table r drop A<br>ALTER TABLE Student DROP UNIQUE(Sname);<br>ALTER TABLE Student MODIFY Sage SMALLINT;</p>
+<h3 id="Drop"><a href="#Drop" class="headerlink" title="Drop"></a>Drop</h3><p>DROP TABLE &lt;表名&gt;;<br>基本表删除：数据、表上的索引都删除，表上的视图往往仍然保留，但无法引用<br>删除基本表时，系统会从数据字典中删去有关该基本表及其索引的描述 </p>
+<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><h4 id="建立索引"><a href="#建立索引" class="headerlink" title="建立索引"></a>建立索引</h4><p>DBA或表的属主（即建立表的人）根据需要建立；<br>有些DBMS自动建立以下列上的索引： PRIMARY  KEY；UNIQUE</p>
+<p>CREATE [UNIQUE] [CLUSTER] INDEX &lt;索引名&gt;<br>               ON &lt;表名&gt;(&lt;列名&gt;[&lt;次序&gt;][,&lt;列名&gt;[&lt;次序&gt;] ]…);<br>&lt;表名&gt;指定要建索引的基本表名字<br>索引可以建立在该表的一列或多列上，各列名之间用逗号分隔<br>用&lt;次序&gt;指定索引值的排列次序，升序：ASC，降序：DESC。缺省值：ASC<br>UNIQUE表明此索引的每一个索引值只对应唯一的数据记录<br>CLUSTER表示要建立的索引是聚簇索引</p>
+<p>例：<br>为学生-课程数据库中的Student，Course，SC三个表建立索引。其中Student表按学号升序建唯一索引，Course表按课程号升序建唯一索引，SC表按学号升序和课程号降序建唯一索引。</p>
+<ul>
+<li>CREATE UNIQUE INDEX  Stusno ON Student(Sno);</li>
+<li>CREATE UNIQUE INDEX Coucno ON Course(Cno);</li>
+<li>CREATE UNIQUE INDEX SCno ON SC(Sno ASC，Cno DESC);</li>
+</ul>
+<p>聚簇索引(CLUSTER子句)</p>
+<ul>
+<li>建立聚簇索引后，基表中数据也需要按指定的聚簇属性值的升序或降序存放。也即聚簇索引的索引项顺序与表中记录的物理顺序一致。</li>
+<li>在一个基本表上最多只能建立一个聚簇索引。</li>
+<li>在创建任何非聚簇索引之前创建聚簇索引。</li>
+<li>聚簇索引的用途：对于某些类型的查询，可以提高查询效率。</li>
+<li>聚簇索引的适用范围：经常更新的列不易建聚簇索引</li>
+</ul>
+<h4 id="删除索引"><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h4><p>DROP INDEX &lt;索引名&gt;</p>
+<h2 id="数据查询"><a href="#数据查询" class="headerlink" title="数据查询"></a>数据查询</h2><h3 id="Select"><a href="#Select" class="headerlink" title="Select"></a>Select</h3><p>SELECT [ALL|DISTINCT] &lt;目标列表达式&gt;[，&lt;目标列表达式&gt;] …<br>FROM &lt;表名或视图名&gt;[， &lt;表名或视图名&gt;] …<br>[WHERE &lt;条件表达式&gt;]<br>[GROUP BY &lt;列名1&gt; [HAVING &lt;条件表达式&gt;]]<br>[ORDER BY &lt;列名2&gt; [ASC|DESC]]；</p>
+<p>SELECT子句：指定结果中需要显示的属性列<br>FROM子句：指定涉及的查询对象(基本表或视图)<br>WHERE子句：指定查询条件<br>GROUP BY子句：对查询结果按指定列的值分组，该属性列值相等的元组为一个组。通常会在每组中作用集函数。<br>HAVING短语：筛选出只有满足指定条件的组。<br>ORDER BY子句：对查询结果表按指定列值的升序或降序排序。<br>DISTINCT短语的作用范围是所有目标列</p>
+<p>SELECT子句的&lt;目标列表达式&gt;为表达式</p>
+<ul>
+<li>算术表达式</li>
+<li>字符串常量</li>
+<li>函数</li>
+<li>列别名</li>
+</ul>
+<p>select的查询结果是一个关系</p>
+<p>SELECT Sname, ‘Year of Birth: ‘, 2012-Sage, ISLOWER(Sdept)<br>FROM Student;<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db4.png" alt=""></p>
+<p>WHERE子句常用的查询条件:<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db5.png" alt=""><br>[NOT] LIKE  ‘&lt;匹配串&gt;’  [ESCAPE ‘ &lt;换码字符&gt;’]<br>&lt;匹配串&gt;：指定匹配模板。<br>匹配模板：固定字符串或含通配符的字符串<br>当匹配模板为固定字符串时<br>可以用 = 运算符取代 LIKE 谓词<br>用 != 或 &lt; &gt;运算符取代 NOT LIKE 谓词<br>ESCAPE换码符</p>
+<p>\被指定为换码符;% (百分号)  代表任意长度（长度可以为0）的字符串;_ (下横线)  代表任意单个字符</p>
+<h3 id="集函数"><a href="#集函数" class="headerlink" title="集函数"></a>集函数</h3><p>5类主要集函数</p>
+<ul>
+<li>计数<ul>
+<li>COUNT（[DISTINCT|ALL] *）</li>
+<li>COUNT（[DISTINCT|ALL] &lt;列名&gt;）</li>
+</ul>
+</li>
+<li>计算总和<ul>
+<li>SUM（[DISTINCT|ALL] &lt;列名&gt;）    </li>
+</ul>
+</li>
+<li>计算平均值<ul>
+<li>AVG（[DISTINCT|ALL] &lt;列名&gt;）</li>
+</ul>
+</li>
+<li>求最大值<ul>
+<li>MAX（[DISTINCT|ALL] &lt;列名&gt;）    </li>
+</ul>
+</li>
+<li>求最小值<ul>
+<li>MIN（[DISTINCT|ALL] &lt;列名&gt;）    </li>
+</ul>
+</li>
+<li>DISTINCT短语：在计算时要取消指定列中的重复值<ul>
+<li>ALL短语：不取消重复值</li>
+<li>缺省值：ALL</li>
+</ul>
+</li>
+</ul>
+<p>使用GROUP BY子句分组 （细化集函数的作用对象）<br>未对查询结果分组，集函数将作用于整个查询结果<br>对查询结果分组后，集函数将分别作用于每个组<br>[例]  求各个课程号及相应的选课人数。<br>SELECT Cno, COUNT(Sno)<br>FROM SC<br>GROUP BY Cno;</p>
+<p>GROUP BY子句的作用对象是查询的中间结果表<br>分组方法：按指定的一列或多列值分组，值相等的为一组<br>使用GROUP BY子句后，SELECT子句的列名列表中只能出现分组属性和集函数</p>
+<p>只有满足HAVING短语指定条件的组才输出<br>HAVING短语与WHERE子句的区别：作用对象不同<br>WHERE子句作用于基表或视图，从中选择满足条件的元组。<br>HAVING短语作用于组(Group)，从中选择满足条件的组。 </p>
+<p>[例]  查询有3门以上课程是90分以上的学生的学号及（90分以上的）课程数。<br>     SELECT Sno, COUNT(<em>)<br>     FROM SC<br>     WHERE Grade&gt;=90<br>     GROUP BY Sno<br>     HAVING COUNT(</em>)&gt;=3; </p>
+<h3 id="嵌套查询"><a href="#嵌套查询" class="headerlink" title="嵌套查询"></a>嵌套查询</h3><p>一个SELECT-FROM-WHERE语句称为一个查询块<br>将一个查询块嵌套在另一个查询块的WHERE子句或HAVING短语的条件中的查询称为嵌套查询。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> Sname        外层查询/父查询</div><div class="line"><span class="keyword">FROM</span> Student</div><div class="line"><span class="keyword">WHERE</span> Sno <span class="keyword">IN</span></div><div class="line">            (<span class="keyword">SELECT</span> Sno              内层查询/子查询</div><div class="line">             <span class="keyword">FROM</span> SC</div><div class="line">             <span class="keyword">WHERE</span> Cno= <span class="string">'2'</span>);</div></pre></td></tr></table></figure>
+<p>子查询的限制:不能使用ORDER BY子句<br>层层嵌套方式反映了SQL语言的结构化。<br>有些嵌套查询可以用连接运算替代。</p>
+<p>嵌套查询分类：</p>
+<ol>
+<li>不相关子查询<br>子查询的查询条件不依赖于父查询；<br>由里向外逐层处理。<br>每个子查询在上一级查询处理之前求解，子查询的结果用于建立其父查询的查找条件。</li>
+<li>相关子查询<br>子查询的查询条件依赖于父查询。<br>首先取外层查询中表的第一个元组，根据它与内层查询相关的属性值处理内层查询，若WHERE子句返回值为真，则取此元组放入结果表；<br>然后再取外层表的下一个元组；<br>重复这一过程，直至外层表全部检查完为止。</li>
+</ol>
+<p>引出子查询的谓词：<br>带有IN谓词的子查询<br>带有比较运算符的子查询<br>带有ANY或ALL谓词的子查询<br>带有EXISTS谓词的子查询</p>
+<p><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db6.png" alt=""></p>
+<h3 id="EXISTS谓词"><a href="#EXISTS谓词" class="headerlink" title="EXISTS谓词"></a>EXISTS谓词</h3><p>存在量词<br>带有EXISTS谓词的子查询不返回任何数据，只产生逻辑真值”true”或逻辑假值”false”。</p>
+<pre><code>- 若内层查询结果非空，则返回真值；
+- 若内层查询结果为空，则返回假值。
+</code></pre><p>带EXISTS的子查询只返回真值或假值，给出列名无实际意义，其目标列表达式通常都用’*’。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db7.png" alt=""><br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/DB/db8.png" alt=""></p>
+<h3 id="集合查询"><a href="#集合查询" class="headerlink" title="集合查询"></a>集合查询</h3><p>标准SQL直接支持的集合操作种类</p>
+<ul>
+<li>并操作(UNION)</li>
+</ul>
+<p>一般商用数据库支持的集合操作种类</p>
+<ul>
+<li>并操作(UNION)</li>
+<li>交操作(INTERSECT)</li>
+<li>差操作(MINUS)</li>
+</ul>
+<h2 id="数据更新"><a href="#数据更新" class="headerlink" title="数据更新"></a>数据更新</h2><h3 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h3><p>两种插入数据方式<br>插入单个元组<br>插入子查询结果<br>    INSERT<br>    INTO &lt;表名&gt; [(&lt;属性列1&gt;[，&lt;属性列2 &gt;…)]<br>    VALUES (&lt;常量1&gt; [，&lt;常量2&gt;]    …           )</p>
+<p>VALUES子句提供的值必须与INTO子句匹配</p>
+<h3 id="修改数据"><a href="#修改数据" class="headerlink" title="修改数据"></a>修改数据</h3><pre><code>UPDATE  &lt;表名&gt;
+SET  &lt;列名&gt;=&lt;表达式&gt;[，&lt;列名&gt;=&lt;表达式&gt;]…
+[WHERE &lt;条件&gt;];
+</code></pre><h3 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h3><pre><code>DELETE
+FROM  &lt;表名&gt;
+[WHERE &lt;条件&gt;];
+</code></pre><p>功能：删除指定表中满足WHERE子句条件的元组<br>WHERE子句：指定要删除的元组；缺省表示要修改表中的所有元组</p>
+<h2 id="数据控制（DCL）"><a href="#数据控制（DCL）" class="headerlink" title="数据控制（DCL）"></a>数据控制（DCL）</h2><p>授权：GRANT<br>收回权限：REVOKE</p>
+<p>数据控制亦称为数据保护，包括数据的：</p>
+<ul>
+<li>安全性控制</li>
+<li>完整性控制</li>
+<li>并发控制</li>
+<li>恢复<br>SQL语言提供了数据控制功能，能够在一定程度上保证数据库中数据的完全性、完整性，并提供了一定的并发控制及恢复能力。</li>
+</ul>
+<h3 id="完整性"><a href="#完整性" class="headerlink" title="完整性"></a>完整性</h3><p>数据库的完整性是指数据库中数据的正确性与相容性。<br>SQL语言定义完整性约束条件</p>
+<pre><code>- CREATE TABLE语句
+- ALTER TABLE语句
+   ①码；
+   ②取值唯一的列；
+   ③参照完整性（外码）；
+   ④其他约束条件。
+</code></pre><h3 id="并发控制"><a href="#并发控制" class="headerlink" title="并发控制"></a>并发控制</h3><p>并发控制: 当多个用户并发地对数据库进行操作时，对他们加以控制、协调，以保证并发操作正确执行，保持数据库的一致性。<br>SQL语言并发控制能力：提供事务、事务开始、事务结束、提交等概念。</p>
+<h3 id="恢复"><a href="#恢复" class="headerlink" title="恢复"></a>恢复</h3><p>恢复:当发生各种类型的故障导致数据库处于不一致状态时，将数据库恢复到一致状态的功能。<br>SQL语言恢复功能：提供事务回滚、重做等概念；UNDO、REDO等。</p>
+<h3 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h3><p>安全性：保护数据库，防止不合法的使用所造成的数据泄露和破坏。<br>保证数据安全性的主要措施：</p>
+<pre><code>- 存取控制：控制用户只能存取他有权存取的数据。
+- 规定不同用户对于不同数据对象所允许执行的操作。
+</code></pre>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Database/">Database</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Interview/">Interview</a><a href="/tags/Database/">Database</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/16/数据库1_概述/" data-title="数据库-第1-5章-概述SQL-笔记 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/18/数据库2_查询优化/" title="数据库-第5章-查询优化-笔记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  数据库-第5章-查询优化-笔记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/16/Cookies和Session/"  title="计算机网络--Cookies和Session">
+ <strong>下一篇：</strong><br/> 
+ <span>计算机网络--Cookies和Session
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/16/数据库1_概述/" data-title="数据库-第1-5章-概述SQL-笔记" data-url="http://yoursite.com/2016/08/16/数据库1_概述/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#关系数据库"><span class="toc-number">2.</span> <span class="toc-text">关系数据库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#码-键"><span class="toc-number">2.1.</span> <span class="toc-text">码(键)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关系运算"><span class="toc-number">2.2.</span> <span class="toc-text">关系运算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL"><span class="toc-number">2.3.</span> <span class="toc-text">SQL</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#关系数据库设计"><span class="toc-number">3.</span> <span class="toc-text">关系数据库设计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#目标"><span class="toc-number">3.1.</span> <span class="toc-text">目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关系模式的规范形式"><span class="toc-number">3.2.</span> <span class="toc-text">关系模式的规范形式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SQL语言"><span class="toc-number">4.</span> <span class="toc-text">SQL语言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#数据定义"><span class="toc-number">4.1.</span> <span class="toc-text">数据定义</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create"><span class="toc-number">4.1.1.</span> <span class="toc-text">Create</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Alter"><span class="toc-number">4.1.2.</span> <span class="toc-text">Alter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Drop"><span class="toc-number">4.1.3.</span> <span class="toc-text">Drop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#索引"><span class="toc-number">4.1.4.</span> <span class="toc-text">索引</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#建立索引"><span class="toc-number">4.1.4.1.</span> <span class="toc-text">建立索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#删除索引"><span class="toc-number">4.1.4.2.</span> <span class="toc-text">删除索引</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据查询"><span class="toc-number">4.2.</span> <span class="toc-text">数据查询</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Select"><span class="toc-number">4.2.1.</span> <span class="toc-text">Select</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#集函数"><span class="toc-number">4.2.2.</span> <span class="toc-text">集函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#嵌套查询"><span class="toc-number">4.2.3.</span> <span class="toc-text">嵌套查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EXISTS谓词"><span class="toc-number">4.2.4.</span> <span class="toc-text">EXISTS谓词</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#集合查询"><span class="toc-number">4.2.5.</span> <span class="toc-text">集合查询</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据更新"><span class="toc-number">4.3.</span> <span class="toc-text">数据更新</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#插入数据"><span class="toc-number">4.3.1.</span> <span class="toc-text">插入数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改数据"><span class="toc-number">4.3.2.</span> <span class="toc-text">修改数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除数据"><span class="toc-number">4.3.3.</span> <span class="toc-text">删除数据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据控制（DCL）"><span class="toc-number">4.4.</span> <span class="toc-text">数据控制（DCL）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#完整性"><span class="toc-number">4.4.1.</span> <span class="toc-text">完整性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#并发控制"><span class="toc-number">4.4.2.</span> <span class="toc-text">并发控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#恢复"><span class="toc-number">4.4.3.</span> <span class="toc-text">恢复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安全性"><span class="toc-number">4.4.4.</span> <span class="toc-text">安全性</span></a></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

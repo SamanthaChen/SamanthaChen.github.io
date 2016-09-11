@@ -1,0 +1,826 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>计算机操作系统（汤小丹）--进程线程--笔记 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="第一章 操作系统引论操作系统的4大特征
+并发性 并行是指两个或多个时间在同一时刻发生，并发是两个或多个时间再同一间隔内发生。引入进程和线程可以提高系统的并发性
+共享性 指系统中的资源可以供内存中的多个并发执行的进程（线程）共同使用。主要实现方式有互斥共享和同时访问
+虚拟技术 通过某种技术吧一个屋里实体变成若干个逻辑上的对应物，分为时分复用和空分复用。
+异步性 进程的执行不是一气呵成而是走走停停的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机操作系统（汤小丹）--进程线程--笔记">
+<meta property="og:url" content="http://yoursite.com/2016/08/12/计算机操作系统_汤小丹_笔记1/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="第一章 操作系统引论操作系统的4大特征
+并发性 并行是指两个或多个时间在同一时刻发生，并发是两个或多个时间再同一间隔内发生。引入进程和线程可以提高系统的并发性
+共享性 指系统中的资源可以供内存中的多个并发执行的进程（线程）共同使用。主要实现方式有互斥共享和同时访问
+虚拟技术 通过某种技术吧一个屋里实体变成若干个逻辑上的对应物，分为时分复用和空分复用。
+异步性 进程的执行不是一气呵成而是走走停停的。">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS3.png">
+<meta property="og:updated_time" content="2016-08-16T08:33:48.865Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计算机操作系统（汤小丹）--进程线程--笔记">
+<meta name="twitter:description" content="第一章 操作系统引论操作系统的4大特征
+并发性 并行是指两个或多个时间在同一时刻发生，并发是两个或多个时间再同一间隔内发生。引入进程和线程可以提高系统的并发性
+共享性 指系统中的资源可以供内存中的多个并发执行的进程（线程）共同使用。主要实现方式有互斥共享和同时访问
+虚拟技术 通过某种技术吧一个屋里实体变成若干个逻辑上的对应物，分为时分复用和空分复用。
+异步性 进程的执行不是一气呵成而是走走停停的。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS1.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/12/计算机操作系统_汤小丹_笔记1/" title="计算机操作系统（汤小丹）--进程线程--笔记" itemprop="url">计算机操作系统（汤小丹）--进程线程--笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-12T04:52:42.014Z" itemprop="datePublished"> Published 2016-08-12</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#第一章-操作系统引论"><span class="toc-number">1.</span> <span class="toc-text">第一章 操作系统引论</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#操作系统的4大特征"><span class="toc-number">2.</span> <span class="toc-text">操作系统的4大特征</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#线程和进程"><span class="toc-number">2.1.</span> <span class="toc-text">线程和进程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#第二章-进程管理"><span class="toc-number">3.</span> <span class="toc-text">第二章 进程管理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#进程的定义"><span class="toc-number">3.1.</span> <span class="toc-text">进程的定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程与程序"><span class="toc-number">3.2.</span> <span class="toc-text">进程与程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程空间"><span class="toc-number">3.3.</span> <span class="toc-text">进程空间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程的三个基本状态"><span class="toc-number">3.4.</span> <span class="toc-text">进程的三个基本状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程控制块"><span class="toc-number">3.5.</span> <span class="toc-text">进程控制块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux进程切换"><span class="toc-number">3.6.</span> <span class="toc-text">Linux进程切换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程控制"><span class="toc-number">3.7.</span> <span class="toc-text">进程控制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程控制的基本步骤"><span class="toc-number">3.8.</span> <span class="toc-text">进程控制的基本步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程的同步"><span class="toc-number">3.9.</span> <span class="toc-text">进程的同步</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#两种形式的制约关系"><span class="toc-number">3.9.1.</span> <span class="toc-text">两种形式的制约关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#临界资源"><span class="toc-number">3.9.2.</span> <span class="toc-text">临界资源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#临界区"><span class="toc-number">3.9.3.</span> <span class="toc-text">临界区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#同步机制应该遵循的规则"><span class="toc-number">3.9.4.</span> <span class="toc-text">同步机制应该遵循的规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进程间的同步机制"><span class="toc-number">3.9.5.</span> <span class="toc-text">进程间的同步机制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程间通信"><span class="toc-number">3.10.</span> <span class="toc-text">进程间通信</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#进程间的通信方式（Inter-Process-Communication）"><span class="toc-number">3.10.1.</span> <span class="toc-text">进程间的通信方式（Inter-Process Communication）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unix相关系统调用介绍"><span class="toc-number">3.11.</span> <span class="toc-text">Unix相关系统调用介绍</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#线程"><span class="toc-number">4.</span> <span class="toc-text">线程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#线程的引入"><span class="toc-number">4.1.</span> <span class="toc-text">线程的引入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程和线程的比较"><span class="toc-number">4.2.</span> <span class="toc-text">进程和线程的比较</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程的属性"><span class="toc-number">4.3.</span> <span class="toc-text">线程的属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程的状态"><span class="toc-number">4.4.</span> <span class="toc-text">线程的状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多线程OS中的进程"><span class="toc-number">4.5.</span> <span class="toc-text">多线程OS中的进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程之间的同步"><span class="toc-number">4.6.</span> <span class="toc-text">线程之间的同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程的实现方式"><span class="toc-number">4.7.</span> <span class="toc-text">线程的实现方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程的实现"><span class="toc-number">4.8.</span> <span class="toc-text">线程的实现</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#课后习题"><span class="toc-number">5.</span> <span class="toc-text">课后习题</span></a></li></ol>
+		
+		</div>
+		
+		<h1 id="第一章-操作系统引论"><a href="#第一章-操作系统引论" class="headerlink" title="第一章 操作系统引论"></a>第一章 操作系统引论</h1><h1 id="操作系统的4大特征"><a href="#操作系统的4大特征" class="headerlink" title="操作系统的4大特征"></a>操作系统的4大特征</h1><ol>
+<li>并发性<br> 并行是指两个或多个时间在同一时刻发生，并发是两个或多个时间再同一间隔内发生。引入进程和线程可以提高系统的并发性</li>
+<li>共享性<br> 指系统中的资源可以供内存中的多个并发执行的进程（线程）共同使用。主要实现方式有互斥共享和同时访问</li>
+<li>虚拟技术<br> 通过某种技术吧一个屋里实体变成若干个逻辑上的对应物，分为时分复用和空分复用。</li>
+<li>异步性<br> 进程的执行不是一气呵成而是走走停停的。</li>
+</ol>
+<h2 id="线程和进程"><a href="#线程和进程" class="headerlink" title="线程和进程"></a>线程和进程</h2><ul>
+<li>进程（Process）是指系统中能够独立运行并作为资源分配的基本单位，它由一组机器指令、数据和堆栈等组成，是一个能够独立运行的活动实体。多个进程之间可以执行和交换信息。一个进程在运行的时候需要一定的资源，如CPU、存储空间以及I/O设备等。</li>
+<li>线程（Threads）是比进程更小的单位。通常在一个进程中包含若干个线程，它们可以利用进程所拥有的资源。在引入线程的OS中，通常都是把进程当做分配资源的基本单位，把线程当做独立运行和独立调度的基本单位。由于线程比进程小，基本上不拥有系统资源，故对它调度所付出的开销就会小得多，能更高效地提高多个程序之间并发执行的程度。</li>
+</ul>
+<h1 id="第二章-进程管理"><a href="#第二章-进程管理" class="headerlink" title="第二章 进程管理"></a>第二章 进程管理</h1><p>OS基本特性是并发与共享，即在系统中（内存）同时存在几个相互独立的程序，他们交叉地运行，并共享资源，这就会引起诸如:</p>
+<ul>
+<li>资源的竞争</li>
+<li>程序之间的合作与协同</li>
+<li>程序之间的通信等问题。<br>要解决这些问题，用程序的概念已经不能描述程序在内存中运行的状态，必须引入新的概念－－进程。</li>
+</ul>
+<h2 id="进程的定义"><a href="#进程的定义" class="headerlink" title="进程的定义"></a>进程的定义</h2><p>通常的程序是不能并发执行的。为了使程序（含数据）能够独立运行，应为之配备一进程控制块，即PCB（Process Control Blocck）；而由程序段、相关数据段和PCB三部分便构成了进程实体。<br>进程的特性有：结构特性、动态性、并发性、独立性和异步性。</p>
+<p>比较典型的进程的定义：</p>
+<ol>
+<li>进程是程序的一次执行</li>
+<li>进程是一个程序及其数据在处理机上顺序执行的时候所发生的活动</li>
+<li>进程是程序在一个数据集合上运行的而过程，他是系统进行资源分配和调度的一个独立单位。</li>
+</ol>
+<p>总的来说。<strong>进程是进程实体的运行过程，是系统进行资源分配调度的一个独立单位</strong>。</p>
+<h2 id="进程与程序"><a href="#进程与程序" class="headerlink" title="进程与程序"></a>进程与程序</h2><ul>
+<li>进程是动态的，程序是静态的：程序是有序代码的集合；进程是程序的执行。</li>
+<li>进程是暂时的，程序是永久的：进程是一个状态变化的过程，程序可长久保存。</li>
+<li>进程与程序的组成不同：进程的组成包括程序、数据和进程控制块（即进程状态信息）。</li>
+<li>进程与程序的对应关系：通过多次执行，一个程序可对应多个进程；通过调用关系，一个进程可对应多个程序。</li>
+</ul>
+<h2 id="进程空间"><a href="#进程空间" class="headerlink" title="进程空间"></a>进程空间</h2><p>任何一个进程，都有自己的地址空间，把该空间称为进程空间或虚空间。<br>进程空间的大小只与处理机的位数有关。<br>程序的执行都在进程空间内进行。</p>
+<h2 id="进程的三个基本状态"><a href="#进程的三个基本状态" class="headerlink" title="进程的三个基本状态"></a>进程的三个基本状态</h2><ol>
+<li>就绪状态</li>
+<li>执行状态</li>
+<li>阻塞状态（等待状态/封锁状态）<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS1.png" alt=""><br>不少系统只有上面三种状态，但另一些又增加了新状态，如挂起状态、创建状态和终止状态。挂起状态是终端用户在自己程序运行期间发现有可疑问题时，希望暂时使自己的程序静止下来，以便研究其执行情况或者对程序进行修改。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS2.png" alt=""><br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS3.png" alt=""></li>
+</ol>
+<h2 id="进程控制块"><a href="#进程控制块" class="headerlink" title="进程控制块"></a>进程控制块</h2><p>PCB（Process Control Block）中记录了操作系统所需的、用于描述当前状况以及控制进程运行的全部信息。进程控制块的作用是使在一个多道环境下不能独立运行的程序（含数据）称为一个能独立运行的基本单位，一个能与其他进程并发执行的进程。PCB是进程管理和控制的最重要的数据结构，在创建进程时，建立PCB，并伴随进程运行的全过程，直到进程撤消而撤消。PCB是系统感知进程存在的唯一标识，常驻内存。<br>PCB包含的信息有：进程状态、程序计数器、CPU寄存器、CPU调度此内存、内存管理信息、记账信息、IO状态信息等。</p>
+<h2 id="Linux进程切换"><a href="#Linux进程切换" class="headerlink" title="Linux进程切换"></a>Linux进程切换</h2><p>需要做三个层次的工作：</p>
+<ol>
+<li>用户数据的保存：包括正文段、数据段、栈段、共享内存段</li>
+<li>寄存器数据的保存：</li>
+<li>系统层次的保存：包括虚存空间管理表格和中断处理栈等</li>
+</ol>
+<h2 id="进程控制"><a href="#进程控制" class="headerlink" title="进程控制"></a>进程控制</h2><p>进程控制是进程管理中最基本的功能，用于创建一个新进程（创建原语），终止一个已完成的进程或者终止一个因出现某事而使其无法运行下去的进程（撤销原语），还可以负责进程运行中的状态转换。<br>进程控制一般是由OS内核中的原语（Primitive）实现的。</p>
+<p>原语是由若干条指令构成，用于完成一定功能的一个过程，与一般过程的区别是：<br>它们是原子操作，是一个不可分割的单位，执行过程中不可中断。</p>
+<h2 id="进程控制的基本步骤"><a href="#进程控制的基本步骤" class="headerlink" title="进程控制的基本步骤"></a>进程控制的基本步骤</h2><ul>
+<li>进程创建：<ol>
+<li>申请新的空白PCB</li>
+<li>为新进程分配资源</li>
+<li>初始化进程控制块:标识符信息、处理机状态信息、处理机控制信息</li>
+<li>将新进程插入就绪队列</li>
+</ol>
+</li>
+<li>进程的终止<ol>
+<li>进程完成，正常结束</li>
+<li>有错误，异常结束</li>
+<li>外界，祖先进程要求撤销</li>
+</ol>
+</li>
+<li>进程的阻塞与唤醒<ol>
+<li>请求系统服务、启动某种操作、新数据尚未到达、无新工作可做</li>
+<li>期待的时间出现、新数据已经到达（由系统进程唤醒，由时间发生唤醒）</li>
+</ol>
+</li>
+<li>进程的挂起与激活</li>
+</ul>
+<p>UNIX examples<br>在UNIX系统中用户键入一个命令（如date, ps, ls )，shell就创建一个进程。<br>用户程序可使用fork()系统调用创建多个进程，每个进程执行一个程序段。<br>在fork后 用execve系统调用用一个新程序替代进程的内存空间</p>
+<h2 id="进程的同步"><a href="#进程的同步" class="headerlink" title="进程的同步"></a>进程的同步</h2><p>进程的同步的主要任务是对多个相关进程在执行次序上进行协调，使得并发执行的各个程序之间能够有效地共享资源和互相合作，从而使得程序的执行具有可再现性。</p>
+<h3 id="两种形式的制约关系"><a href="#两种形式的制约关系" class="headerlink" title="两种形式的制约关系"></a>两种形式的制约关系</h3><ul>
+<li>间接相互制约： 资源共享的两个进程</li>
+<li>直接相互制约： 进程间的合作</li>
+</ul>
+<h3 id="临界资源"><a href="#临界资源" class="headerlink" title="临界资源"></a>临界资源</h3><p>很多硬件资源如打印机等属于Critical Resource，进程之间应该采取互斥方式</p>
+<h3 id="临界区"><a href="#临界区" class="headerlink" title="临界区"></a>临界区</h3><p>人们把每个进程中访问临界资源的那段代码称作临界区。临界区应该增加入区和退区的代码标志。<br>访问临界资源分为四步<br>         进入区，检查是否能够进入临界区，如果可以设定标志位<br>         临界区，访问临界资源的代码<br>         退出区，将标志位清除<br>         剩余区，代码中剩余部分</p>
+<h3 id="同步机制应该遵循的规则"><a href="#同步机制应该遵循的规则" class="headerlink" title="同步机制应该遵循的规则"></a>同步机制应该遵循的规则</h3><ol>
+<li>空闲让进<br> 当无进程处于临界区时，表明临界资源处于空闲状态，允许一个请求进入临界区的进程立即进入临界区，以有效利用临界资源 </li>
+<li>忙则等待<br> 当已有进程处于临界区时，表明临界资源正在被访问，因而其他试图进入临界区的进程必须等待，以保证对临界资源的互斥访问 ·</li>
+<li>有限等待<br> 对要求访问临界资源的进程，应保证在有限时间内能进入自己的临界区，以免陷入“死等”状态 ·</li>
+<li>让权等待<br> 当进程不能进入自己的临界区时，应立即释放处理机，以免进程陷入“忙等”状态</li>
+</ol>
+<h3 id="进程间的同步机制"><a href="#进程间的同步机制" class="headerlink" title="进程间的同步机制"></a>进程间的同步机制</h3><p>同步功能可以控制程序流并访问共享数据，从而并发执行多个线程。共有四种同步模型：<br>互斥锁、读写锁、条件变量和信号。</p>
+<h2 id="进程间通信"><a href="#进程间通信" class="headerlink" title="进程间通信"></a>进程间通信</h2><p>进程通信是指进程之间的信息交换。</p>
+<h3 id="进程间的通信方式（Inter-Process-Communication）"><a href="#进程间的通信方式（Inter-Process-Communication）" class="headerlink" title="进程间的通信方式（Inter-Process Communication）"></a>进程间的通信方式（Inter-Process Communication）</h3><p>进程间通信主要包括管道, 系统IPC(包括消息队列,信号量,共享存储), SOCKET.</p>
+<p>Linux下的进程间通信机制大致包括：管道、信号（在Windows上成为消息）、信号队列（实际是消息链表）、共享内存、信号量、套接字。</p>
+<p>Windows：WM_COPYDATA 、dll共享 、映象文件、CreatePipe 、createnamedpipe 、邮件通道、网络接口，socket，但要求有网卡。可以实现不同主机间的IPC </p>
+<ol>
+<li><p>管道（Pipe）<br> 无名管道( pipe )：管道是一种半双工的通信方式，数据只能单向流动，而且只能在具有亲缘关系的进程间使用。进程的亲缘关系通常是指父子进程关系。</p>
+<p> 有名管道 (named pipe)（FIFO）：有名管道也是半双工的通信方式，但是它允许无亲缘关系进程间的通信。</p>
+<p> 高级管道(popen)：将另一个程序当做一个新的进程在当前程序进程中启动，则它算是当前程序的子进程，这种方式我们成为高级管道方式。</p>
+</li>
+<li><p>消息队列（message queue）<br> 消息队列是由消息的链表，存放在内核中并由消息队列标识符标识。消息队列克服了信号传递信息少、管道只能承载无格式字节流以及缓冲区大小受限等缺点。</p>
+<p> 是用于两个进程之间的通讯，首先在一个进程中创建一个消息队列，然后再往消息队列中写数据，而另一个进程则从那个消息队列中取数据。需要注意的是，消息队列是用创建文件的方式建立的，如果一个进程向某个消息队列中写入了数据之后，另一个进程并没有取出数据，即使向消息队列中写数据的进程已经结束，保存在消息队列中的数据并没有消失，也就是说下次再从这个消息队列读数据的时候，就是上次的数据！！！</p>
+<p> 事实上，它是一种正逐渐被淘汰的通信方式，我们可以用流管道或者套接口的方式来取代它，所以，我们对此方式也不再解释，也建议读者忽略这种方式。</p>
+</li>
+<li><p>信号量（Semophore）<br> 控制多进程对共享数据、互斥资源的访问。不能用来传递复杂消息，只能用来同步。<br> 信号量是一个计数器，可以用来控制多个进程对共享资源的访问。它常作为一种锁机制，防止某进程正在访问共享资源时，其他进程也访问该资源。因此，主要作为进程间以及同一进程内不同线程之间的同步手段。</p>
+</li>
+<li><p>共享存储(shared memory)（IPC最快的方式）<br> 共享内存是运行在同一台机器上的进程间通信最快的方式，因为数据不需要在不同的进程间复制。</p>
+<p> 只要首先创建一个共享内存区，其它进程按照一定的步骤就能访问到这个共享内存区中的数据，当然可读可写；</p>
+</li>
+<li><p>UNIX套接字（Socket）<br> 套解口也是一种进程间通信机制，与其他通信机制不同的是，它可用于不同机器间的进程通信。（注意区别因特网域套接字？）</p>
+<p> 我们熟知的WWW服务、FTP服务、TELNET服务 等都是基于套接口编程来实现的。除了在异地的计算机进程间以外，套接口同样适用于本地同一台计算机内部的进程间通信。</p>
+</li>
+</ol>
+<p>几种方式的比较：</p>
+<ol>
+<li>管道：速度慢，容量有限</li>
+<li>消息队列：容量受到系统限制，且要注意第一次读的时候，要考虑上一次没读完数据的问题</li>
+<li>信号量：不能传递复杂消息，只能用来同步</li>
+<li>共享内存区：很容易控制容量，速度快，但是要保持同步。比如说一个进程在写的时候，另一个进程要注意读写的问题，相当于线程安全。当然，共享内存区同样可以用作线程间通讯，不过没必要，线程间本来就已经共享了一块内存。</li>
+</ol>
+<h2 id="Unix相关系统调用介绍"><a href="#Unix相关系统调用介绍" class="headerlink" title="Unix相关系统调用介绍"></a>Unix相关系统调用介绍</h2><ol>
+<li><p>fork(): 创建一个子进程.<br>创建的子进程是fork调用者进程(即父进程)的复制品,即进程映像.除了进程标识数以及与进程特性有关的一些参数外,其他都与父进程相同,与父进程共享文本段和打开的文件,并都受进程调度程序的调度.<br>如果创建进程失败,则fork()返回值为-1,若创建成功,则从父进程返回值是子进程号,从子进程返回的值是0</p>
+</li>
+<li><p>.exec(): 装入并执行相应文件.<br>因为FORK会将调用进程的所有内容原封不动地拷贝到新创建的子进程中去,而如果之后马上调用exec,这些拷贝的东西又会马上抹掉,非常不划算.于是设计了一种叫作”写时拷贝”的技术,使得fork结束后并不马上复制父进程的内容,而是到了真正要用的时候才复制.</p>
+</li>
+<li><p>wait():父进程处于阻塞状态,等待子进程终止,其返回值为所等待子进程的进程号.</p>
+</li>
+<li><p>exit():进程自我终止,释放所占资源,通知父进程可以删除自己,此时它的状态变为P_state= SZOMB,即僵死状态.如果调用进程在执行exit时其父进程正在等待它的中止，则父进程可立即得到该子进程的ID号。</p>
+</li>
+<li><p>getpid():获得进程号.</p>
+</li>
+<li><p>lockf(files,function,size):用于锁定文件的某些段或整个文件。本函数适用的头文件为：#include<unistd.h>,<br>参数定义：int lockf(files,function,size)</unistd.h></p>
+<pre><code>int files,founction;
+long size;
+</code></pre><p>files 是文件描述符，function表示锁状态，1表示锁定，0表示解锁；size是锁定或解锁的字节数，若为0则表示从文件的当前位置到文件尾。</p>
+</li>
+<li><p>kill(pid,sig)：一个进程向同一用户的其他进程pid发送一中断信号</p>
+</li>
+<li><p>signal(sig,function): 捕捉中断信号sig后执行function规定的操作。<br>头文件为：#include <signal.h><br>参数定义：signal(sig,function)</signal.h></p>
+<pre><code>int sig;
+void (*func) (); 
+</code></pre><p>其中sig共有19个值</p>
+</li>
+<li><p>pipe(fd);<br>int fd[2];<br>其中fd[1]是写端，向管道中写入，fd[0]是读端，从管道中读出。</p>
+</li>
+<li><p>暂停一段时间sleep；<br>调用sleep将在指定的时间seconds内挂起本进程。<br>其调用格式为：“unsigned sleep(unsigned seconds);”；返回值为实际的挂起时间。 </p>
+</li>
+<li><p>暂停并等待信号pause；<br>调用pause挂起本进程以等待信号，接收到信号后恢复执行。当接收到中止进程信号时，该调用不再返回。<br>其调用格式为“int pause(void);”</p>
+</li>
+</ol>
+<h1 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h1><h2 id="线程的引入"><a href="#线程的引入" class="headerlink" title="线程的引入"></a>线程的引入</h2><p>先复习一下进程：①进程是一个可拥有资源的独立单位；②进程同时又是一个可以独立调度和分派基本单位；<br>进程的操作：①创建进程：分配资源，创建PCB；② 撤销进程：资源回收，撤销PCB；③进程切换：保留当前进程的CPU环境和设置新选中进程的CPU环境<br>思想来源： 作为调度和分派的基本单位，不同时拥有资源；对于拥有资源的基本单位，不进行频繁切换</p>
+<h2 id="进程和线程的比较"><a href="#进程和线程的比较" class="headerlink" title="进程和线程的比较"></a>进程和线程的比较</h2><ol>
+<li>调度<br> 进程作为资源拥有的基本单位，线程作为调度和分派的基本单位</li>
+<li>并发性<br> 不仅进程之间可以并发执行，而且在一个进程中的多个线程之间亦可以并发执行</li>
+<li>拥有资源<br> 进程都可以拥有资源，但是线程自己不拥有资源（也有一点必不可少的资源），但它可以访问其隶属的进程资源，即一个进程的代码段、数据段以及所拥有的系统资源。</li>
+<li>系统开销<br> 创建和撤销进程的系统开销明显大于线程。<br> 进程切换时候涉及到当前进程的CPU环境的保存以及新被调度运行进程的CPU环境的设置，而线程的切换仅需保存少量的寄存器内容不涉及存储器管理方面的操作，所以进程的切换代价也远高于线程。</li>
+<li>地址空间和其他资源<br> 进程之间互相独立，同一进程的各线程间共享。<br> 此外，在同步和通信的实现方面线程也比较容易，无需操作系统内核的干预。</li>
+</ol>
+<p>1.1 概述:<br>进程是具有一定独立功能的程序关于某个数据集合上的一次运行活动,进程是系统进行资源分配和调度的一个独立单位.<br>线程是进程的一个实体,是CPU调度和分派的基本单位,它是比进程更小的能独立运行的基本单位.线程自己基本上不拥有系统资源,只拥有一点在运行中必不可少的资源(如程序计数器,一组寄存器和栈),但是它可与同属一个进程的其他的线程共享进程所拥有的全部资源.<br>一个线程可以创建和撤销另一个线程;同一个进程中的多个线程之间可以并发执行.<br>相对进程而言，线程是一个更加接近于执行体的概念，它可以与同进程中的其他线程共享数据，但拥有自己的栈空间，拥有独立的执行序列。<br>在串行程序基础上引入线程和进程是为了提高程序的并发度，从而提高程序运行效率和响应时间。</p>
+<p>1.2 区别:<br>进程和线程的主要差别在于它们是不同的操作系统资源管理方式。进程有独立的地址空间，一个进程崩溃后，在保护模式下不会对其它进程产生影响，而线程只是一个进程中的不同执行路径。线程有自己的堆栈和局部变量，但线程之间没有单独的地址空间，一个线程死掉就等于整个进程死掉，所以多进程的程序要比多线程的程序健壮，但在进程切换时，耗费资源较大，效率要差一些。但对于一些要求同时进行并且又要共享某些变量的并发操作，只能用线程，不能用进程。<br>1) 简而言之,一个程序至少有一个进程,一个进程至少有一个线程.<br>2) 线程的划分尺度小于进程，使得多线程程序的并发性高。<br>3) 另外，进程在执行过程中拥有独立的内存单元，而多个线程共享内存，从而极大地提高了程序的运行效率。<br>4) 线程在执行过程中与进程还是有区别的。每个独立的线程有一个程序运行的入口、顺序执行序列和程序的出口。但是线程不能够独立执行，必须依存在应用程序中，由应用程序提供多个线程执行控制。<br>5) 从逻辑角度来看，多线程的意义在于一个应用程序中，有多个执行部分可以同时执行。但操作系统并没有将多个线程看做多个独立的应用，来实现进程的调度和管理以及资源分配。这就是进程和线程的重要区别。</p>
+<p>1.3 优缺点:<br>线程和进程在使用上各有优缺点：线程执行开销小，但不利于资源的管理和保护；而进程正相反。同时，线程适合于在SMP机器上运行，而进程则可以跨机器迁移。</p>
+<h2 id="线程的属性"><a href="#线程的属性" class="headerlink" title="线程的属性"></a>线程的属性</h2><p>轻型实体、独立调度和分派的基本单位、可并发执行、共享进程资源。</p>
+<h2 id="线程的状态"><a href="#线程的状态" class="headerlink" title="线程的状态"></a>线程的状态</h2><p>1.状态参数： ①寄存器状态；②堆栈；③线程运行状态；④优先级；⑤线程专有存储器；⑥信号屏蔽</p>
+<ol>
+<li>线程运行状态：<br>执行、就绪、阻塞</li>
+</ol>
+<h2 id="多线程OS中的进程"><a href="#多线程OS中的进程" class="headerlink" title="多线程OS中的进程"></a>多线程OS中的进程</h2><p>作为系统资源分配的单位；可包括多个线程；进程不是一个可执行的实体，实际上处理执行状态的是进程里的线程。</p>
+<h2 id="线程之间的同步"><a href="#线程之间的同步" class="headerlink" title="线程之间的同步"></a>线程之间的同步</h2><p>线程同步指多个线程同时访问某资源时，采用一系列的机制以保证同时最多只能一个线程访问该资源。线程同步是多线程中必须考虑和解决的问题，因为很可能发生多个线程同时访问（主要是写操作）同一资源，如果不进行线程同步，很可能会引起数据混乱，造成线程死锁等问题；在多线程OS中通常提供多种同步机制，如互斥量、条件变量、技术信号量以及多读、单写锁等。</p>
+<ol>
+<li><p>临界区：<br> 通过对多线程的串行化来访问公共资源或者一段代码，速度快，适合控制数据访问</p>
+</li>
+<li><p>互斥锁（mutex）<br> 是一种比较简单的实现线程间对资源互斥访问的机制。由于操作互斥锁的时间和空间开销都很低，因而较适合于高频度使用关键共享数据和程序段。因为互斥对象只有一个，所以可以保证公共资源不会被多个线程同时访问。</p>
+</li>
+<li><p>条件变量（condition variable）<br> 很多情况下只用mutex来实现互斥访问可能引起死锁。为了解决这个问题引入了条件变量。每个变量通常都和一个互斥锁一起使用。单纯的互斥锁用于短期锁定，主要是用来保证对临界区的互斥进入。而条件变量则用于线程的长期等待，直至所有等待的资源成为可用资源。</p>
+<p> 原来占有资源的线程在使用完资源后遍释放资源，然后去唤醒指定条件变量上等待的一个或者多个线程。</p>
+</li>
+<li><p>信号量机制(Semaphore)<br> 是实现进程同步的最常用工具，也可以用于多线程OS中，实现线程或进程之间的同步。为了提高效率，可以为线程和进程分别设置相应的信号量。<br> 它允许多个线程同一时刻访问同一资源，但是需要限制同一时刻访问此资源的最大线程数目。信号量对象对线程的同步方式与前面几种方法不同，信号允许多个线程同时使用共享资源，这与操作系统中PV操作相似。</p>
+<p> 分私用信号量（特定进程私有），公用信号量（不同线程或进程）</p>
+</li>
+<li><p>事件（信号）(Event)<br> 通过通知操作的方式来保持多线程的同步，还可以方便的实现多线程的优先级比较的操作</p>
+</li>
+</ol>
+<p>总结比较：　<br>•   互斥量与临界区的作用非常相似，但互斥量是可以命名的，也就是说它可以跨越进程使用。所以创建互斥量需要的资源更多，所以如果只为了在进程内部是用的话使用临界区会带来速度上的优势并能够减少资源占用量。因为互斥量是跨进程的互斥量一旦被创建，就可以通过名字打开它。<br>•   互斥量（Mutex），信号灯（Semaphore），事件（Event）都可以被跨越进程使用来进行同步数据操作，而其他的对象与数据同步操作无关，但对于进程和线程来讲，如果进程和线程在运行状态则为无信号状态，在退出后为有信号状态。所以可以使用WaitForSingleObject来等待进程和线程退出。<br>•   通过互斥量可以指定资源被独占的方式使用，但如果有下面一种情况通过互斥量就无法处理，比如现在一位用户购买了一份三个并发访问许可的数据库系统，可以根据用户购买的访问许可数量来决定有多少个线程/进程能同时进行数据库操作，这时候如果利用互斥量就没有办法完成这个要求，信号灯对象可以说是一种资源计数器。</p>
+<h2 id="线程的实现方式"><a href="#线程的实现方式" class="headerlink" title="线程的实现方式"></a>线程的实现方式</h2><ol>
+<li><p>内核支持线程（Kernal Support Threads，KST）<br> 无论用户进程中的线程，还是系统进程中的线程，它们的创建、撤销和切换等也是依靠内核，在内核空间实现的。此外，在内核空间还为每一个内核支持线程设置了一个线程控制块，内核是根据该控制块而感知某线程的存在并加以控制。</p>
+<p> 这种线程实现方式的好处：</p>
+<ol>
+<li>在多处理器系统中，内核能够同时调度同一进程中多个线程并执行</li>
+<li>如果进程中的一个线程被阻塞了，内核可以调度其他线程</li>
+<li>内核支持线程具有很小的数据结构和堆栈，切换快且开销小</li>
+<li>内核本身也可以采用多线程技术，提高系统的执行速度和效率</li>
+<li><p>时间片分配给线程，所以多线程的进程获得更多CPU时间</p>
+<p>缺点：<br>对于用户态的线程切换而言，模式切换的开销较大，在同一个进程中，从一个线程切换到另一个线程时，需要从用户态转到内核态进行。这是因为用户进程的线程在用户态运行而线程调度和管理在内核实现。</p>
+</li>
+</ol>
+</li>
+<li><p>用户级线程（User Level Thread）<br> 仅存在用户空间中。对于这种线程的创建撤销同步和通信都无需系统调用来实现。对于一个用户级线程的切换，通常发生在一个应用进程的诸多线程中，这时同样无需内核支持。</p>
+<p> 值的说明的而是设置了用户级线程的系统，其调度仍是以进程为单位进行的。假如系统设置的是内核支持线程，则调度是以线程为单位的。</p>
+<p> 用户级线程的好处：</p>
+<ol>
+<li>OS不知道用户线程的存在</li>
+<li>用户线程的维护由应用进程完成</li>
+<li>用户线程的切换不需要内核特权</li>
+<li><p>用户线程调度算法可针对应用优化</p>
+<p>缺点：</p>
+</li>
+<li>系统调用的阻塞问题。在基于进程机制的操作系统中，大多数系统调用将阻塞进程。因此，当线程执行一个系统调用时候，不仅该线程被阻塞，而且进程内所有线程都会被阻塞。在内核支持的线程方式中，则进程中的其他线程仍然可以运行。</li>
+<li>在单纯的用户级线程实现方式中，多线程不能利用多处理机进行多重处理的优点。因为内核每次分给一个进程的仅有一个cpu，因此进程中只有一个线程能执行。</li>
+<li>如果内核是单线程的,那么一个用户线程发起系统调用而阻塞，则整个进程阻塞。时间片分配给进程，多线程则每个线程就慢。</li>
+</ol>
+</li>
+</ol>
+<ol>
+<li>组合方式<br> 内核支持KST线程的建立，也允许用户引用程序建立调度和管理用户级线程。</li>
+</ol>
+<p>用户线程和内核线程总的区别：<br>调度方式：内核线程的调度和切换与进程的调度和切换十分相似，用户线程的调度不需OS的支持。<br>调度单位：用户线程不是调度单位：在采用时间片轮转调度算法时，每个进程分配相同的时间片。内核级线程则是调度单位。</p>
+<h2 id="线程的实现"><a href="#线程的实现" class="headerlink" title="线程的实现"></a>线程的实现</h2><p>1、 内核支持线程<br>创建一个新进程时候就分配PTDA，包括若干个线程控制块TCB，这些信息都保存子啊内核空间。内核线程的调度和切换与进程的调度和切换十分相似，也分抢占式和非抢占式。在线程调度算法上同样分时间片轮转法、优先权算法。<br>2、 用户级线程实现<br>3、 用户级线程与内核控制线程的连接</p>
+<pre><code>1. 一对一：一个用户线程设置一个内核控制线程
+2. 多对一：多个用户线程映射到一个内核控制线程
+3. 多对多：多个用户线程映射到多个内核线程
+</code></pre><h1 id="课后习题"><a href="#课后习题" class="headerlink" title="课后习题"></a>课后习题</h1><ol>
+<li><p>试说明进程在三个基本状态之间转换的典型原因。<br>答： （1）就绪状态→执行状态：进程分配到CPU资源<br>（2）执行状态→就绪状态：时间片用完<br>（3）执行状态→阻塞状态：I/O请求<br>（4）阻塞状态→就绪状态：I/O完成</p>
+</li>
+<li><p>试从物理概念上说明记录型信号量wait 和signal。<br>答：wait(S)：当S.value&gt;0 时，表示目前系统中这类资源还有可用的。执行一次wait 操<br>作，意味着进程请求一个单位的该类资源，使系统中可供分配的该类资源减少一个，因此描<br>述为S.value:=S.value-1；当S.value&lt;0时，表示该类资源已分配完毕，进程应调用block<br>原语自我阻塞，放弃处理机，并插入到信号量链表S.L中。<br>signal(S)：执行一次signal操作，意味着释放一个单位的可用资源，使系统中可供分配<br>的该类资源数增加一个，故执行S.value:=S.value+1 操作。若加1 后S.value≤0，则表<br>示在该信号量链表中，仍有等待该资源的进程被阻塞，因此应调用wakeup 原语，将S.L<br>链表中的第一个等待进程唤醒。</p>
+</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/OS/">OS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Interview/">Interview</a><a href="/tags/OS/">OS</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/12/计算机操作系统_汤小丹_笔记1/" data-title="计算机操作系统（汤小丹）--进程线程--笔记 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/13/计算机操作系统_汤小丹_笔记2/" title="计算机操作系统（汤小丹）--处理机调度-笔记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  计算机操作系统（汤小丹）--处理机调度-笔记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/11/深入理解java虚拟机3/"  title="深入理解Java虚拟机--第3章垃圾收集器与内存分配策略">
+ <strong>下一篇：</strong><br/> 
+ <span>深入理解Java虚拟机--第3章垃圾收集器与内存分配策略
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/12/计算机操作系统_汤小丹_笔记1/" data-title="计算机操作系统（汤小丹）--进程线程--笔记" data-url="http://yoursite.com/2016/08/12/计算机操作系统_汤小丹_笔记1/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#第一章-操作系统引论"><span class="toc-number">1.</span> <span class="toc-text">第一章 操作系统引论</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#操作系统的4大特征"><span class="toc-number">2.</span> <span class="toc-text">操作系统的4大特征</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#线程和进程"><span class="toc-number">2.1.</span> <span class="toc-text">线程和进程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#第二章-进程管理"><span class="toc-number">3.</span> <span class="toc-text">第二章 进程管理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#进程的定义"><span class="toc-number">3.1.</span> <span class="toc-text">进程的定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程与程序"><span class="toc-number">3.2.</span> <span class="toc-text">进程与程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程空间"><span class="toc-number">3.3.</span> <span class="toc-text">进程空间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程的三个基本状态"><span class="toc-number">3.4.</span> <span class="toc-text">进程的三个基本状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程控制块"><span class="toc-number">3.5.</span> <span class="toc-text">进程控制块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux进程切换"><span class="toc-number">3.6.</span> <span class="toc-text">Linux进程切换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程控制"><span class="toc-number">3.7.</span> <span class="toc-text">进程控制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程控制的基本步骤"><span class="toc-number">3.8.</span> <span class="toc-text">进程控制的基本步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程的同步"><span class="toc-number">3.9.</span> <span class="toc-text">进程的同步</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#两种形式的制约关系"><span class="toc-number">3.9.1.</span> <span class="toc-text">两种形式的制约关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#临界资源"><span class="toc-number">3.9.2.</span> <span class="toc-text">临界资源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#临界区"><span class="toc-number">3.9.3.</span> <span class="toc-text">临界区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#同步机制应该遵循的规则"><span class="toc-number">3.9.4.</span> <span class="toc-text">同步机制应该遵循的规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进程间的同步机制"><span class="toc-number">3.9.5.</span> <span class="toc-text">进程间的同步机制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程间通信"><span class="toc-number">3.10.</span> <span class="toc-text">进程间通信</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#进程间的通信方式（Inter-Process-Communication）"><span class="toc-number">3.10.1.</span> <span class="toc-text">进程间的通信方式（Inter-Process Communication）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unix相关系统调用介绍"><span class="toc-number">3.11.</span> <span class="toc-text">Unix相关系统调用介绍</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#线程"><span class="toc-number">4.</span> <span class="toc-text">线程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#线程的引入"><span class="toc-number">4.1.</span> <span class="toc-text">线程的引入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#进程和线程的比较"><span class="toc-number">4.2.</span> <span class="toc-text">进程和线程的比较</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程的属性"><span class="toc-number">4.3.</span> <span class="toc-text">线程的属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程的状态"><span class="toc-number">4.4.</span> <span class="toc-text">线程的状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多线程OS中的进程"><span class="toc-number">4.5.</span> <span class="toc-text">多线程OS中的进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程之间的同步"><span class="toc-number">4.6.</span> <span class="toc-text">线程之间的同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程的实现方式"><span class="toc-number">4.7.</span> <span class="toc-text">线程的实现方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程的实现"><span class="toc-number">4.8.</span> <span class="toc-text">线程的实现</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#课后习题"><span class="toc-number">5.</span> <span class="toc-text">课后习题</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

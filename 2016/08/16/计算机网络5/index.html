@@ -1,0 +1,708 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>计算机网络-网络安全-笔记 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="国际标准化组织ISO对计算机网络安全（Network Security）的定义为数据处理系统建立和采用的安全防范技术，以保护计算机硬件、软件和数据不因偶然和恶意的原因遭到破坏、更改和泄露。 
+网络安全威胁主要表现在：
+
+非授权访问 
+信息泄漏或丢失 
+破坏数据完整性 
+拒绝服务攻击DoS
+利用网络传播病毒等
+
+网络安全的分类：
+
+根据安全需求将其分为数据保密、数据完整性、身份验证、授权、不可抵赖和">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络-网络安全-笔记">
+<meta property="og:url" content="http://yoursite.com/2016/08/16/计算机网络5/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="国际标准化组织ISO对计算机网络安全（Network Security）的定义为数据处理系统建立和采用的安全防范技术，以保护计算机硬件、软件和数据不因偶然和恶意的原因遭到破坏、更改和泄露。 
+网络安全威胁主要表现在：
+
+非授权访问 
+信息泄漏或丢失 
+破坏数据完整性 
+拒绝服务攻击DoS
+利用网络传播病毒等
+
+网络安全的分类：
+
+根据安全需求将其分为数据保密、数据完整性、身份验证、授权、不可抵赖和">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network41.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network42.png">
+<meta property="og:updated_time" content="2016-08-16T07:13:34.714Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计算机网络-网络安全-笔记">
+<meta name="twitter:description" content="国际标准化组织ISO对计算机网络安全（Network Security）的定义为数据处理系统建立和采用的安全防范技术，以保护计算机硬件、软件和数据不因偶然和恶意的原因遭到破坏、更改和泄露。 
+网络安全威胁主要表现在：
+
+非授权访问 
+信息泄漏或丢失 
+破坏数据完整性 
+拒绝服务攻击DoS
+利用网络传播病毒等
+
+网络安全的分类：
+
+根据安全需求将其分为数据保密、数据完整性、身份验证、授权、不可抵赖和">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network41.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/16/计算机网络5/" title="计算机网络-网络安全-笔记" itemprop="url">计算机网络-网络安全-笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-16T04:53:09.443Z" itemprop="datePublished"> Published 2016-08-16</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#密码学"><span class="toc-number">1.</span> <span class="toc-text">密码学</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#对称密钥密码体制"><span class="toc-number">1.1.</span> <span class="toc-text">对称密钥密码体制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#公钥密码体制"><span class="toc-number">1.2.</span> <span class="toc-text">公钥密码体制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数字签名和消息认证"><span class="toc-number">1.3.</span> <span class="toc-text">数字签名和消息认证</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#消息认证"><span class="toc-number">1.3.1.</span> <span class="toc-text">消息认证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数字签名"><span class="toc-number">1.3.2.</span> <span class="toc-text">数字签名</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#密钥的分发和管理"><span class="toc-number">2.</span> <span class="toc-text">密钥的分发和管理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#网络安全技术"><span class="toc-number">3.</span> <span class="toc-text">网络安全技术</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#防火墙"><span class="toc-number">3.1.</span> <span class="toc-text">防火墙</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#网络入侵与安全检测"><span class="toc-number">3.2.</span> <span class="toc-text">网络入侵与安全检测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#虚拟专用网VPN"><span class="toc-number">3.3.</span> <span class="toc-text">虚拟专用网VPN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#病毒防范"><span class="toc-number">3.4.</span> <span class="toc-text">病毒防范</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>国际标准化组织ISO对计算机网络安全（Network Security）的定义<br>为数据处理系统建立和采用的安全防范技术，以保护计算机硬件、软件和数据不因偶然和恶意的原因遭到破坏、更改和泄露。 </p>
+<p>网络安全威胁主要表现在：</p>
+<ul>
+<li>非授权访问 </li>
+<li>信息泄漏或丢失 </li>
+<li>破坏数据完整性 </li>
+<li>拒绝服务攻击DoS</li>
+<li>利用网络传播病毒等</li>
+</ul>
+<p>网络安全的分类：</p>
+<ul>
+<li>根据安全需求将其分为数据保密、数据完整性、身份验证、授权、不可抵赖和不可否认等几个部分；</li>
+<li>根据解决手段可以分为病毒防范、防火墙、存取控制、身份鉴别、安全综合解决方案；</li>
+<li>根据威胁来源将其划分为网络攻击行为、安全漏洞及恶意代码等类别。 </li>
+</ul>
+<h1 id="密码学"><a href="#密码学" class="headerlink" title="密码学"></a>密码学</h1><p>一般的数据加密模型<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network41.png" alt=""></p>
+<p>密码编码学(cryptography)是密码体制的设计学，而密码分析学(cryptanalysis)则是在未知密钥的情况下从密文推演出明文或密钥的技术。密码编码学与密码分析学合起来即为密码学(cryptology)。</p>
+<p>如果不论截取者获得了多少密文，但在密文中都没有足够的信息来唯一地确定出对应的明文，则这一密码体制称为无条件安全的，或称为理论上是不可破的。<br>如果密码体制中的密码不能被可使用的计算资源破译，则这一密码体制称为在计算上是安全的。   </p>
+<p>根据密钥的特点，密码体制分为非对称密钥体制和对称密钥体制两种</p>
+<h2 id="对称密钥密码体制"><a href="#对称密钥密码体制" class="headerlink" title="对称密钥密码体制"></a>对称密钥密码体制</h2><p>所谓常规密钥密码体制，即加密密钥与解密密钥是相同的密码体制。<br>这种加密系统又称为对称密钥系统。</p>
+<p>数据加密标准 DES 属于常规密钥密码体制，是一种分组密码。<br>加密前，先对整个的明文进行分组，每一个组长64位；<br>使用密钥64位，对每一个64位分组进行加密处理。<br>最后将各组密文串接，得出整个的密文。<br>DES 的保密性仅取决于对密钥的保密，而算法是公开的。尽管人们在破译 DES 方面取得了许多进展，但至今仍未能找到比穷举搜索密钥更有效的方法。</p>
+<p>AES是一个迭代的、对称密钥分组的密码<br>算法可以使用128、192 和 256 位密钥，并且用 128 位分组加密和解密数据，算法迭代次数由分组长度和密钥长度共同决定。<br>AES算法在每一轮都采用置换和代替并行地处理整个数据分组，这个分组被编排为一个称做状态阵列(state array)的4×4字节矩阵。<br>AES算法的加密实际上就是对输入状态阵列进行一系列运算，产生输出的过程。</p>
+<h2 id="公钥密码体制"><a href="#公钥密码体制" class="headerlink" title="公钥密码体制"></a>公钥密码体制</h2><p>公钥密码体制使用不同的加密密钥与解密密钥，是一种“由已知加密密钥推导出解密密钥在计算上是不可行的”密码体制。</p>
+<p>在公钥密码体制中，加密密钥(即公钥) PK 是公开信息，而解密密钥(即私钥或秘钥) SK 是需要保密的。<br>加密算法 E 和解密算法 D 也都是公开的。<br>虽然秘钥 SK 是由公钥 PK 决定的，但却不能根据 PK 计算出 SK。 </p>
+<p>公钥密码体制的产生主要是因为两个方面的原因，一是由于常规密钥密码体制的密钥分配问题，另一是由于对数字签名的需求。</p>
+<p>公开密钥体制中最著名的是RSA算法<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/Network/network42.png" alt=""></p>
+<h2 id="数字签名和消息认证"><a href="#数字签名和消息认证" class="headerlink" title="数字签名和消息认证"></a>数字签名和消息认证</h2><p>除了信息的保密之外，如何保证信息的来源方是真实的，保证收到的信息的可靠的而没有被非法篡改，也是非常重要的。<br>认证包括对用户身份的认证和对消息正确性的认证两种方式。</p>
+<p>用户认证用于鉴别用户的身份是否是合法用户，可以利用数字签名技术来实现的。</p>
+<p>消息认证（又称报文鉴别）主要用于验证所收到的消息确实是来自真正的发送方且未被修改的消息，也可以验证消息的顺序和及时性。 </p>
+<h3 id="消息认证"><a href="#消息认证" class="headerlink" title="消息认证"></a>消息认证</h3><p>用于消息认证最常用的是消息认证码（MAC）和散列函数。<br>消息认证码是在一个密钥的控制下将任意长的消息映射到一个简短的定长数据分组，将它附加在消息后。接收者通过重新计算MAC来对消息进行认证。</p>
+<h3 id="数字签名"><a href="#数字签名" class="headerlink" title="数字签名"></a>数字签名</h3><ul>
+<li>当通信双方发生了下列情况时，数字签名技术能够解决引发的争端：</li>
+<li>否认：发送方不承认自己发送过某一报文。</li>
+<li>伪造：接收方自己伪造一份报文，并声称它来自发送方。</li>
+<li>冒充：网络上的某个用户冒充另一个用户接收或发送报文。</li>
+<li>篡改：接收方对收到的信息进行篡改。</li>
+</ul>
+<p>目前应用最为广泛的数字签名包括：</p>
+<ul>
+<li>Hash签名</li>
+<li>DSS签名</li>
+<li>RSA签名</li>
+<li>ElGamal数字签名体制等。 </li>
+</ul>
+<h1 id="密钥的分发和管理"><a href="#密钥的分发和管理" class="headerlink" title="密钥的分发和管理"></a>密钥的分发和管理</h1><p>1）如何解决两个实体通过网络实现对称密钥的共享?<br>2）当Alice获取Bob的公钥时 (可以从网站、 e-mail, 甚至软盘), 如何能够使她相信这就是 Bob的公钥, 而不是 Trudy的?</p>
+<p>解决办法:<br>1）具有公信力的密钥分发中心（key distribution center (KDC) ）来作为诸多实体间的中介<br>2）具有公信力的认证机构（certificationauthority ，CA）</p>
+<h1 id="网络安全技术"><a href="#网络安全技术" class="headerlink" title="网络安全技术"></a>网络安全技术</h1><h2 id="防火墙"><a href="#防火墙" class="headerlink" title="防火墙"></a>防火墙</h2><p>防火墙是位于两个(或多个)网络间，实施网络之间访问控制的一组组件集合。它具有以下三个方面的基本特性：</p>
+<ul>
+<li>内、外网间的所有数据流都须经过防火墙;</li>
+<li>只有符合安全策略的数据流才能通过防火墙；</li>
+<li>防火墙自身应具有强的抗攻击免疫力。</li>
+</ul>
+<p>具体来说，防火墙主要有以下功能：</p>
+<ul>
+<li>创建一个阻塞点 </li>
+<li>隔离不同网络，防止内部信息的外泄</li>
+<li>强化安全策略 </li>
+<li>有效地审计和记录内、外部网络上的活动 </li>
+</ul>
+<p>防火墙的基本类型：</p>
+<ul>
+<li>包过滤型</li>
+<li>网络地址转换（NAT）</li>
+<li>代理型</li>
+<li>监测型</li>
+</ul>
+<p>防火墙技术一般分为两类<br>(1) 网络级防火墙——用来防止整个网络出现外来非法的入侵。属于这类的有分组过滤和授权服务器。前者检查所有流入本网络的信息，然后拒绝不符合事先制订好的一套准则的数据，而后者则是检查用户的登录是否合法。<br>(2) 应用级防火墙——从应用程序来进行接入控制。通常使用应用网关或代理服务器来区分各种应用。例如，可以只允许通过访问万维网的应用，而阻止 FTP 应用的通过。</p>
+<h2 id="网络入侵与安全检测"><a href="#网络入侵与安全检测" class="headerlink" title="网络入侵与安全检测"></a>网络入侵与安全检测</h2><h2 id="虚拟专用网VPN"><a href="#虚拟专用网VPN" class="headerlink" title="虚拟专用网VPN"></a>虚拟专用网VPN</h2><p>VPN网络的任意两个结点之间的连接并没有传统专网所需的端到端的物理链路。</p>
+<p>VPN是架构在公用网络服务商所提供的网络平台，如Internet、ATM或帧中继之上的逻辑网络。</p>
+<h2 id="病毒防范"><a href="#病毒防范" class="headerlink" title="病毒防范"></a>病毒防范</h2><p>计算机病毒是指编制或者在计算机程序中插入的破坏计算机功能或者毁坏数据，影响计算机使用，并能自我复制的一组计算机指令或者程序代码。</p>
+<p>计算机病毒一般包括以下几个部分：</p>
+<ul>
+<li>引导部分</li>
+<li>传染部分</li>
+<li>表现部分 </li>
+</ul>
+<p>计算机病毒分类<br>根据病毒存在的媒体，病毒可以划分为网络病毒，文件病毒，引导型病毒；<br>按照计算机病毒激活时间可分为定时的和随机病毒；<br>根据病毒特有的算法，分为伴随型病毒、“蠕虫”型病毒和寄生型病毒等。 </p>
+<p>蠕虫病毒（Worm）和特洛伊木马（Trojan）  </p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Network/">Network</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Interview/">Interview</a><a href="/tags/Network/">Network</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/16/计算机网络5/" data-title="计算机网络-网络安全-笔记 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/16/Cookies和Session/" title="计算机网络--Cookies和Session">
+  <strong>上一篇：</strong><br/>
+  <span>
+  计算机网络--Cookies和Session</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/15/计算机网络4/"  title="计算机网络-应用层-笔记">
+ <strong>下一篇：</strong><br/> 
+ <span>计算机网络-应用层-笔记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/16/计算机网络5/" data-title="计算机网络-网络安全-笔记" data-url="http://yoursite.com/2016/08/16/计算机网络5/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#密码学"><span class="toc-number">1.</span> <span class="toc-text">密码学</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#对称密钥密码体制"><span class="toc-number">1.1.</span> <span class="toc-text">对称密钥密码体制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#公钥密码体制"><span class="toc-number">1.2.</span> <span class="toc-text">公钥密码体制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数字签名和消息认证"><span class="toc-number">1.3.</span> <span class="toc-text">数字签名和消息认证</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#消息认证"><span class="toc-number">1.3.1.</span> <span class="toc-text">消息认证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数字签名"><span class="toc-number">1.3.2.</span> <span class="toc-text">数字签名</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#密钥的分发和管理"><span class="toc-number">2.</span> <span class="toc-text">密钥的分发和管理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#网络安全技术"><span class="toc-number">3.</span> <span class="toc-text">网络安全技术</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#防火墙"><span class="toc-number">3.1.</span> <span class="toc-text">防火墙</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#网络入侵与安全检测"><span class="toc-number">3.2.</span> <span class="toc-text">网络入侵与安全检测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#虚拟专用网VPN"><span class="toc-number">3.3.</span> <span class="toc-text">虚拟专用网VPN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#病毒防范"><span class="toc-number">3.4.</span> <span class="toc-text">病毒防范</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

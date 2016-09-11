@@ -1,0 +1,692 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>机器学习（周志华）- 第6章支持向量机(2)笔记 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="软间隔与正则化在前面袈裟中我们一直假设训练样本在样本空间或者特征空间中是线性可分的，即存在一个超平面能将不同类的样本完全划分开。
+
+然而现实任务中往往很难确定合适的核函数使得训练样本在特征空间中线性可分；
+即时找到了某个核函数使得训练集在特征空间中线性可分，也很难断定这个貌似线性可分的结果是不是过拟合所造成的。例如可能并不是因为数据本身是非线性结构的，而只是因为数据有噪音。对于这种偏离正常位置很远">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习（周志华）- 第6章支持向量机(2)笔记">
+<meta property="og:url" content="http://yoursite.com/2016/08/05/机器学习_周志华_笔记6_2/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="软间隔与正则化在前面袈裟中我们一直假设训练样本在样本空间或者特征空间中是线性可分的，即存在一个超平面能将不同类的样本完全划分开。
+
+然而现实任务中往往很难确定合适的核函数使得训练样本在特征空间中线性可分；
+即时找到了某个核函数使得训练集在特征空间中线性可分，也很难断定这个貌似线性可分的结果是不是过拟合所造成的。例如可能并不是因为数据本身是非线性结构的，而只是因为数据有噪音。对于这种偏离正常位置很远">
+<meta property="og:image" content="http://blog.pluskid.org/wp-content/uploads/2010/09/Optimal-Hyper-Plane-2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/svm.jpg">
+<meta property="og:image" content="http://7xjbdi.com1.z0.glb.clouddn.com/2016-03-25_092026.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/SVM_LR.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/SVM_LR2.png">
+<meta property="og:image" content="http://7xjbdi.com1.z0.glb.clouddn.com/2016-03-22_195233.png?imageView2/2/w/400">
+<meta property="og:updated_time" content="2016-09-09T07:25:57.645Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习（周志华）- 第6章支持向量机(2)笔记">
+<meta name="twitter:description" content="软间隔与正则化在前面袈裟中我们一直假设训练样本在样本空间或者特征空间中是线性可分的，即存在一个超平面能将不同类的样本完全划分开。
+
+然而现实任务中往往很难确定合适的核函数使得训练样本在特征空间中线性可分；
+即时找到了某个核函数使得训练集在特征空间中线性可分，也很难断定这个貌似线性可分的结果是不是过拟合所造成的。例如可能并不是因为数据本身是非线性结构的，而只是因为数据有噪音。对于这种偏离正常位置很远">
+<meta name="twitter:image" content="http://blog.pluskid.org/wp-content/uploads/2010/09/Optimal-Hyper-Plane-2.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/05/机器学习_周志华_笔记6_2/" title="机器学习（周志华）- 第6章支持向量机(2)笔记" itemprop="url">机器学习（周志华）- 第6章支持向量机(2)笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-05T00:55:08.688Z" itemprop="datePublished"> Published 2016-08-05</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#软间隔与正则化"><span class="toc-number">1.</span> <span class="toc-text">软间隔与正则化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#替代损失函数问题"><span class="toc-number">2.</span> <span class="toc-text">替代损失函数问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#对率回归（逻辑回归）和SVM区别："><span class="toc-number">2.1.</span> <span class="toc-text">对率回归（逻辑回归）和SVM区别：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#他人的解答"><span class="toc-number">2.1.1.</span> <span class="toc-text">他人的解答</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#另一个总结"><span class="toc-number">2.1.2.</span> <span class="toc-text">另一个总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#什么时候用SVM，LR？"><span class="toc-number">2.1.3.</span> <span class="toc-text">什么时候用SVM，LR？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他损失函数"><span class="toc-number">2.2.</span> <span class="toc-text">其他损失函数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#支持向量回归（Support-Vector-Regression，SVR）"><span class="toc-number">3.</span> <span class="toc-text">支持向量回归（Support Vector Regression，SVR）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#核方法"><span class="toc-number">4.</span> <span class="toc-text">核方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他关于SVM的问题"><span class="toc-number">5.</span> <span class="toc-text">其他关于SVM的问题</span></a></li></ol>
+		
+		</div>
+		
+		<h1 id="软间隔与正则化"><a href="#软间隔与正则化" class="headerlink" title="软间隔与正则化"></a>软间隔与正则化</h1><p>在前面袈裟中我们一直假设训练样本在样本空间或者特征空间中是线性可分的，即存在一个超平面能将不同类的样本完全划分开。</p>
+<ul>
+<li>然而现实任务中往往很难确定合适的核函数使得训练样本在特征空间中线性可分；</li>
+<li>即时找到了某个核函数使得训练集在特征空间中线性可分，也很难断定这个貌似线性可分的结果是不是过拟合所造成的。<br>例如可能并不是因为数据本身是非线性结构的，而只是因为数据有噪音。对于这种偏离正常位置很远的数据点，我们称之为 outlier ，在我们原来的 SVM 模型里，outlier 的存在有可能造成很大的影响，因为超平面本身就是只有少数几个 support vector 组成的，如果这些 support vector 里又存在 outlier 的话，其影响就很大了。例如下图：<br><img src="http://blog.pluskid.org/wp-content/uploads/2010/09/Optimal-Hyper-Plane-2.png" alt=""><br>用黑圈圈起来的那个蓝点是一个 outlier ，它偏离了自己原本所应该在的那个半空间，如果直接忽略掉它的话，原来的分隔超平面还是挺好的，但是由于这个 outlier 的出现，导致分隔超平面不得不被挤歪了，变成途中黑色虚线所示（这只是一个示意图，并没有严格计算精确坐标），同时 margin 也相应变小了。当然，更严重的情况是，如果这个 outlier 再往右上移动一些距离的话，我们将无法构造出能将数据分开的超平面来。</li>
+</ul>
+<p>缓解该问题的一个办法就是引入”软间隔（soft margin）”。具体来说，前面介绍的支持向量机是要求所有样本均满足约束，即所有的而样本均划分正确，称为“硬间隔”，而软间隔就是允许某些样本不满足约束:</p>
+<p>$$y_i(w^Tx_i+b)\geq 1, \quad i=1,\ldots,n   \quad (1)$$</p>
+<p>当然，在最大化间隔的同时，不满足约束的样本应该尽可能少，于是优化目标可以写成：</p>
+<p>$$\min_{w,b} \frac{1}{2} ||w||^2 + C \sum_{i=1}^m \mathcal{l}_{0/1}(y_i (w^T x_i +b ) -1)  \quad (2)$$ </p>
+<p>其中 C&gt;0 是一个常数，$\mathcal{l}_{0/1}$ 是“0/1损失常数”</p>
+<p>$$\mathcal{l}_{0/1} =<br>\begin{cases}<br>1 &amp; if \quad z&lt;0 \\<br>0 &amp; otherwise<br>\end{cases} \quad (3)$$</p>
+<p>显然，当C为无穷大的时候，式子（2）迫使所有样本满足式子（1），于是等价于SVM基本型；当C取有限值的时候，式子(2)允许一些样本不满足约束。</p>
+<p>然而，$l_{0/1}$ 非凸、非连续，使得(2)不易直接求解。于是我们通常采用其他一些函数来代替，称为“替代损失”。替代损失函数一般具有较好的数学性质，如他们通常是凸的联系函数并且是  $l_{0/1}$ 的上界。，如图给克三种常用的替代损失函数：<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/svm.jpg" alt=""></p>
+<ul>
+<li>hinge 损失：$l_{hinge}(z) = max(0, 1-z) $</li>
+<li>指数损失：$l_{exp}(z) = \exp(-z) $</li>
+<li>对率损失：$l_{log}(z) = \log(0, \exp(-z) $ （是对率函数的变形 log 可用ln）<br>若采用hinge损失：</li>
+</ul>
+<p>$$\min_{w,b} \frac{1}{2} ||w||^2 + C \sum_{i=1}^m \max (0,1-y_i (w^T x_i +b ))  \quad (2)$$ </p>
+<p>引入松弛变量ξi≥0 ,对应数据点 xi 允许偏离的 functional margin 的量。当然，如果我们运行 ξi 任意大的话，那任意的超平面都是符合条件的了。所以，我们在原来的目标函数后面加上一项，使得这些 ξi 的总和也要最小：:</p>
+<p>$$\begin{align}<br>\min &amp; \frac{1}{2}|w|^2 + C\sum_{i=1}^n\xi_i \ <br>s.t., &amp; y_i(w^Tx_i+b)\geq 1-\xi_i, i=1,\ldots,n \ <br>&amp; \xi_i \geq 0, i=1,\ldots,n<br>\end{align}$$</p>
+<p>其中 C 是一个参数，用于控制目标函数中两项（“寻找 margin 最大的超平面”和“保证数据点偏差量最小”）之间的权重。注意，其中 ξ 是需要优化的变量（之一），而 C 是一个事先确定好的常量。<br>这就是常用的<code>“软间隔支持向量机”</code>.</p>
+<p>显然，每个样本都有一个对应的松弛变量，泳衣表征该样本不满足约束的程度，但是，解决这个问题仍是个二次规划问题，于是通过与上一节类似的拉格朗日乘子法可以得到：</p>
+<p>$$\mathcal{L}(w,b,\xi,\alpha,r)=\frac{1}{2}|w|^2 + C\sum_{i=1}^n\xi_i – \sum_{i=1}^n\alpha_i \left(y_i(w^Tx_i+b)-1+\xi_i\right) – \sum_{i=1}^n r_i\xi_i$$</p>
+<p>分析方法和前面一样，转换为另一个问题之后，我们先让 L 针对 w、b 和 ξ 最小化：</p>
+<p>$$\begin{align}<br>\frac{\partial \mathcal{L}}{\partial w}=0 &amp;\Rightarrow w=\sum_{i=1}^n \alpha_i y_i x_i \ <br>\frac{\partial \mathcal{L}}{\partial b} = 0 &amp;\Rightarrow \sum_{i=1}^n \alpha_i y_i = 0 \ <br>\frac{\partial \mathcal{L}}{\partial \xi_i} = 0 &amp;\Rightarrow C-\alpha_i-r_i=0, \quad i=1,\ldots,n<br>\end{align} $$</p>
+<p>将 w 带回 L 并化简，得到和原来一样的目标函数：</p>
+<p>$$\max_\alpha \sum_{i=1}^n\alpha_i – \frac{1}{2}\sum_{i,j=1}^n\alpha_i\alpha_jy_iy_j\langle x_i,x_j\rangle$$</p>
+<p>不过，由于我们得到 C−αi−ri=0 ，而又有 ri≥0 （作为 Lagrange multiplier 的条件），因此有 αi≤C ，所以整个 dual 问题现在写作：</p>
+<p>$$\begin{align}<br>\max_\alpha &amp;\sum_{i=1}^n\alpha_i – \frac{1}{2}\sum_{i,j=1}^n\alpha_i\alpha_jy_iy_j\langle x_i,x_j\rangle \ <br>s.t., &amp;0\leq \alpha_i\leq C, i=1,\ldots,n \ <br>&amp;\sum_{i=1}^n\alpha_iy_i = 0<br>\end{align}$$</p>
+<p>和之前的结果对比一下，可以看到唯一的区别就是现在 dual variable α 多了一个上限 C 。而 Kernel 化的非线性形式也是一样的，只要把 <xi,xj> 换成 κ(xi,xj) 即可。这样一来，一个完整的，可以处理线性和非线性并能容忍噪音和 outliers 的支持向量机才终于介绍完毕了。 :)</xi,xj></p>
+<h1 id="替代损失函数问题"><a href="#替代损失函数问题" class="headerlink" title="替代损失函数问题"></a>替代损失函数问题</h1><p>有一点需要注意：</p>
+<blockquote>
+<p>通过求解替代函数损失函数得到的是否仍是原来问题的解？这理论称为替代损失的“一致性”问题，有论文给出了一致性的充要条件。</p>
+</blockquote>
+<h2 id="对率回归（逻辑回归）和SVM区别："><a href="#对率回归（逻辑回归）和SVM区别：" class="headerlink" title="对率回归（逻辑回归）和SVM区别："></a>对率回归（逻辑回归）和SVM区别：</h2><p>可以发现，若果用对率损失函数$l_{log}$替代0/1损失（不是合页损失吗？）函数，则几乎就得到了对率回归模型。</p>
+<ul>
+<li>实际上支持向量机和对率回归的优化目标相近，通常情况下他们的性能相当。</li>
+<li>对率回归的优势主要对于其输出具有自然的概率意义，即在给出预测标记的同时也给了概率，而支持向量机的输出不具有概率意义，欲得到概率需要进行特殊处理；</li>
+<li>此外，对率回归能够直接用于多分类任务，支持向量机为此需要进行推广。</li>
+<li>另一方面，可以看出hinge损失函数有一块平摊的零区域，这使得支持向量机的解具有稀疏性，而对率损失是光滑的而单调递减函数，不能导出类似支持向量的概念。因此对率回归的解依赖于更多的训练样本，其预测开销大。</li>
+</ul>
+<h3 id="他人的解答"><a href="#他人的解答" class="headerlink" title="他人的解答"></a>他人的解答</h3><p><a href="http://charlesx.top/2016/03/LR-SVM/" target="_blank" rel="external">来源</a><br><img src="http://7xjbdi.com1.z0.glb.clouddn.com/2016-03-25_092026.png" alt=""></p>
+<p>我们先来看一下带松弛变量的 SVM 和正则化的逻辑回归它们的损失函数：</p>
+<p><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/SVM_LR.png" alt=""></p>
+<p>其中 $g(z)=(1+\exp(-z))^{-1}$<br>可以将两者统一起来:<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/SVM_LR2.png" alt=""></p>
+<blockquote>
+<p>也就是说，它们的区别就在于逻辑回归采用的是 log loss（对数损失函数），svm采用的是hinge loss →E(z)=max(0,1−z)→E(z)=max(0,1−z)。</p>
+</blockquote>
+<p>SVM 损失函数 : Loss(z)=(1−z)+Loss(z)=(1−z)+<br>LR 损失函数: Loss(z)=log(1+exp(−z)) </p>
+<p><img src="http://7xjbdi.com1.z0.glb.clouddn.com/2016-03-22_195233.png?imageView2/2/w/400" alt=""></p>
+<p>这两个损失函数的目的都是增加对分类影响较大的数据点的权重，减少与分类关系较小的数据点的权重。SVM的处理方法是只考虑support vectors，也就是和分类最相关的少数点，去学习分类器。而逻辑回归通过非线性映射，大大减小了离分类平面较远的点的权重，相对提升了与分类最相关的数据点的权重,两者的根本目的都是一样的。</p>
+<p>svm考虑局部（支持向量），而logistic回归考虑全局，就像大学里的辅导员和教师间的区别</p>
+<blockquote>
+<p>辅导员关心的是挂科边缘的人，常常找他们谈话，告诫他们一定得好好学习，不要浪费大好青春，挂科了会拿不到毕业证、学位证等等，相反，对于那些相对优秀或者良好的学生，他们却很少去问，因为辅导员相信他们一定会按部就班的做好分内的事；而大学里的教师却不是这样的，他们关心的是班里的整体情况，大家是不是基本都理解了，平均分怎么样，至于某个人的分数是59还是61，他们倒不是很在意。</p>
+</blockquote>
+<h3 id="另一个总结"><a href="#另一个总结" class="headerlink" title="另一个总结"></a>另一个总结</h3><p>1、LR采用log损失，SVM采用合页损失。<br>2、LR对异常值敏感，SVM对异常值不敏感。<br>3、在训练集较小时，SVM较适用，而LR需要较多的样本。<br>4、LR模型找到的那个超平面，是尽量让所有点都远离他，而SVM寻找的那个超平面，是只让最靠近中间分割线的那些点尽量远离，即只用到那些支持向量的样本。<br>5、对非线性问题的处理方式不同，LR主要靠特征构造，必须组合交叉特征，特征离散化。SVM也可以这样，还可以通过kernel。<br>6、svm 更多的属于非参数模型，而logistic regression 是参数模型，本质不同。其区别就可以参考参数模型和非参模型的区别</p>
+<h3 id="什么时候用SVM，LR？"><a href="#什么时候用SVM，LR？" class="headerlink" title="什么时候用SVM，LR？"></a>什么时候用SVM，LR？</h3><p>来自 Andrew NG：</p>
+<ol>
+<li>如果Feature的数量很大，跟样本数量差不多，这时候选用LR或者是Linear Kernel的SVM</li>
+<li>如果Feature的数量比较小，样本数量一般，不算大也不算小，选用SVM+Gaussian Kernel</li>
+<li>如果Feature的数量比较小，而样本数量很多，需要手工添加一些feature变成第一种情况<br>仔细想想，为什么是这样？<br>(LR和不带核函数的SVM比较类似。)</li>
+</ol>
+<h2 id="其他损失函数"><a href="#其他损失函数" class="headerlink" title="其他损失函数"></a>其他损失函数</h2><p>我们还可以把0/1损失函数换成别的损失函数得到其他学习模型，这些模型性质与其所用的替代函数直接相关，但他们具有一个共性：优化目标的第一项用来秒速划分超平面的“间隔”大小，另一项用来表述训练集上的误差，可以写成更一般的形式:</p>
+<p>$$\min_f \Omega (f) + C \sum_{i=1}^m \mathcal{l} (f(x_i),y_i)$$</p>
+<ul>
+<li>其中 $\Omega (f)$ 称为“结构风险”，用于描述模型f的某些性质；</li>
+<li>第二项称为“经验风险”，用于描述模型与训练数据的契合程度；</li>
+<li>C用于对二者折中。</li>
+</ul>
+<p>从经验风险最小化角度看，</p>
+<ul>
+<li>$\Omega (f)$表述了我们希望获取哪种性质的模型（例如希望获得复杂度比较小的模型），这为引入领域知识和用户意图提供了途径；</li>
+<li>另一方面，该信息有助于消减假设空间，降低了最小化训练误差的过拟合风险。</li>
+</ul>
+<p>从这个角度说，上面的式子成为“正则化问题”，$\Omega (f)$称为正则化项，C称为正则化常数。Lp范数是常用的正则化项，其中L2范数||w||2倾向于 $mathbf{w}$ 的分量取值尽量平衡,即非零个数尽量稠密，而L0范数和L1范数则倾向于w的分量尽量稀疏，即非0个数尽量少。</p>
+<p>“正则化问题”可以理解为一种“罚函数法”，即对不希望得到的结果加以惩罚，从而使优化过程趋向于希望目标。从贝叶斯估计的角度看，正则化项可认为是提供了模型的先验概率。</p>
+<h1 id="支持向量回归（Support-Vector-Regression，SVR）"><a href="#支持向量回归（Support-Vector-Regression，SVR）" class="headerlink" title="支持向量回归（Support Vector Regression，SVR）"></a>支持向量回归（Support Vector Regression，SVR）</h1><h1 id="核方法"><a href="#核方法" class="headerlink" title="核方法"></a>核方法</h1><p>给定训练样本，若不考虑偏移量b，则无论SVM还是SVR，学得的模型总能表示成核函数的组合。我们还有定理证明核函数对损失函数没有限制，对正则化$\Omega$ 仅要求单调递增，甚至不要求是凸函数，意味着对一般的损失函数和正则化项，优化问题的最优解都可以表示成核函数的线性组合，这显示出核函数的巨大威力。</p>
+<p>人们发展出一系列基于核函数的学习方法，统称“核方法”。最常见的通过“核化（即引入核函数）”来讲线性学习器拓展为非线性学习器，从而得到“核线性判别分析”（KLDA）。</p>
+<h1 id="其他关于SVM的问题"><a href="#其他关于SVM的问题" class="headerlink" title="其他关于SVM的问题"></a>其他关于SVM的问题</h1><ol>
+<li>高斯核SVM和RBF神经网络的区别<br>若将隐层神经元数目设置为训练样本数，且每个训练样本对应一个神经元中心，则以高斯径向基函数为激活函数的RBF网络恰好与高斯核SVM预测函数相同。</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/MachineLearning/">MachineLearning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/MachineLearning/">MachineLearning</a><a href="/tags/Notes/">Notes</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/05/机器学习_周志华_笔记6_2/" data-title="机器学习（周志华）- 第6章支持向量机(2)笔记 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/05/机器学习_周志华_笔记7/" title="机器学习（周志华）- 第7章贝叶斯分类器笔记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  机器学习（周志华）- 第7章贝叶斯分类器笔记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/04/机器学习_周志华_笔记6/"  title="机器学习（周志华）- 第6章支持向量机(1)笔记">
+ <strong>下一篇：</strong><br/> 
+ <span>机器学习（周志华）- 第6章支持向量机(1)笔记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/05/机器学习_周志华_笔记6_2/" data-title="机器学习（周志华）- 第6章支持向量机(2)笔记" data-url="http://yoursite.com/2016/08/05/机器学习_周志华_笔记6_2/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#软间隔与正则化"><span class="toc-number">1.</span> <span class="toc-text">软间隔与正则化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#替代损失函数问题"><span class="toc-number">2.</span> <span class="toc-text">替代损失函数问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#对率回归（逻辑回归）和SVM区别："><span class="toc-number">2.1.</span> <span class="toc-text">对率回归（逻辑回归）和SVM区别：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#他人的解答"><span class="toc-number">2.1.1.</span> <span class="toc-text">他人的解答</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#另一个总结"><span class="toc-number">2.1.2.</span> <span class="toc-text">另一个总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#什么时候用SVM，LR？"><span class="toc-number">2.1.3.</span> <span class="toc-text">什么时候用SVM，LR？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他损失函数"><span class="toc-number">2.2.</span> <span class="toc-text">其他损失函数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#支持向量回归（Support-Vector-Regression，SVR）"><span class="toc-number">3.</span> <span class="toc-text">支持向量回归（Support Vector Regression，SVR）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#核方法"><span class="toc-number">4.</span> <span class="toc-text">核方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他关于SVM的问题"><span class="toc-number">5.</span> <span class="toc-text">其他关于SVM的问题</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

@@ -1,0 +1,712 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>第k个数与合并数组问题 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="几种问题：
+
+一个无序的数组，快速找出第k小/大的数
+两个有序数组，找出第k小/大的数
+多个有序数组，找出第k小/大的数
+
+合并两个有序数组
+
+合并多个有序数组
+合并两个链表
+合并多个链表
+
+1. 一个无序的数组，快速找出第k小/大的数
+解法1：排序（快排），然后再选择，时间O（n * log n)+O(k)=O（n * log n）
+
+解法2：选择或者交换排序。
+
+遍历n个数，把最先遍历到的k个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第k个数与合并数组问题">
+<meta property="og:url" content="http://yoursite.com/2016/08/01/第k个数/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="几种问题：
+
+一个无序的数组，快速找出第k小/大的数
+两个有序数组，找出第k小/大的数
+多个有序数组，找出第k小/大的数
+
+合并两个有序数组
+
+合并多个有序数组
+合并两个链表
+合并多个链表
+
+1. 一个无序的数组，快速找出第k小/大的数
+解法1：排序（快排），然后再选择，时间O（n * log n)+O(k)=O（n * log n）
+
+解法2：选择或者交换排序。
+
+遍历n个数，把最先遍历到的k个">
+<meta property="og:image" content="http://img.my.csdn.net/uploads/201210/26/1351227534_2876.jpg">
+<meta property="og:image" content="http://img.my.csdn.net/uploads/201210/26/1351228298_9937.jpg">
+<meta property="og:image" content="http://img.my.csdn.net/uploads/201210/26/1351228301_6812.jpg">
+<meta property="og:image" content="http://img.my.csdn.net/uploads/201210/26/1351230276_2409.jpg">
+<meta property="og:image" content="http://img.my.csdn.net/uploads/201210/26/1351230823_7394.jpg">
+<meta property="og:image" content="http://img.my.csdn.net/uploads/201210/26/1351231166_3147.jpg">
+<meta property="og:updated_time" content="2016-08-01T09:28:02.104Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第k个数与合并数组问题">
+<meta name="twitter:description" content="几种问题：
+
+一个无序的数组，快速找出第k小/大的数
+两个有序数组，找出第k小/大的数
+多个有序数组，找出第k小/大的数
+
+合并两个有序数组
+
+合并多个有序数组
+合并两个链表
+合并多个链表
+
+1. 一个无序的数组，快速找出第k小/大的数
+解法1：排序（快排），然后再选择，时间O（n * log n)+O(k)=O（n * log n）
+
+解法2：选择或者交换排序。
+
+遍历n个数，把最先遍历到的k个">
+<meta name="twitter:image" content="http://img.my.csdn.net/uploads/201210/26/1351227534_2876.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/01/第k个数/" title="第k个数与合并数组问题" itemprop="url">第k个数与合并数组问题</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-01T07:34:54.428Z" itemprop="datePublished"> Published 2016-08-01</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-一个无序的数组，快速找出第k小-大的数"><span class="toc-number">1.</span> <span class="toc-text">1. 一个无序的数组，快速找出第k小/大的数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#LeetCode-：Kth-Largest-Element-in-an-array"><span class="toc-number">1.1.</span> <span class="toc-text">LeetCode ：Kth Largest Element in an array</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-两个有序数组，找出第k小-大的数"><span class="toc-number">2.</span> <span class="toc-text">2. 两个有序数组，找出第k小/大的数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#一一般情况"><span class="toc-number">3.</span> <span class="toc-text">一一般情况</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一个类似的问题是-LeetCode：-Median-of-Two-Sorted-Arrays"><span class="toc-number">3.1.</span> <span class="toc-text">一个类似的问题是 LeetCode： Median of Two Sorted Arrays</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-多个有序数组，找出第k小-大的数"><span class="toc-number">4.</span> <span class="toc-text">3. 多个有序数组，找出第k小/大的数</span></a></li></ol>
+		
+		</div>
+		
+		<p>几种问题：</p>
+<ol>
+<li>一个无序的数组，快速找出第k小/大的数</li>
+<li>两个有序数组，找出第k小/大的数</li>
+<li><p>多个有序数组，找出第k小/大的数</p>
+</li>
+<li><p>合并两个有序数组</p>
+</li>
+<li>合并多个有序数组</li>
+<li>合并两个链表</li>
+<li>合并多个链表</li>
+</ol>
+<h1 id="1-一个无序的数组，快速找出第k小-大的数"><a href="#1-一个无序的数组，快速找出第k小-大的数" class="headerlink" title="1. 一个无序的数组，快速找出第k小/大的数"></a>1. 一个无序的数组，快速找出第k小/大的数</h1><ul>
+<li><p>解法1：排序（快排），然后再选择，时间<code>O（n * log n)+O(k)=O（n * log n）</code></p>
+</li>
+<li><p>解法2：选择或者交换排序。</p>
+<ol>
+<li>遍历n个数，把最先遍历到的k个数存入到大小为k的数组中，假设它们即是最小的k个数；</li>
+<li>对这k个数，利用选择或交换排序找到这k个元素中的最大值kmax（找最大值需要遍历这k个数，时间复杂度为O（k））；</li>
+<li>继续遍历剩余n-k个数。假设每一次遍历到的新的元素的值为x，把x与kmax比较：如果x &lt; kmax ，用x替换kmax，并回到第二步重新找出k个元素的数组中最大元素kmax‘；如果x &gt;= kmax，则继续遍历不更新数组。</li>
+</ol>
+</li>
+</ul>
+<p>每次遍历，更新或不更新数组的所用的时间为O（k）或O（0）。故整趟下来，时间复杂度为 <code>n*O（k）=O（n*k）</code>。</p>
+<ul>
+<li><p>解法3：更好的办法是维护容量为k的最大堆，原理跟解法二的方法相似：</p>
+<ol>
+<li>用容量为k的最大堆存储最先遍历到的k个数，同样假设它们即是最小的k个数；</li>
+<li>堆中元素是有序的，令k1&lt;k2&lt;…&lt;kmax（kmax设为最大堆中的最大元素）</li>
+<li>遍历剩余n-k个数。假设每一次遍历到的新的元素的值为x，把x与堆顶元素kmax比较：如果<code>x &lt; kmax</code>，用x替换kmax，然后更新堆（用时logk）；否则不更新堆。</li>
+</ol>
+</li>
+</ul>
+<p>这样下来，总的时间复杂度:<code>O（k+（n-k）*logk）=O（n*logk）</code>。此方法得益于堆中进行查找和更新的时间复杂度均为：<code>O(logk)</code>（若使用解法二：在数组中找出最大元素，时间复杂度：<code>O（k））</code>。 </p>
+<ul>
+<li><p>解法4:一种在平均情况下，时间复杂度为<code>O（N）</code>的快速选择算法。如下述文字：</p>
+<ul>
+<li>选取S中一个元素作为枢纽元v，将集合S-{v}分割成S1和S2，就像快速排序那样</li>
+<li>如果k &lt;= |S1|，那么第k个最小元素必然在S1中。在这种情况下，返回QuickSelect(S1, k)。</li>
+<li>如果k = 1 + |S1|，那么枢纽元素就是第k个最小元素，即找到，直接返回它。</li>
+<li>否则，这第k个最小元素就在S2中，即S2中的第（k - |S1| - 1）个最小元素，我们递归调用并返回QuickSelect(S2, k - |S1| - 1)。</li>
+</ul>
+</li>
+</ul>
+<p>此算法的平均运行时间为O(n)。  </p>
+<h2 id="LeetCode-：Kth-Largest-Element-in-an-array"><a href="#LeetCode-：Kth-Largest-Element-in-an-array" class="headerlink" title="LeetCode ：Kth Largest Element in an array"></a>LeetCode ：Kth Largest Element in an array</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">partition</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> low, <span class="keyword">int</span> high)</span></span>&#123;</div><div class="line">	<span class="keyword">int</span> pivot = nums[low];</div><div class="line">	<span class="keyword">while</span>(low&lt;high)&#123;</div><div class="line">		<span class="keyword">while</span>(low&lt;high &amp;&amp; nums[high]&gt;=pivot) high--;</div><div class="line">		nums[low]=nums[high];</div><div class="line">		<span class="keyword">while</span>(low&lt;high &amp;&amp; nums[low]&lt;=pivot) low++;</div><div class="line">		nums[high] =nums[low];</div><div class="line">	&#125;</div><div class="line">	nums[low]=pivot;</div><div class="line">	<span class="keyword">return</span> low;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">findKthLargest</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> k)</span> </span>&#123;</div><div class="line">	k = nums.length-k;</div><div class="line">	<span class="keyword">int</span> low = <span class="number">0</span>;</div><div class="line">	<span class="keyword">int</span> high = nums.length-<span class="number">1</span>;</div><div class="line">	<span class="keyword">while</span>(low &lt; high)&#123;</div><div class="line">    	<span class="keyword">int</span> pivotloc = partition(nums,low,high);</div><div class="line">    	<span class="keyword">if</span>(pivotloc==k) </div><div class="line">    		<span class="keyword">break</span>;</div><div class="line">    	<span class="keyword">else</span> <span class="keyword">if</span>(k&lt;pivotloc)&#123;</div><div class="line">    		high = pivotloc-<span class="number">1</span>;</div><div class="line">    	&#125;<span class="keyword">else</span> <span class="keyword">if</span>(k&gt;pivotloc)&#123;</div><div class="line">    		low = pivotloc+<span class="number">1</span>;</div><div class="line">    	&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> nums[k];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="2-两个有序数组，找出第k小-大的数"><a href="#2-两个有序数组，找出第k小-大的数" class="headerlink" title="2. 两个有序数组，找出第k小/大的数"></a>2. 两个有序数组，找出第k小/大的数</h1><p><a href="http://blog.csdn.net/fangkyo/article/details/8114784" target="_blank" rel="external">来源</a></p>
+<h1 id="一一般情况"><a href="#一一般情况" class="headerlink" title="一一般情况"></a>一一般情况</h1><p>采用一种类似于二分查找的方法。<br>基于中位数的比较。为什么使用中位数而不是在两个数组中各取k/2大的数呢，是因为只要数组的长度不为0，那么中位数总是存在的，而第K/2的数就不一定了，数组的长度很有可能小于k/2哦。通过这样的方法我们可以规避一大票边界问题。</p>
+<p>我们将两个数组按照3种情况来讨论：</p>
+<p>1、两个数组的长度均为奇数。<br>我们设a数组的中位数下标为x，b数组的中位数下标为y，则如下图所示，a数组的长度为2x+1，b数组的长度为2y+1，总的元素的个数为2x+2y+2。<br><img src="http://img.my.csdn.net/uploads/201210/26/1351227534_2876.jpg" alt=""><br>我们现在需要探讨的就是k是大于x+y+1，还是小于x+y+1的情况，也就是我们想找的第k大的数是在a、b数组归并后的数组中的前一半内，还是在后一半内。不失一般性，我们讨论当a[x] &lt;= b[y]的情况，</p>
+<p>当k &lt;= x + y + 1，也即k属于归并数组的前一半时，从下图可以看出黄色区域明显不包含第k个数。原因很简单，因为b[y]大于等于蓝色部分的数，而蓝色部分的数目即为x+y+1，恰好为全体数的前一半的个数，也就是说黄色区域的数不可能属于归并后的前一半数组，可以排除在外，在剩余的两个数组中寻找第k大数。<br> <img src="http://img.my.csdn.net/uploads/201210/26/1351228298_9937.jpg" alt=""></p>
+<p>当k &gt; x + y + 1，也即k属于归并后数组的后一半，那么从下图可以看出黄色区域明显不包含第k个数。原因是黄色区域的数必然小于蓝色区域的数，而蓝色区域的数的数目之和即为x+y+1，恰好为归并后数组的和的一半，因此可以将黄色区域排除在外，注意在剩余的两个 数组中寻找第 k - x -1 大数。<br><img src="http://img.my.csdn.net/uploads/201210/26/1351228301_6812.jpg" alt=""></p>
+<p>当a[x] &gt; b[y]时，只是上述的情况反一下，读者可以自己试着推一下。</p>
+<p>2、两个数组的长度均为偶数<br>我们寻找a数组的上中位下标，记为x，b数组的下中位下标，记为y，如下图所示。这样错开中位数的目的是为了在将来做排除时能够保证像奇数情况下能将第k大数归类到前一半或者后一半的完美性质。<br> <img src="http://img.my.csdn.net/uploads/201210/26/1351230276_2409.jpg" alt=""><br>这样看来，a数组长度为2x + 2，b数组长度为2y，因此归并后的数组长度为2x + 2y + 2，与奇数情况一致。<br>不失一般性，我们讨论a[x] &lt;= b[y]的情况。</p>
+<p>当k &lt;= x + y + 1，也即k属于归并数组的前一半时，如下图所示。显然黄色部分可以排除在外，因为黄色部分一定大于等于蓝色部分，而蓝色部分的长度之和为x+y+1，恰好为归并数组的一半。也就是说黄色部分必然位于归并数组的后一半，不可能包含第k个数。之后我们在排除了黄色区域的两个数组中寻找第k个数。</p>
+<p><img src="http://img.my.csdn.net/uploads/201210/26/1351230823_7394.jpg" alt=""></p>
+<p>当k &gt; x + y + 1，也即k属于归并数组的后一半时，如下图所示。显然黄色部分可以排除在外，因为黄色部分一定小于蓝色部分，而蓝色部分的长度之和为x+y+1，恰好为归并数组的一半。也就是说黄色部分必然位于归并数组的前一半，不可能包含第k个数。之后我们在排除了黄色区域的两个数组中寻找第k - x - 1个数。<br><img src="http://img.my.csdn.net/uploads/201210/26/1351231166_3147.jpg" alt=""><br>当a[x] &gt; b[y]时，只是上述的情况反一下，读者可以自己试着推一下。</p>
+<p>3、当a、b数组的长度为一奇一偶的情况。<br>若 k = 1，那么直接返回min(a[0], b[0])即可。<br>若 k &gt; 1，不妨假设 a[0] &lt; b[0]，那么a[0]必然是两个数组中最小的数，那么排除a[0]后我们可以在a、b两个数组中寻找第k-1个数，并且a的长度减一，这样就将原问题转化为上述1、2讨论的问题。</p>
+<p>4、当a、b数组的长度有一个为0时，直接返回另一个长度非0数组的第k个数即可。</p>
+<p>综上所述，我们在每次递归的时候都去除了一个数组中包含一个中位数的一半元素，直到一个数组被完全排除在外为止，直接去另一个数组的第k个数。上面的过程中由于每次总会去除一个中位数，因此算法总能够收敛，不难证明算法的时间复杂度为O(logN)。</p>
+<h2 id="一个类似的问题是-LeetCode：-Median-of-Two-Sorted-Arrays"><a href="#一个类似的问题是-LeetCode：-Median-of-Two-Sorted-Arrays" class="headerlink" title="一个类似的问题是 LeetCode： Median of Two Sorted Arrays"></a>一个类似的问题是 LeetCode： Median of Two Sorted Arrays</h2><h1 id="3-多个有序数组，找出第k小-大的数"><a href="#3-多个有序数组，找出第k小-大的数" class="headerlink" title="3. 多个有序数组，找出第k小/大的数"></a>3. 多个有序数组，找出第k小/大的数</h1>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Interview/">Interview</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/01/第k个数/" data-title="第k个数与合并数组问题 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/01/Java常见知识点/" title="Java常考知识点">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Java常考知识点</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/01/海量数据面试题/"  title="海量数据面试题">
+ <strong>下一篇：</strong><br/> 
+ <span>海量数据面试题
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/01/第k个数/" data-title="第k个数与合并数组问题" data-url="http://yoursite.com/2016/08/01/第k个数/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-一个无序的数组，快速找出第k小-大的数"><span class="toc-number">1.</span> <span class="toc-text">1. 一个无序的数组，快速找出第k小/大的数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#LeetCode-：Kth-Largest-Element-in-an-array"><span class="toc-number">1.1.</span> <span class="toc-text">LeetCode ：Kth Largest Element in an array</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-两个有序数组，找出第k小-大的数"><span class="toc-number">2.</span> <span class="toc-text">2. 两个有序数组，找出第k小/大的数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#一一般情况"><span class="toc-number">3.</span> <span class="toc-text">一一般情况</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一个类似的问题是-LeetCode：-Median-of-Two-Sorted-Arrays"><span class="toc-number">3.1.</span> <span class="toc-text">一个类似的问题是 LeetCode： Median of Two Sorted Arrays</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-多个有序数组，找出第k小-大的数"><span class="toc-number">4.</span> <span class="toc-text">3. 多个有序数组，找出第k小/大的数</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

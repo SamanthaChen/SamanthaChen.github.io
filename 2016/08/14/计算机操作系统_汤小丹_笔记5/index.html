@@ -1,0 +1,698 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>计算机操作系统--存储器管理-笔记 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="多级存储器结构计算机存储系统的设计主要考虑三个问题：容量、速度和成本。
+程序的装入和链接
+程序的装入
+绝对装入 编译程序将目标模块装入绝对地址。只适合单道程序环境。
+静态可重定位装入 在装入一个作业时，把作业中的指令地址全部转换为绝对地址,在作业执行过程中就无须再进行地址转换工作。
+动态运行时装入 在程序执行过程中，在CPU访问内存之前,将要访问的程序或数据地址转换成内存地址. 动态重定位依靠硬件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机操作系统--存储器管理-笔记">
+<meta property="og:url" content="http://yoursite.com/2016/08/14/计算机操作系统_汤小丹_笔记5/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="多级存储器结构计算机存储系统的设计主要考虑三个问题：容量、速度和成本。
+程序的装入和链接
+程序的装入
+绝对装入 编译程序将目标模块装入绝对地址。只适合单道程序环境。
+静态可重定位装入 在装入一个作业时，把作业中的指令地址全部转换为绝对地址,在作业执行过程中就无须再进行地址转换工作。
+动态运行时装入 在程序执行过程中，在CPU访问内存之前,将要访问的程序或数据地址转换成内存地址. 动态重定位依靠硬件">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS15.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS16.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS17.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS18.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS19.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS20.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS21.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS22.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS23.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS24.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS25.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS26.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS27.png">
+<meta property="og:updated_time" content="2016-08-14T05:34:52.938Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计算机操作系统--存储器管理-笔记">
+<meta name="twitter:description" content="多级存储器结构计算机存储系统的设计主要考虑三个问题：容量、速度和成本。
+程序的装入和链接
+程序的装入
+绝对装入 编译程序将目标模块装入绝对地址。只适合单道程序环境。
+静态可重定位装入 在装入一个作业时，把作业中的指令地址全部转换为绝对地址,在作业执行过程中就无须再进行地址转换工作。
+动态运行时装入 在程序执行过程中，在CPU访问内存之前,将要访问的程序或数据地址转换成内存地址. 动态重定位依靠硬件">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS15.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/14/计算机操作系统_汤小丹_笔记5/" title="计算机操作系统--存储器管理-笔记" itemprop="url">计算机操作系统--存储器管理-笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-14T01:29:10.928Z" itemprop="datePublished"> Published 2016-08-14</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#多级存储器结构"><span class="toc-number">1.</span> <span class="toc-text">多级存储器结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#程序的装入和链接"><span class="toc-number">2.</span> <span class="toc-text">程序的装入和链接</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#程序的装入"><span class="toc-number">2.1.</span> <span class="toc-text">程序的装入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#程序链接"><span class="toc-number">2.2.</span> <span class="toc-text">程序链接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#指令和地址的绑定"><span class="toc-number">2.3.</span> <span class="toc-text">指令和地址的绑定</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#连续分配方式"><span class="toc-number">3.</span> <span class="toc-text">连续分配方式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#单一分区分配"><span class="toc-number">3.1.</span> <span class="toc-text">单一分区分配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#固定分区分配"><span class="toc-number">3.2.</span> <span class="toc-text">固定分区分配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态（可变）分区分配"><span class="toc-number">3.3.</span> <span class="toc-text">动态（可变）分区分配</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#可变分区分配算法"><span class="toc-number">3.3.1.</span> <span class="toc-text">可变分区分配算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#首次适应（First-Fit）"><span class="toc-number">3.3.1.1.</span> <span class="toc-text">首次适应（First Fit）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#循环首次适应算法-Next-Fit"><span class="toc-number">3.3.1.2.</span> <span class="toc-text">循环首次适应算法(Next Fit)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#最佳适应算法（Best-Fit）"><span class="toc-number">3.3.1.3.</span> <span class="toc-text">最佳适应算法（Best Fit）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态重定位分区分配"><span class="toc-number">3.4.</span> <span class="toc-text">动态重定位分区分配</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#离散分配方式"><span class="toc-number">4.</span> <span class="toc-text">离散分配方式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#分页储存管理方式"><span class="toc-number">5.</span> <span class="toc-text">分页储存管理方式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#地址结构"><span class="toc-number">5.1.</span> <span class="toc-text">地址结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#页表"><span class="toc-number">5.2.</span> <span class="toc-text">页表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本的地址变换机构"><span class="toc-number">5.3.</span> <span class="toc-text">基本的地址变换机构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#地址变换过程"><span class="toc-number">5.4.</span> <span class="toc-text">地址变换过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基本的地址变换"><span class="toc-number">5.4.1.</span> <span class="toc-text">基本的地址变换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#页式存储"><span class="toc-number">5.4.2.</span> <span class="toc-text">页式存储</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#两级和多级页表"><span class="toc-number">5.5.</span> <span class="toc-text">两级和多级页表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#纯分页的特点"><span class="toc-number">5.6.</span> <span class="toc-text">纯分页的特点</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#分段式存储"><span class="toc-number">6.</span> <span class="toc-text">分段式存储</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#地址变换过程-1"><span class="toc-number">6.1.</span> <span class="toc-text">地址变换过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分段的特点"><span class="toc-number">6.2.</span> <span class="toc-text">分段的特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分段分页比较"><span class="toc-number">6.3.</span> <span class="toc-text">分段分页比较</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#段页式"><span class="toc-number">7.</span> <span class="toc-text">段页式</span></a></li></ol>
+		
+		</div>
+		
+		<h1 id="多级存储器结构"><a href="#多级存储器结构" class="headerlink" title="多级存储器结构"></a>多级存储器结构</h1><p><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS15.png" alt=""><br>计算机存储系统的设计主要考虑三个问题：容量、速度和成本。</p>
+<h1 id="程序的装入和链接"><a href="#程序的装入和链接" class="headerlink" title="程序的装入和链接"></a>程序的装入和链接</h1><p><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS16.png" alt=""></p>
+<h2 id="程序的装入"><a href="#程序的装入" class="headerlink" title="程序的装入"></a>程序的装入</h2><ol>
+<li>绝对装入<br> 编译程序将目标模块装入绝对地址。只适合单道程序环境。</li>
+<li>静态可重定位装入<br> 在装入一个作业时，把作业中的指令地址全部转换为绝对地址,在作业执行过程中就无须再进行地址转换工作。</li>
+<li>动态运行时装入<br> 在程序执行过程中，在CPU访问内存之前,将要访问的程序或数据地址转换成内存地址. 动态重定位依靠硬件地址变换机构完成。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS17.png" alt=""></li>
+</ol>
+<h2 id="程序链接"><a href="#程序链接" class="headerlink" title="程序链接"></a>程序链接</h2><ol>
+<li>静态链接<br> 程序运行之前，先将各目标模块和所需的库函数。连接成一个完整的装配模块。以后不再拆开。</li>
+<li>装入时动态链接<br> 用户源程序编译后得到的一组目标模块，边装入内存边链接。</li>
+<li>运行时动态链接<br> 需要该模块时候才进行链接。</li>
+</ol>
+<h2 id="指令和地址的绑定"><a href="#指令和地址的绑定" class="headerlink" title="指令和地址的绑定"></a>指令和地址的绑定</h2><p>指令和数据绑定到内存地址可以在3个不同的阶段发生。</p>
+<ul>
+<li>编译时期：如果内存位置已知，可生成绝对代码；如果开始位置改变，需要重新编译代码</li>
+<li>装入时期: 如果存储位置在编译时不知道，则必须生成可重定位代码</li>
+<li>执行时期: 如果进程在执行时可以在内存中移动，则地址绑定要延迟到运行时。需要硬件对地址映射的支持，例如基址和限长寄存器</li>
+</ul>
+<h1 id="连续分配方式"><a href="#连续分配方式" class="headerlink" title="连续分配方式"></a>连续分配方式</h1><ul>
+<li>单一分区分配（单用户但任务）</li>
+<li>多分区分配<ul>
+<li>固定分区分配</li>
+<li>可变分区/动态分区</li>
+<li>动态可重定位分区</li>
+</ul>
+</li>
+</ul>
+<h2 id="单一分区分配"><a href="#单一分区分配" class="headerlink" title="单一分区分配"></a>单一分区分配</h2><p>内存分成两部分:<br>    OS区<br>    用户区<br>    用户区只能容纳一道作业</p>
+<h2 id="固定分区分配"><a href="#固定分区分配" class="headerlink" title="固定分区分配"></a>固定分区分配</h2><ul>
+<li>固定分区是在作业装入之前，内存就被划分成若干个固定大小的连续分区。</li>
+<li>划分工作可以由系统管理员完成，也可以由操作系统实现。</li>
+<li>一旦划分完成，在系统运行期间不再重新划分，即分区的个数不可变，分区的大小不可变，又称为静态分区。</li>
+</ul>
+<p>划分分区的方法如下：</p>
+<ul>
+<li>分区大小相等：只适用于多个大小相同程序的并发执行，缺乏灵活性。</li>
+<li>分区大小不等：多个小分区、适量的中等分区、少量的大分区。根据程序的大小，分配当前空闲的、适当大小的分区。</li>
+</ul>
+<p>一般将内存的用户区域划分成大小不等的分区，可适应不同大小的作业需要。<br>系统有一张分区说明表，每个表目说明一个分区的大小、起始地址和是否已分配的使用标志</p>
+<p>优点：易于实现，开销小。<br>缺点：<br>    分区大小固定: 内碎片<br>    分区总数固定: 限制并发执行的进程数目</p>
+<h2 id="动态（可变）分区分配"><a href="#动态（可变）分区分配" class="headerlink" title="动态（可变）分区分配"></a>动态（可变）分区分配</h2><p>分区的划分是动态的,不是预先确定的。当一个进程到来的时候，它将从一个足够容纳它的分区中分配内存。分配的数据结构有空闲分区表和空闲分区链。</p>
+<h3 id="可变分区分配算法"><a href="#可变分区分配算法" class="headerlink" title="可变分区分配算法"></a>可变分区分配算法</h3><p>分区分配算法：寻找某个空闲分区，若大于要求，则将该分区分割成两个分区，其中一个分区为要求的大小并标记为“占用”，而另一个分区为余下部分并标记为“空闲”。分区分配的先后次序通常是从内存低端到高端。<br>分区释放算法：需要将相邻的空闲分区合并成一个空闲分区。(这时要解决的问题是：合并条件的判断)</p>
+<h4 id="首次适应（First-Fit）"><a href="#首次适应（First-Fit）" class="headerlink" title="首次适应（First Fit）"></a>首次适应（First Fit）</h4><p>从空闲分区表的第一个表目开始查找，把找到的第一个满足要求的空闲区分配给作业，目的在于减少查找时间。通常将空闲分区表（空闲区链）中的空闲分区按地址由低到高进行排序。</p>
+<p>特点：<br>分配和释放的时间性能较好，较大的空闲分区可以被保留在内存高端。<br>随着低端分区不断划分而产生较多小分区，每次分配时查找时间开销会增大。</p>
+<h4 id="循环首次适应算法-Next-Fit"><a href="#循环首次适应算法-Next-Fit" class="headerlink" title="循环首次适应算法(Next Fit)"></a>循环首次适应算法(Next Fit)</h4><p>是首次适应算法的变种。在分配内存空间时，不再每次从表头（链首）开始查找，而是从上次找到的空闲区的下一个空闲区开始查找（并采用循环查找的方式），直到找到第一个能满足要求的空闲区为止，并从中划出一块与请求大小相等的内存空间分配给作业。</p>
+<p>特点：<br>算法的分配和释放的时间性能较好，使空闲分区分布得更均匀<br>较大的空闲分区不易保留</p>
+<h4 id="最佳适应算法（Best-Fit）"><a href="#最佳适应算法（Best-Fit）" class="headerlink" title="最佳适应算法（Best Fit）"></a>最佳适应算法（Best Fit）</h4><p>从全部空闲区中找出能满足作业要求的、且最小的空闲分区.<br>能使碎片尽量小<br>为提高查找效率，空闲分区表（空闲区链）中的空闲分区要按从小到大进行排序，自表头开始查找到第一个满足要求的自由分区分配<br>特点：<br>从个别来看，外碎片较小，但从整体来看，会形成较多无法利用的碎片。<br>较大的空闲分区可以被保留。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS18.png" alt=""></p>
+<h2 id="动态重定位分区分配"><a href="#动态重定位分区分配" class="headerlink" title="动态重定位分区分配"></a>动态重定位分区分配</h2><p>动态分区的碎片问题:在系统不断地分配和回收中，必定会出现一些不连续的小的空闲区，称为外碎片。虽然可能所有碎片的总和超过某一个作业的要求，但是由于不连续而无法分配。<br>解决碎片的方法是拼接（或称紧凑），即向一个方向（例如向低地址端）移动已分配的作业，使那些零散的小空闲区在另一方向连成一片。<br>分区的拼接技术，一方面要求能够对作业进行重定位，另一方面系统在拼接时要耗费较多的时间。</p>
+<p>实现紧凑的技术必须获得硬件支持。<br>只有具有动态重定位硬件机构的计算机系统，才有可能采用动态重定位可变分区管理技术，系统的硬件包括重定位寄存器和加法器。</p>
+<h1 id="离散分配方式"><a href="#离散分配方式" class="headerlink" title="离散分配方式"></a>离散分配方式</h1><p>连续分配容易造成很多碎片，虽然可以通过紧凑的算法来将碎片拼接成可用的大块空间，但必须付出很大的开销。如果允许一个进程直接分散的装入很多不相邻的分区，则无需紧凑，即离散分配方式。如果离散分配的基本单位是页，称为分页储存管理方式；如果离散分配及基本单位是段，称为分段存储管理方式。</p>
+<h1 id="分页储存管理方式"><a href="#分页储存管理方式" class="headerlink" title="分页储存管理方式"></a>分页储存管理方式</h1><p>分页存储管理是解决存储碎片的一种方法。<br>动态重定位是解决存储碎片问题的一种途径，但要移动大量信息从而浪费处理机时间,代价比较高,这是因为这种分配要求把作业必须安置在一连续存储区内的缘故,而分页存储管理正是要避开这种连续性要求。</p>
+<p>物理内存分成大小固定的块,称为物理块或页框。逻辑内存也分为固定大小的块，叫做页。<br>页面大小应该适中，页面太小虽然可以减少页内碎片但是会导致页表过长，占用大量内存，降低页面换进换出的效率；页面较大页内碎片又会增大。通常是512B~8KB。</p>
+<p>运行一个有N页大小的程序，需要找到N个空的页框装入程序。建立一个页表，把逻辑地址转换为物理地址。</p>
+<h2 id="地址结构"><a href="#地址结构" class="headerlink" title="地址结构"></a>地址结构</h2><p>分页地址中的地址结构如下：<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS19.png" alt=""><br>程序经过编译链接后形成逻辑地址，对某特定机器其地址结构是一定的。</p>
+<h2 id="页表"><a href="#页表" class="headerlink" title="页表"></a>页表</h2><p>实现从页号到物理块号的映射<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS20.png" alt=""></p>
+<h2 id="基本的地址变换机构"><a href="#基本的地址变换机构" class="headerlink" title="基本的地址变换机构"></a>基本的地址变换机构</h2><ul>
+<li>实现从逻辑地址到物理地址的转换:将用户程序中的页号变换成内存中的物理块号</li>
+<li>地址变换机构：<br> 页表寄存器<br> 有效地址寄存器（逻辑地址寄存器）<br> 物理地址寄存器<br> 页表<br> PCB中增加存放页表始址和页表长度的项</li>
+</ul>
+<h2 id="地址变换过程"><a href="#地址变换过程" class="headerlink" title="地址变换过程"></a>地址变换过程</h2><h3 id="基本的地址变换"><a href="#基本的地址变换" class="headerlink" title="基本的地址变换"></a>基本的地址变换</h3><ul>
+<li>①按页的大小分离出页号和位移量，放入有效地址寄存器中</li>
+<li>②将页号与页表长度进行比较，如果页号大于页表长度，越界中断；</li>
+<li>③以页号为索引查找页表:将页表始址与页号和页表项长度的乘积相加，便得到该表项在页表中的位置，于是可从中得到该页的物理块号；</li>
+<li>④将该物理块号装入物理地址寄存器的高址部分；</li>
+<li>⑤将有效地址寄存器中的位移量直接复制到物理地址寄存器的低位部分，从而形成内存地址。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS21.png" alt=""></li>
+</ul>
+<h3 id="页式存储"><a href="#页式存储" class="headerlink" title="页式存储"></a>页式存储</h3><p>虚地址以十进制数给出<br>    页号＝虚地址％页大小<br>    位移量＝虚地址 mod 页大小<br>    以页号查页表，得到对应页装入内存的块号<br>    内存地址＝块号×页大小＋位移量</p>
+<h2 id="两级和多级页表"><a href="#两级和多级页表" class="headerlink" title="两级和多级页表"></a>两级和多级页表</h2><p>将页表进行分页,并进行编号<br>页表分页存放在不同的物理块中<br>外层页表（页表目录），即第一级页表，指出页表分页的物理地址<br>第二级页表（即页表分页），指出每个页对应的物理块号<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS22.png" alt=""></p>
+<p>多级页表的引入，使逻辑地址到物理地址的变换时间增加了许多:二级页表需三次访存,三级页表需四次访存,四级页表需五次访存</p>
+<h2 id="纯分页的特点"><a href="#纯分页的特点" class="headerlink" title="纯分页的特点"></a>纯分页的特点</h2><p>优点：<br>    没有外碎片，每个内碎片不超过页大小。<br>    一个程序不必连续存放。<br>缺点：程序全部装入内存。</p>
+<h1 id="分段式存储"><a href="#分段式存储" class="headerlink" title="分段式存储"></a>分段式存储</h1><p>分段内存管理机制是从用户观点出发的，即为了方便用户<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS23.png" alt=""></p>
+<h2 id="地址变换过程-1"><a href="#地址变换过程-1" class="headerlink" title="地址变换过程"></a>地址变换过程</h2><p>系统将逻辑地址中的段号S与段表长度TL进行比较。若 S≥TL，访问越界；<br>若未越界，则根据段表的始址和该段的段号，计算出该段对应段表项的位置，从中读出该段在内存中的起始地址；<br>然后再检查段内地址d是否超过该段的段长SL。若超过，即 d≥SL，同样发出越界中断信号；<br>若未越界，则将该段的基址与段内地址d相加，得到要访问的内存物理地址。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS24.png" alt=""></p>
+<h2 id="分段的特点"><a href="#分段的特点" class="headerlink" title="分段的特点"></a>分段的特点</h2><p>程序通过分段(segmentation)划分为多个模块，如代码段、数据段、共享段。<br>    可以分别编写和编译<br>    可以针对不同类型的段采取不同的保护<br>    可以按段为单位来进行共享，包括通过动态链接进行代码共享<br>优点：<br>    没有内碎片，外碎片可以通过内存紧缩来消除。<br>    便于改变进程占用空间的大小。<br>缺点：<br>    进程全部装入内存。</p>
+<h2 id="分段分页比较"><a href="#分段分页比较" class="headerlink" title="分段分页比较"></a>分段分页比较</h2><p><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS25.png" alt=""></p>
+<h1 id="段页式"><a href="#段页式" class="headerlink" title="段页式"></a>段页式</h1><p>分页和分段存储管理方式都各有其优缺点。<br>结合两种存储管理方式,则形成一种新的存储管理方式——段页式。<br>    分页系统:提高内存利用率<br>    分段系统:满足用户需要<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS26.png" alt=""><br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS27.png" alt=""></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/OS/">OS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Interview/">Interview</a><a href="/tags/OS/">OS</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/14/计算机操作系统_汤小丹_笔记5/" data-title="计算机操作系统--存储器管理-笔记 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/14/计算机操作系统_汤小丹_笔记6/" title="计算机操作系统--虚拟内存-笔记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  计算机操作系统--虚拟内存-笔记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/13/计算机操作系统_汤小丹_笔记4/"  title="计算机操作系统--死锁-笔记">
+ <strong>下一篇：</strong><br/> 
+ <span>计算机操作系统--死锁-笔记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/14/计算机操作系统_汤小丹_笔记5/" data-title="计算机操作系统--存储器管理-笔记" data-url="http://yoursite.com/2016/08/14/计算机操作系统_汤小丹_笔记5/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#多级存储器结构"><span class="toc-number">1.</span> <span class="toc-text">多级存储器结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#程序的装入和链接"><span class="toc-number">2.</span> <span class="toc-text">程序的装入和链接</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#程序的装入"><span class="toc-number">2.1.</span> <span class="toc-text">程序的装入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#程序链接"><span class="toc-number">2.2.</span> <span class="toc-text">程序链接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#指令和地址的绑定"><span class="toc-number">2.3.</span> <span class="toc-text">指令和地址的绑定</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#连续分配方式"><span class="toc-number">3.</span> <span class="toc-text">连续分配方式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#单一分区分配"><span class="toc-number">3.1.</span> <span class="toc-text">单一分区分配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#固定分区分配"><span class="toc-number">3.2.</span> <span class="toc-text">固定分区分配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态（可变）分区分配"><span class="toc-number">3.3.</span> <span class="toc-text">动态（可变）分区分配</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#可变分区分配算法"><span class="toc-number">3.3.1.</span> <span class="toc-text">可变分区分配算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#首次适应（First-Fit）"><span class="toc-number">3.3.1.1.</span> <span class="toc-text">首次适应（First Fit）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#循环首次适应算法-Next-Fit"><span class="toc-number">3.3.1.2.</span> <span class="toc-text">循环首次适应算法(Next Fit)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#最佳适应算法（Best-Fit）"><span class="toc-number">3.3.1.3.</span> <span class="toc-text">最佳适应算法（Best Fit）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态重定位分区分配"><span class="toc-number">3.4.</span> <span class="toc-text">动态重定位分区分配</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#离散分配方式"><span class="toc-number">4.</span> <span class="toc-text">离散分配方式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#分页储存管理方式"><span class="toc-number">5.</span> <span class="toc-text">分页储存管理方式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#地址结构"><span class="toc-number">5.1.</span> <span class="toc-text">地址结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#页表"><span class="toc-number">5.2.</span> <span class="toc-text">页表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本的地址变换机构"><span class="toc-number">5.3.</span> <span class="toc-text">基本的地址变换机构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#地址变换过程"><span class="toc-number">5.4.</span> <span class="toc-text">地址变换过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基本的地址变换"><span class="toc-number">5.4.1.</span> <span class="toc-text">基本的地址变换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#页式存储"><span class="toc-number">5.4.2.</span> <span class="toc-text">页式存储</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#两级和多级页表"><span class="toc-number">5.5.</span> <span class="toc-text">两级和多级页表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#纯分页的特点"><span class="toc-number">5.6.</span> <span class="toc-text">纯分页的特点</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#分段式存储"><span class="toc-number">6.</span> <span class="toc-text">分段式存储</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#地址变换过程-1"><span class="toc-number">6.1.</span> <span class="toc-text">地址变换过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分段的特点"><span class="toc-number">6.2.</span> <span class="toc-text">分段的特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分段分页比较"><span class="toc-number">6.3.</span> <span class="toc-text">分段分页比较</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#段页式"><span class="toc-number">7.</span> <span class="toc-text">段页式</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

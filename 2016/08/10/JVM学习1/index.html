@@ -1,0 +1,669 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>JVM学习（1）--Java虚拟机的运行机制 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="来源：https://yq.aliyun.com/articles/49201?spm=5176.100240.searchblog.69.vchDL7http://www.cnblogs.com/kubixuesheng/p/5199200.html
+Java的两大基石：Java语言规范和JVM规范
+Java语言规范：规定了语法、变量、类型、文法。Java余元规范定义了什么是java语言
+JVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM学习（1）--Java虚拟机的运行机制">
+<meta property="og:url" content="http://yoursite.com/2016/08/10/JVM学习1/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="来源：https://yq.aliyun.com/articles/49201?spm=5176.100240.searchblog.69.vchDL7http://www.cnblogs.com/kubixuesheng/p/5199200.html
+Java的两大基石：Java语言规范和JVM规范
+Java语言规范：规定了语法、变量、类型、文法。Java余元规范定义了什么是java语言
+JVM">
+<meta property="og:image" content="http://images2015.cnblogs.com/blog/682679/201602/682679-20160218003556378-754163140.png">
+<meta property="og:image" content="http://images2015.cnblogs.com/blog/682679/201602/682679-20160218003759831-852713532.png">
+<meta property="og:image" content="http://images2015.cnblogs.com/blog/682679/201602/682679-20160218125116519-1526877008.png">
+<meta property="og:image" content="http://images2015.cnblogs.com/blog/682679/201602/682679-20160218132026706-1119527267.png">
+<meta property="og:image" content="http://images2015.cnblogs.com/blog/682679/201602/682679-20160218195903863-1005101251.png">
+<meta property="og:image" content="http://images2015.cnblogs.com/blog/682679/201602/682679-20160219131847456-1977752325.png">
+<meta property="og:image" content="http://images2015.cnblogs.com/blog/682679/201602/682679-20160219224659550-649686408.png">
+<meta property="og:updated_time" content="2016-08-12T01:05:56.017Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVM学习（1）--Java虚拟机的运行机制">
+<meta name="twitter:description" content="来源：https://yq.aliyun.com/articles/49201?spm=5176.100240.searchblog.69.vchDL7http://www.cnblogs.com/kubixuesheng/p/5199200.html
+Java的两大基石：Java语言规范和JVM规范
+Java语言规范：规定了语法、变量、类型、文法。Java余元规范定义了什么是java语言
+JVM">
+<meta name="twitter:image" content="http://images2015.cnblogs.com/blog/682679/201602/682679-20160218003556378-754163140.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/10/JVM学习1/" title="JVM学习（1）--Java虚拟机的运行机制" itemprop="url">JVM学习（1）--Java虚拟机的运行机制</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-10T15:15:51.614Z" itemprop="datePublished"> Published 2016-08-10</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Java的两大基石：Java语言规范和JVM规范"><span class="toc-number">1.</span> <span class="toc-text">Java的两大基石：Java语言规范和JVM规范</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM的启动过程"><span class="toc-number">2.</span> <span class="toc-text">JVM的启动过程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#介绍一下JVM的基本结构，并说出各个模块的功能"><span class="toc-number">3.</span> <span class="toc-text">介绍一下JVM的基本结构，并说出各个模块的功能</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#java栈里的局部变量表"><span class="toc-number">3.1.</span> <span class="toc-text">java栈里的局部变量表</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#对JVM对内存进行配置可以使用哪个命令参数"><span class="toc-number">4.</span> <span class="toc-text">对JVM对内存进行配置可以使用哪个命令参数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#java的server模式和client模式的区别？"><span class="toc-number">5.</span> <span class="toc-text">java的server模式和client模式的区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#什么是JVM逃逸分析（Escape-Analysis）"><span class="toc-number">6.</span> <span class="toc-text">什么是JVM逃逸分析（Escape Analysis）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM栈、堆和方法区的交互"><span class="toc-number">7.</span> <span class="toc-text">JVM栈、堆和方法区的交互</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#为了能让递归方法调用的次数多一些，应该怎么做？"><span class="toc-number">8.</span> <span class="toc-text">为了能让递归方法调用的次数多一些，应该怎么做？</span></a></li></ol>
+		
+		</div>
+		
+		<p>来源：<br><a href="https://yq.aliyun.com/articles/49201?spm=5176.100240.searchblog.69.vchDL7" target="_blank" rel="external">https://yq.aliyun.com/articles/49201?spm=5176.100240.searchblog.69.vchDL7</a><br><a href="http://www.cnblogs.com/kubixuesheng/p/5199200.html" target="_blank" rel="external">http://www.cnblogs.com/kubixuesheng/p/5199200.html</a></p>
+<h1 id="Java的两大基石：Java语言规范和JVM规范"><a href="#Java的两大基石：Java语言规范和JVM规范" class="headerlink" title="Java的两大基石：Java语言规范和JVM规范"></a>Java的两大基石：Java语言规范和JVM规范</h1><ul>
+<li>Java语言规范：规定了语法、变量、类型、文法。Java余元规范定义了什么是java语言</li>
+<li>JVM规范：规范了Class问价类型、运行时数据、帧栈、虚拟机的启动、虚拟机的指令集，JVM规范。主要定义二进制class文件和JVM指令集等，且要明确的问题是Java语言与JVM相对独立，不论何种语言，单反符合了JVM规范，都可以在JVM上运行，比如Groovy，Clojure，Scala</li>
+</ul>
+<h1 id="JVM的启动过程"><a href="#JVM的启动过程" class="headerlink" title="JVM的启动过程"></a>JVM的启动过程</h1><p>也就是JVM如何一步步找到main方法的</p>
+<ol>
+<li>首先使用JAVA命令启动虚拟机</li>
+<li>其次进行JVM配置的装载–根据当前路径和系统的版本寻找jvm.cfg文件，装载配置</li>
+<li>通过该文件去初始化JVM，并获得相应接口，比如JNIEnv接口，通过该接口实现findClass操作</li>
+<li>最后，通过相关接口（JNIEnv…），找到程序里的main方法，即可进入程序</li>
+</ol>
+<p><img src="http://images2015.cnblogs.com/blog/682679/201602/682679-20160218003556378-754163140.png" alt=""></p>
+<h1 id="介绍一下JVM的基本结构，并说出各个模块的功能"><a href="#介绍一下JVM的基本结构，并说出各个模块的功能" class="headerlink" title="介绍一下JVM的基本结构，并说出各个模块的功能"></a>介绍一下JVM的基本结构，并说出各个模块的功能</h1><p>结合这个经典的图做个解释：<br><img src="http://images2015.cnblogs.com/blog/682679/201602/682679-20160218003759831-852713532.png" alt=""><br>首先，JVM有一个类加载系统（不然类没法执行），也就是ClassLoader。class文件（Java编译之后的）通过类加载器加载到JVM中，而JVM的内存空间是分区的，主要分为以下几个区：</p>
+<ul>
+<li>方法区</li>
+<li>Java堆</li>
+<li>Java栈</li>
+<li>本地方法栈（也就是native方法调用）<br>类比物理CPU，JVM也需要一个指令来指向下一条指令的地址，就是图中的PC寄存器，接着是执行引擎，用来执行字节代码，当然还有一个重要的模块–GC（垃圾回收器）。下面单租总结各个模块：</li>
+<li>PC寄存器<br> java程序里的<strong>每个线程都拥有一个PC寄存器</strong>，线程私有的，每当线程启动PC寄存器时候就创建了，它是一个指针，总是用来指向下一跳指令的地址，让程序知道下一步需要做啥，且执行本地方法的时候，PC的值为undefined（未定义）</li>
+<li>方法区<br> <strong>保存JVM加载的类的信息</strong>，比如类型的常量池、类中的字段、类中的方法信息、方法的字节码（bytecode）等。但是这不是绝对的，比如JDK 6,String等字符串常量的信息是至于方法区中，JDK 7的时候已经移动到了Java堆，所以方法区也好，Java堆也罢，到底保存了什么没有具体定论，要结合不同的JVM版本进行分析，因为技术是发展的。<strong>一般认为，方法区就是保存了JVM加载的类的信息</strong>。通常方法区和永久取关联在一起，用就去是JVM里常见概念，保存了相对来说比较稳定的数据。</li>
+<li>Java堆<br> java堆是和程序开发紧密相关的一块内存区间，可以说，<strong>应用系统的对象都保存在Java堆中，且所有的线程共享Java堆，也就是说Java堆是全局共享的</strong>；从GC角度看，对使用了分带算法的GC来说，必须堆也是对应分代的，因为<strong>Java堆是GC的主要工作区间</strong>。比如下图，分代的堆：<br> <img src="http://images2015.cnblogs.com/blog/682679/201602/682679-20160218125116519-1526877008.png" alt=""><br> 首先有个eden代–是对象出生的地方，还有s0,s1使用复制算法。最后还有一个老年代tenured–年龄比较大的对象。</li>
+<li>Java栈<br> java栈和java堆是完全不一样的，上面说的java堆是全局共享的（all线程访问），而<strong>java栈是线程私有的</strong>，java栈由一系列的帧组成（因此java栈也叫作帧栈），栈众所周知是先进后出的结构，java栈也不例外。<strong>java栈中每个帧都保存一个方法调用的局部变量、操作数栈、指向常量池的指针等，且每一次方法调用都会创建一个帧，并压栈</strong>。</li>
+</ul>
+<h2 id="java栈里的局部变量表"><a href="#java栈里的局部变量表" class="headerlink" title="java栈里的局部变量表"></a>java栈里的局部变量表</h2><p>该表不仅仅只是方法里的局部变量，而是更加宽泛的包含了方法的参数以及局部变量，放方法调用的时候，会在java栈里创建一个帧，帧里的局部变量表保存了方法的参数和局部变量。如下面一个静态方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">doStaticMethod</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">long</span> l, <span class="keyword">float</span> f, Object o, <span class="keyword">byte</span> b)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>编译之后的具备变量表字节码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">LOCALVARIABLE i I L0 L1 <span class="number">0</span></div><div class="line">LOCALVARIABLE l J L0 L1 <span class="number">1</span></div><div class="line">LOCALVARIABLE f F L0 L1 <span class="number">3</span></div><div class="line">LOCALVARIABLE o Ljava/lang/Object; L0 L1 <span class="number">4</span></div><div class="line">LOCALVARIABLE b B L0 L1 <span class="number">5</span></div><div class="line">MAXSTACK = <span class="number">1</span></div><div class="line">MAXLOCALS = <span class="number">6</span></div></pre></td></tr></table></figure>
+<p>可以认为java栈帧里的局部变量又很多槽位组成，每个槽最大可以容纳32位的数据类型，故方法参数里的int i参数占据了一个槽位，而long l占据了两个槽 1和2，Object 对象类型其实只是一个引用，O相当于一个指针，32位。byte类型升为int（？）也是32位。<br><img src="http://images2015.cnblogs.com/blog/682679/201602/682679-20160218132026706-1119527267.png" alt=""><br>再看看实例方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">doInstanceMethod</span><span class="params">(<span class="keyword">char</span> c, <span class="keyword">short</span> s, <span class="keyword">boolean</span> b)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>编译之后的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">L1</div><div class="line">LOCALVARIABLE <span class="keyword">this</span> LDemo; L0 L1 <span class="number">0</span></div><div class="line">LOCALVARIABLE c C L0 L1 <span class="number">1</span></div><div class="line">LOCALVARIABLE s S L0 L1 <span class="number">2</span></div><div class="line">LOCALVARIABLE b Z L0 L1 <span class="number">3</span></div><div class="line">MAXSTACK = <span class="number">1</span></div><div class="line">MAXLOCALS = <span class="number">4</span></div></pre></td></tr></table></figure>
+<p>实例方法的局部变量表和静态方法基本一样，唯一区别就是实例方法在Java栈帧的局部变量表里第一个槽位（0位置）存的是一个this引用（当前对象的引用），后面就和静态方法的一样了。<br>如上一个递归调用（栈的内存溢出），当类中方法（静态 or 实例）调用的时候，就会在Java栈里创建一个帧，每一次调用都会产生一个帧，并持续的压入栈顶……一直到Java栈满了，就发生了溢出！或者方法调用结束了，那么对应的Java栈帧就被移除。<br><img src="http://images2015.cnblogs.com/blog/682679/201602/682679-20160218195903863-1005101251.png" alt=""><br>注意，一个Java栈帧里除了保存局部变量表外，还会保存操作数栈，返回地址等信息。顺势我在分析下Java栈帧里的操作数栈，理解Java栈帧里的操作数栈前先知道一个结论——因为Java没有寄存器(PC寄存器？)，故所有参数传递使用Java栈帧里的操作数栈。</p>
+<h1 id="对JVM对内存进行配置可以使用哪个命令参数"><a href="#对JVM对内存进行配置可以使用哪个命令参数" class="headerlink" title="对JVM对内存进行配置可以使用哪个命令参数"></a>对JVM对内存进行配置可以使用哪个命令参数</h1><p>　-Xms 10m，表示JVM Heap(堆内存)最小尺寸10MB，最开始只有 -Xms 的参数，表示 “初始” memory size(m表示memory，s表示size)，属于初始分配10m，-Xms表示的“初始”内存也有一个“最小”内存的概念（其实常用的做法中初始内存采用的也就是最小内存）。<br>　-Xmx 10m，表示JVM Heap(堆内存)最大允许的尺寸10MB，按需分配。如果 -Xmx 不指定或者指定偏小，也许出现java.lang.OutOfMemory错误，此错误来自JVM不是Throwable的，无法用try…catch捕捉。</p>
+<h1 id="java的server模式和client模式的区别？"><a href="#java的server模式和client模式的区别？" class="headerlink" title="java的server模式和client模式的区别？"></a>java的server模式和client模式的区别？</h1><ul>
+<li>client，server两个参数可以设置JVM使用何种运行模型，client模式启动较快，但是运行性能和内存管理效率不如server模式，常用于客户端程序；相反sever模式启动比client慢，但是可以获得更高的运行性能，常用于服务器程序。</li>
+<li>windows上，缺省的虚拟机类型为client模式（java –version查看）（我的是server？Java HotSpot(TM) 64-Bit Server VM (build 25.77-b03, mixed mode)）如果要使用server模式，需要在启动虚拟机时候加-server参数，以获得更高性能；对服务器端应用，推荐server模式，尤其是多个cpu的系统。</li>
+<li>Linux上缺省使用server模式。</li>
+<li>官方这样介绍：JVM Server模式与client模式启动，最主要的差别在于：-Server模式启动时，速度较慢，但是一旦运行起来后，性能将会有很大的提升。JVM工作在Server模式可以大大提高性能，但应用的启动会比client模式慢大概10%。当该参数不指定时，虚拟机启动检测主机是否为服务器，如果是，则以Server模式启动，否则以client模式启动，Java 5.0检测的根据是至少2个CPU和最低2GB内存。</li>
+</ul>
+<p>　　综上，当JVM用于启动GUI界面的交互应用时适合于使用client模式，当JVM用于运行服务器后台程序时建议用Server模式。</p>
+<p>　　JVM在client模式默认-Xms是1M，-Xmx是64M；</p>
+<p>　　JVM在Server模式默认-Xms是128M，-Xmx是1024M。可以通过运行:java -version来查看jvm默认工作在什么模式。</p>
+<h1 id="什么是JVM逃逸分析（Escape-Analysis）"><a href="#什么是JVM逃逸分析（Escape-Analysis）" class="headerlink" title="什么是JVM逃逸分析（Escape Analysis）"></a>什么是JVM逃逸分析（Escape Analysis）</h1><p>所谓逃逸分析，是JVM的一种内存分配的优化方式，一些参考书这样写到：在编程语言的编译优化原理中，分析指针动态范围的方法称为陶艺分析。通俗一点将，就是当一个指针对象被多个方法或者线程引用的时候，我们称这个指针发生了逃逸。而用来分析这种逃逸现象的方法就称之为逃逸分析。</p>
+<p>（待学习再补充）<br>我们知道java对象是在堆里分配的，在Java栈帧中，只保存了对象的指针。当对象不再使用后，需要依靠GC来遍历引用树并回收内存，如果对象数量较多，将给GC带来较大压力，也间接影响了应用的性能。减少临时对象在堆内分配的数量，无疑是最有效的优化方法，接下来，举一个场景来阐述。</p>
+<p>　　假设在方法体内，声明了一个局部变量，且该变量在方法执行生命周期内未发生逃逸（在方法体内，未将引用暴露给外面）。按照JVM内存分配机制，首先会在堆里创建变量类的实例，然后将返回的对象指针压入调用栈，继续执行。这是优化前，JVM的处理方式。</p>
+<p>　　逃逸分析优化 – 栈上分配，优化原理：JVM分析找到未逃逸的变量（在方法体内，未将引用暴露给外面），将变量类的实例化内存直接在栈里分配(无需进入堆)，分配完成后，继续在调用栈内执行，最后线程结束，栈空间被回收，局部变量也被回收。这是优化后的处理方式，对比可以看出，主要区别在<strong>栈空间直接作为临时对象的存储介质</strong>。从而减少了临时对象在堆内的分配数量。</p>
+<h1 id="JVM栈、堆和方法区的交互"><a href="#JVM栈、堆和方法区的交互" class="headerlink" title="JVM栈、堆和方法区的交互"></a>JVM栈、堆和方法区的交互</h1><p>下面是一个JVM内存结构图：<br><img src="http://images2015.cnblogs.com/blog/682679/201602/682679-20160219131847456-1977752325.png" alt=""><br>举例说明三者之间的交互原理：<br>众所周知，通常Java程序都要从main方法进入，故一般情况下Java程序都有一个main方法，而它本身也是一个线程（主线程），自然就对应一个Java栈，main方法也就对应一个Java的栈帧了。而根据之前JVM结构的分析，我们知道类会被JVM装载，那么JVM装载的类的信息放在了方法区里（包括字段信息，方法本身的字节码等，当然main方法也不例外），而方法体内的局部变量（包括形参），本例是对象的引用，统一放到Java栈帧里。而对象本身存放到了Java堆。如下注释：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * AppMain</div><div class="line"> *</div><div class="line"> * 程序运行时，JVM把AppMain这个类的信息（装载的）全部放入方法区保存</div><div class="line"> *</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppMain</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">// main方法本身的字节码也放入方法区保存</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        <span class="comment">// test引用保存到Java栈帧，类Sample的对象存入Java堆</span></div><div class="line">        Sample test1 = <span class="keyword">new</span> Sample(<span class="string">"测试 1"</span>);</div><div class="line">        Sample test2 = <span class="keyword">new</span> Sample(<span class="string">"测试 2"</span>);</div><div class="line"></div><div class="line">        test1.printName();</div><div class="line">        test2.printName();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Sample</span> </span>&#123;</div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 类的字段信息也存入了方法区</div><div class="line">     */</div><div class="line">    <span class="keyword">private</span> String name;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * main方法里new本类实例之后，Sample构造器作为一个方法，它的形参name，name引用存入栈，name引用的字符串对象放入堆</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span> name String</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Sample</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * printName 放入了方法区保存</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printName</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="keyword">this</span>.name);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>画成图就是这样：类中方法本身（字节码）存放在方法区，Java栈里的对象引用指向了Java堆里的对象，之后堆里的对象需要的类的信息要去方法区里（非堆区）读取。<br><img src="http://images2015.cnblogs.com/blog/682679/201602/682679-20160219224659550-649686408.png" alt=""></p>
+<h1 id="为了能让递归方法调用的次数多一些，应该怎么做？"><a href="#为了能让递归方法调用的次数多一些，应该怎么做？" class="headerlink" title="为了能让递归方法调用的次数多一些，应该怎么做？"></a>为了能让递归方法调用的次数多一些，应该怎么做？</h1><p>因为传统的递归都是在栈上根据调用顺序依次申请内存空间（栈帧）进行运算，然后层层回调，这是基于上一层运算依赖于下一层的运算结果（或者说上一层的运算还没做完，需要下一层返回的结果）。<br>后来人们发现，对于该递归而言，一些压栈操作并无必要，递归中的子问题规模几乎不变，每次只减去了1或者2。如果画一个递归树，会发现很多相同的子树！！！说明该实现浪费了很多内存和时间。</p>
+<ul>
+<li>优化1：使用自底向上的算法–线性递归。线性递归每次调用时，针对上一次调用的结果，它不进行收集（保存），只能依靠顺次的展开，这样也很消耗内存。</li>
+<li>优化2：尾递归，它比线性递归多一个参数，这个参数是上一次调用函数得到的结果，尾递归每次调用都在收集结果，避免了线性递归不收集结果只能依次展开，消耗内存的坏处。尾递归的情况是下层计算结果对上层“无用”（上一层运算已经做完，不依赖后续的递归），为了效率，直接将下一层需要的空间覆盖在上一层上，尾递归和一般的递归不同在对内存的占用，普通递归创建stack累积而后计算收缩，尾递归只会占用恒量的内存（和迭代一样）。通俗的说，尾递归是把变化的参数传递给递归函数的变量了。</li>
+</ul>
+<p>　　怎么写尾递归？形式上只要最后一个return语句是单纯函数就可以。如return tailrec(x+1); 而不是return tailrec(x+1) + x;</p>
+<p>更形象的解释（来自网络）：</p>
+<p>普通递归</p>
+<p>function story() {<br>从前有座山，山上有座庙，庙里有个老和尚，一天老和尚对小和尚讲故事：story()，小和尚听了，找了块豆腐撞死了 // 非尾递归，下一个函数结束以后此函数还有后续，所以必须保存本身的环境以供处理返回值。<br>}</p>
+<p>尾递归：<br>function story() {<br>从前有座山，山上有座庙，庙里有个老和尚，一天老和尚对小和尚讲故事：story() // 尾递归，进入下一个函数不再需要上一个函数的环境了，得出结果以后直接返回。<br>}<br>　　综上，可以尽可能高效的利用栈空间，增加递归调研数。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Interview/">Interview</a><a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/10/JVM学习1/" data-title="JVM学习（1）--Java虚拟机的运行机制 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/11/JVM学习2/" title="JVM学习（2）--Java堆和栈">
+  <strong>上一篇：</strong><br/>
+  <span>
+  JVM学习（2）--Java堆和栈</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/09/词向量/"  title="Word2vec解析">
+ <strong>下一篇：</strong><br/> 
+ <span>Word2vec解析
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/10/JVM学习1/" data-title="JVM学习（1）--Java虚拟机的运行机制" data-url="http://yoursite.com/2016/08/10/JVM学习1/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Java的两大基石：Java语言规范和JVM规范"><span class="toc-number">1.</span> <span class="toc-text">Java的两大基石：Java语言规范和JVM规范</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM的启动过程"><span class="toc-number">2.</span> <span class="toc-text">JVM的启动过程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#介绍一下JVM的基本结构，并说出各个模块的功能"><span class="toc-number">3.</span> <span class="toc-text">介绍一下JVM的基本结构，并说出各个模块的功能</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#java栈里的局部变量表"><span class="toc-number">3.1.</span> <span class="toc-text">java栈里的局部变量表</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#对JVM对内存进行配置可以使用哪个命令参数"><span class="toc-number">4.</span> <span class="toc-text">对JVM对内存进行配置可以使用哪个命令参数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#java的server模式和client模式的区别？"><span class="toc-number">5.</span> <span class="toc-text">java的server模式和client模式的区别？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#什么是JVM逃逸分析（Escape-Analysis）"><span class="toc-number">6.</span> <span class="toc-text">什么是JVM逃逸分析（Escape Analysis）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM栈、堆和方法区的交互"><span class="toc-number">7.</span> <span class="toc-text">JVM栈、堆和方法区的交互</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#为了能让递归方法调用的次数多一些，应该怎么做？"><span class="toc-number">8.</span> <span class="toc-text">为了能让递归方法调用的次数多一些，应该怎么做？</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

@@ -1,0 +1,705 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>机器学习（周志华）- 第6章支持向量机(1)笔记 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="注：看书看不懂，参考了pluskid的博客。支持向量机这个名字强调了此类学习器的关键是如何从支持向量构造出解；同时也暗示着其复杂程度主要和支持向量的数目有关。
+间隔与支持向量分类学习的最基本想法就是基于训练集D在样本空间中找到一个划分超平面，将不同类别的样本分开。在样本空间，划分超平面可以通过下列线性方程描述：$$\mathbf{w}^T + b = 0$$其中，$w = (w_1;w_2;\ld">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习（周志华）- 第6章支持向量机(1)笔记">
+<meta property="og:url" content="http://yoursite.com/2016/08/04/机器学习_周志华_笔记6/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="注：看书看不懂，参考了pluskid的博客。支持向量机这个名字强调了此类学习器的关键是如何从支持向量构造出解；同时也暗示着其复杂程度主要和支持向量的数目有关。
+间隔与支持向量分类学习的最基本想法就是基于训练集D在样本空间中找到一个划分超平面，将不同类别的样本分开。在样本空间，划分超平面可以通过下列线性方程描述：$$\mathbf{w}^T + b = 0$$其中，$w = (w_1;w_2;\ld">
+<meta property="og:image" content="http://blog.pluskid.org/wp-content/uploads/2010/09/two_circles.png">
+<meta property="og:image" content="http://blog.pluskid.org/wp-content/uploads/2010/09/rotate.gif">
+<meta property="og:updated_time" content="2016-08-06T00:47:36.751Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习（周志华）- 第6章支持向量机(1)笔记">
+<meta name="twitter:description" content="注：看书看不懂，参考了pluskid的博客。支持向量机这个名字强调了此类学习器的关键是如何从支持向量构造出解；同时也暗示着其复杂程度主要和支持向量的数目有关。
+间隔与支持向量分类学习的最基本想法就是基于训练集D在样本空间中找到一个划分超平面，将不同类别的样本分开。在样本空间，划分超平面可以通过下列线性方程描述：$$\mathbf{w}^T + b = 0$$其中，$w = (w_1;w_2;\ld">
+<meta name="twitter:image" content="http://blog.pluskid.org/wp-content/uploads/2010/09/two_circles.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/04/机器学习_周志华_笔记6/" title="机器学习（周志华）- 第6章支持向量机(1)笔记" itemprop="url">机器学习（周志华）- 第6章支持向量机(1)笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-04T10:37:35.150Z" itemprop="datePublished"> Published 2016-08-04</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#间隔与支持向量"><span class="toc-number">1.</span> <span class="toc-text">间隔与支持向量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#对偶问题"><span class="toc-number">2.</span> <span class="toc-text">对偶问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#核函数"><span class="toc-number">3.</span> <span class="toc-text">核函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#几种常用的核函数"><span class="toc-number">3.1.</span> <span class="toc-text">几种常用的核函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#核函数小结"><span class="toc-number">3.2.</span> <span class="toc-text">核函数小结</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>注：看书看不懂，参考了<a href="http://blog.pluskid.org/?p=682" target="_blank" rel="external">pluskid的博客</a>。<br>支持向量机这个名字强调了此类学习器的关键是如何从支持向量构造出解；同时也暗示着其复杂程度主要和支持向量的数目有关。</p>
+<h1 id="间隔与支持向量"><a href="#间隔与支持向量" class="headerlink" title="间隔与支持向量"></a>间隔与支持向量</h1><p>分类学习的最基本想法就是基于训练集D在样本空间中找到一个划分超平面，将不同类别的样本分开。<br>在样本空间，划分超平面可以通过下列线性方程描述：<br>$$\mathbf{w}^T + b = 0$$<br>其中，$w = (w_1;w_2;\ldots;w_d)$为法向量，决定了超平面的方向；b为移位项，决定了超平面与远点之间的距离。将划分超平面记为(w,b)。样本空间中任意点$\mathbf{x}$到超平面$(\mathbf{w},b)$的距离可以写成：<br>$$r = \frac{|\mathbf{w}^T + b|}{||\mathbf{w}||}$$<br>假设超平面能够正确分类样本$(x_i,y_i)\in D$ 有如下式子：<br>$$\begin{cases}<br>\mathbf{w}^T x_i + b \geq +1 , &amp; y_i = +1\newline<br>\mathbf{w}^T x_i + b \leq +1 , &amp; y_i = -1<br>\end{cases}$$</p>
+<p>而距离超平面最近的几个样本点使得上面的式子成立，称作<code>“支持向量”</code>，两个异类支持向量到超平面的距离之和为<br>$$\gamma = \frac{2}{||w||}$$<br>它被称之为“间隔”。</p>
+<p>欲找到“最大间隔”的划分超平面，等价于最小化1/||w||,等价于<br>$$min_{w,b} \frac{1}{2} ||w||^2   \quad  (1)$$<br>$$s.t. y_i(w^Tx_i+b)\geq 1, \quad i = 1,2,\ldots,m$$</p>
+<p>这就是支持向量机（support vector machine，SVM）的基本型。</p>
+<h1 id="对偶问题"><a href="#对偶问题" class="headerlink" title="对偶问题"></a>对偶问题</h1><p>我们希望求解(1)得到最大间隔划分超平面，注意到（1）式本身是一个凸二次规划问题，能直接用现成的优化计算包（Quadratic Programing）求解，约束条件是线性的。但是我们有更高效的办法。</p>
+<p>虽然这个问题确实是一个标准的 QP 问题，但是它也有它的特殊结构，通过拉格朗日乘子法变换到对偶变量 (dual variable) 的优化问题之后，可以找到一种更加有效的方法来进行求解——这也是 SVM 盛行的一大原因，通常情况下这种方法比直接使用通用的 QP 优化包进行优化要高效得多。此外，在推导过程中，许多有趣的特征也会被揭露出来，包括刚才提到的 supporting vector 的问题。</p>
+<p>关于  我没有办法在这里细讲了，可以参考 Wikipedia 。简单地来说，通过给每一个约束条件加上一个拉格朗自乘子，我们可以将它们融和到目标函数里去</p>
+<p>$$\mathcal{L}(w,b,\alpha)=\frac{1}{2}|w|^2-\sum_{i=1}^n\alpha_i \left(y_i(w^Tx_i+b)-1\right)$$</p>
+<p>然后我们令</p>
+<p>$$\theta(w) = \max_{\alpha_i\geq 0}\mathcal{L}(w,b,\alpha)$$</p>
+<p>容易验证:</p>
+<ul>
+<li>当某个约束条件不满足的时候，例如 $y_i(w^Tx_i+b) &lt; 1$ , 那么我们显然有 $\theta(w)=\infty$ (只要令$\alpha_i=\infty$ 即可)。</li>
+<li>而当所有约束条件都满足的时候，则有 $\theta(w)=\frac{1}{2}|w|^2$ ,即我们最初要最小化的量。<br>因此，在约束条件得到满足的情况下最小化 $\frac{1}{2}|w|^2$ 实际上等价于最小化 $\frac{1}{2}|w|^2$ ,（当然，这里也有约束条件，就是αi≥0,i=1,…,n）因为如果约束条件没有得到满足，θ(w) 会等于无穷大，自然不会是我们所要求的最小值。具体写出来，我们现在的目标函数变成了：</li>
+</ul>
+<p>$$\min_{w,b}\;\theta(w) = \min_{w,b}\; \max_{\alpha_i\geq 0}\; \mathcal{L}(w,b,\alpha) = p^ * $$</p>
+<p>这里用 $p^ * $ 表示这个问题的最优值，这个问题与我们最初的问题是等价的。不过，现在我们来把最小和最大的位置交换一下：</p>
+<p>$$\max_{\alpha_i\geq 0}\; \min_{w,b}\; \mathcal{L}(w,b,\alpha) = d^ * $$</p>
+<p>当然，交换以后的问题不再等价于原问题，这个新问题的最优值用$d^ <em> $来表示。并，我们有 $$d^ </em> \leq p^ <em> $$，这在直观上也不难理解，最大值中最小的一个总也比最小值中最大的一个要大吧！<br>总之，第二个问题的最优值 $d^ </em> $ 在这里提供了一个第一个问题的最优值 $p^ * $ 的一个下界，在满足某些条件的情况下，这两者相等，这个时候我们就可以通过求解第二个问题来间接地求解第一个问题。具体来说，就是要满足 KKT 条件，这里暂且先略过不说，直接给结论：我们这里的问题是满足 KKT 条件的，因此现在我们便转化为求解第二个问题。</p>
+<p>首先要让 L 关于 w 和 b 最小化，我们分别令 ∂L/∂w 和 ∂L/∂b 等于零：</p>
+<p>$$\begin{align}<br>\frac{\partial \mathcal{L}}{\partial w}=0 &amp;\Rightarrow w=\sum_{i=1}^n \alpha_i y_i x_i   \newline<br>\frac{\partial \mathcal{L}}{\partial b} = 0 &amp;\Rightarrow \sum_{i=1}^n \alpha_i y_i = 0<br>\end{align}$$</p>
+<p>带回 L 得到：</p>
+<p>$$\begin{align}<br>\mathcal{L}(w,b,\alpha) &amp;= \frac{1}{2}\sum_{i,j=1}^n\alpha_i\alpha_jy_iy_jx_i^Tx_j-\sum_{i,j=1}^n\alpha_i\alpha_jy_iy_jx_i^Tx_j – b\sum_{i=1}^n\alpha_iy_i + \sum_{i=1}^n\alpha_i  \quad \newline<br>&amp;= \sum_{i=1}^n\alpha_i – \frac{1}{2}\sum_{i,j=1}^n\alpha_i\alpha_jy_iy_jx_i^Tx_j<br>\end{align}$$</p>
+<p>此时我们得到关于 dual variable α 的优化问题：</p>
+<p>$$\begin{align}<br>\max_\alpha &amp;\sum_{i=1}^n\alpha_i – \frac{1}{2}\sum_{i,j=1}^n\alpha_i\alpha_jy_iy_jx_i^Tx_j \newline<br>s.t., &amp;\alpha_i\geq 0, i=1,\ldots,n \newline<br>&amp;\sum_{i=1}^n\alpha_iy_i = 0<br>\end{align}$$</p>
+<p>如前面所说，这个问题有更加高效的优化算法，不过具体方法在这里先不介绍，让我们先来看看推导过程中得到的一些有趣的形式。首先就是关于我们的 hyper plane ，对于一个数据点 x 进行分类，实际上是通过把 x 带入到  $f(x)=w^Tx+b$ 算出结果然后根据其正负号来进行类别划分的。而前面的推导中我们得到 $w=\sum_{i=1}^n \alpha_i y_i x_i$ ，因此</p>
+<p>$$\begin{align}<br>f(x)&amp;=\left(\sum_{i=1}^n\alpha_i y_i x_i\right)^Tx+b \newline<br> &amp;= \sum_{i=1}^n\alpha_i y_i \langle x_i, x\rangle + b<br>\end{align}$$</p>
+<p>这里的形式的有趣之处在于，<strong>对于新点 x 的预测，只需要计算它与训练数据点的内积即可</strong>（这里 $\langle \cdot, \cdot\rangle$ 表示向量内积），这一点至关重要，是之后使用 Kernel 进行非线性推广的基本前提。此外，所谓 Supporting Vector 也在这里显示出来——事实上，所有非 Supporting Vector 所对应的系数 α 都是等于零的，因此对于新点的内积计算实际上只要针对<strong>少量的“支持向量”</strong>而不是所有的训练数据即可。</p>
+<p>为什么非支持向量对应的 α 等于零呢？直观上来理解的话，就是这些“后方”的点——正如我们之前分析过的一样，对超平面是没有影响的，由于分类完全有超平面决定，所以这些无关的点并不会参与分类问题的计算，因而也就不会产生任何影响了。这个结论也可由刚才的推导中得出，回忆一下我们刚才通过 Lagrange multiplier 得到的目标函数： </p>
+<p>$$\max_{\alpha_i\geq 0}\;\mathcal{L}(w,b,\alpha)=\max_{\alpha_i\geq 0}\;\frac{1}{2}|w|^2-\sum_{i=1}^n\alpha_i \color{red}{\left(y_i(w^Tx_i+b)-1\right)}$$</p>
+<p>注意到如果 xi 是支持向量的话，上式中红颜色的部分是等于 0 的（因为支持向量的 functional margin 等于 1 ），而对于非支持向量来说，functional margin 会大于 1 ，因此红颜色部分是大于零的，而 αi 又是非负的，为了满足最大化，αi 必须等于 0 。这也就是这些非 Supporting Vector 的点的悲惨命运了。 :p</p>
+<p>嗯，于是呢，把所有的这些东西整合起来，得到的一个 maximum margin hyper plane classifier 就是支持向量机（Support Vector Machine），经过直观的感觉和数学上的推导，为什么叫“支持向量”，应该也就明了了吧？当然，到目前为止，我们的 SVM 还比较弱，只能处理线性的情况，不过，在得到了 dual 形式之后，通过 Kernel 推广到非线性的情况就变成了一件非常容易的事情了。</p>
+<h1 id="核函数"><a href="#核函数" class="headerlink" title="核函数"></a>核函数</h1><p>前面我们介绍了线性情况下的支持向量机，它通过寻找一个线性的超平面来达到对数据进行分类的目的。不过，由于是线性方法，所以对非线性的数据就没有办法处理了。例如图中的两类数据，分别分布为两个圆圈的形状，不论是任何高级的分类器，只要它是线性的，就没法处理，SVM 也不行。因为这样的数据本身就是线性不可分的。<br><img src="http://blog.pluskid.org/wp-content/uploads/2010/09/two_circles.png" alt=""><br>对于这个数据集，我可以悄悄透露一下：我生成它的时候就是用两个半径不同的圆圈加上了少量的噪音得到的，所以，一个理想的分界应该是一个“圆圈”而不是一条线（超平面）。如果用 X1 和 X2 来表示这个二维平面的两个坐标的话，我们知道一条二次曲线（圆圈是二次曲线的一种特殊情况）的方程可以写作这样的形式：</p>
+<p>$$a_1X_1 + a_2X_1^2 + a_3 X_2 + a_4 X_2^2 + a_5 X_1X_2 + a_6 = 0$$</p>
+<p>注意上面的形式，如果我们构造另外一个五维的空间，其中五个坐标的值分别为 Z1=X1, Z2=X21, Z3=X2, Z4=X22, Z5=X1X2，那么显然，上面的方程在新的坐标系下可以写作：</p>
+<p>$$\sum_{i=1}^5a_iZ_i + a_6 = 0$$</p>
+<p>关于新的坐标 Z ，这正是一个 hyper plane 的方程！也就是说，如果我们做一个映射 $\phi:\mathbb{R}^2\rightarrow\mathbb{R}^5 $，将 X 按照上面的规则映射为 Z ，那么在新的空间中原来的数据将变成线性可分的，从而使用之前我们推导的线性分类算法就可以进行处理了。这正是 Kernel 方法处理非线性问题的基本思想。</p>
+<p>再进一步描述 Kernel 的细节之前，不妨再来看看这个例子映射过后的直观例子。当然，我没有办法把 5 维空间画出来，不过由于我这里生成数据的时候就是用了特殊的情形，具体来说，我这里的超平面实际的方程是这个样子（圆心在 X2 轴上的一个正圆）：</p>
+<p>$$a_1X_1^2 + a_2(X_2-c)^2 + a_3 = 0$$</p>
+<p>因此我只需要把它映射到 Z1=X21, Z2=X22, Z3=X2 这样一个三维空间中即可，下图（这是一个 gif 动画）即是映射之后的结果，将坐标轴经过适当的旋转，就可以很明显地看出，数据是可以通过一个平面来分开的<br><img src="http://blog.pluskid.org/wp-content/uploads/2010/09/rotate.gif" alt=""><br>现在让我们再回到 SVM 的情形，假设原始的数据是非线性的，我们通过一个映射 $\phi(\cdot)$ 将其映射到一个高维空间中，数据变得线性可分了，这个时候，我们就可以使用原来的推导来进行计算，只是所有的推导现在是在新的空间，而不是原始空间中进行。当然，推导过程也并不是可以简单地直接类比的，例如，原本我们要求超平面的法向量 w ，但是如果映射之后得到的新空间的维度是无穷维的（确实会出现这样的情况，比如后面会提到的 Gaussian Kernel ），要表示一个无穷维的向量描述起来就比较麻烦。于是我们不妨先忽略过这些细节，直接从最终的结论来分析，回忆一下，我们上一次得到的最终的分类函数是这样的：</p>
+<p>$$f(x) = \sum_{i=1}^n\alpha_i y_i \langle x_i, x\rangle + b$$</p>
+<p>现在则是在映射过后的空间，即：</p>
+<p>$$f(x) = \sum_{i=1}^n\alpha_i y_i \langle \phi(x_i), \phi(x)\rangle + b$$</p>
+<p>而其中的 α 也是通过求解如下 dual 问题而得到的：</p>
+<p>$$\begin{align}<br>\max_\alpha &amp;\sum_{i=1}^n\alpha_i – \frac{1}{2}\sum_{i,j=1}^n\alpha_i\alpha_jy_iy_j\langle \phi(x_i),\phi(x_j)\rangle \newline<br>s.t., &amp;\alpha_i\geq 0, i=1,\ldots,n \newline<br>&amp;\sum_{i=1}^n\alpha_iy_i = 0<br>\end{align}$$</p>
+<p>这样一来问题就解决了吗？似乎是的：拿到非线性数据，就找一个映射 $\phi(\cdot)$  ，然后一股脑把原来的数据映射到新空间中，再做线性 SVM 即可。不过若真是这么简单，我这篇文章的标题也就白写了——说了这么多，其实还没到正题呐！其实刚才的方法稍想一下就会发现有问题：在最初的例子里，我们对一个二维空间做映射，选择的新空间是原始空间的所有一阶和二阶的组合，得到了五个维度；如果原始空间是三维，那么我们会得到 19 维的新空间（验算一下？），这个数目是呈爆炸性增长的，这给 $\phi(\cdot)$ 的计算带来了非常大的困难，而且如果遇到无穷维的情况，就根本无从计算了。所以就需要 Kernel 出马了。</p>
+<p>不妨还是从最开始的简单例子出发，设两个向量 x1=(η1,η2)T 和 x2=(ξ1,ξ2)T ，而 $\phi(\cdot)$ 即是到前面说的五维空间的映射，因此映射过后的内积为：</p>
+<p>$$\langle \phi(x_1),\phi(x_2)\rangle = \eta_1\xi_1 + \eta_1^2\xi_1^2 + \eta_2\xi_2 + \eta_2^2\xi_2^2+\eta_1\eta_2\xi_1\xi_2$$</p>
+<p>另外，我们又注意到：</p>
+<p>$$\left(\langle x_1, x_2\rangle + 1\right)^2 = 2\eta_1\xi_1 + \eta_1^2\xi_1^2 + 2\eta_2\xi_2 + \eta_2^2\xi_2^2 + 2\eta_1\eta_2\xi_1\xi_2 + 1$$</p>
+<p>二者有很多相似的地方，实际上，我们只要把某几个维度线性缩放一下，然后再加上一个常数维度，具体来说，上面这个式子的计算结果实际上和映射<br>$$\varphi(X_1,X_2)=(\sqrt{2}X_1,X_1^2,\sqrt{2}X_2,X_2^2,\sqrt{2}X_1X_2,1)^T$$</p>
+<p>之后的内积 $\langle \phi(x_1),\phi(x_2)\rangle$ 的结果是相等的（自己验算一下）。区别在于什么地方呢？一个是映射到高维空间中，然后再根据内积的公式进行计算；而另一个则直接在原来的低维空间中进行计算，而不需要显式地写出映射后的结果。回忆刚才提到的映射的维度爆炸，在前一种方法已经无法计算的情况下，后一种方法却依旧能从容处理，甚至是无穷维度的情况也没有问题。<br>我们把这里的计算两个向量在映射过后的空间中的内积的函数叫做核函数 (Kernel Function) ，例如，在刚才的例子中，我们的核函数为：<br>$$\kappa(x_1,x_2)=\left(\langle x_1, x_2\rangle + 1\right)^2$$</p>
+<p>核函数能简化映射空间中的内积运算——刚好“碰巧”的是，在我们的 SVM 里需要计算的地方数据向量总是以内积的形式出现的。对比刚才我们写出来的式子，现在我们的分类函数为：</p>
+<p>$$\sum_{i=1}^n\alpha_i y_i \color{red}{\kappa(x_i,x)} + b$$</p>
+<p>其中 α 由如下 dual 问题计算而得：</p>
+<p>$$\begin{align}<br>\max_\alpha &amp;\sum_{i=1}^n\alpha_i – \frac{1}{2}\sum_{i,j=1}^n\alpha_i\alpha_jy_iy_j \color{red}{\kappa(x_i, x_j)} \newline<br>s.t., &amp;\alpha_i\geq 0, i=1,\ldots,n \newline<br>&amp;\sum_{i=1}^n\alpha_iy_i = 0<br>\end{align}$$</p>
+<p>这样一来计算的问题就算解决了，避开了直接在高维空间中进行计算，而结果却是等价的，实在是一件非常美妙的事情！当然，因为我们这里的例子非常简单，所以我可以手工构造出对应于 $\phi(\cdot)$ 的核函数出来，如果对于任意一个映射，想要构造出对应的核函数就很困难了。</p>
+<p>最理想的情况下，我们希望知道数据的具体形状和分布，从而得到一个刚好可以将数据映射成线性可分的  $\phi(\cdot)$  ，然后通过这个 $\phi(\cdot)$  得出对应的  $\phi(\cdot)$  进行内积计算。然而，第二步通常是非常困难甚至完全没法做的。不过，由于第一步也是几乎无法做到，因为对于任意的数据分析其形状找到合适的映射本身就不是什么容易的事情，所以，人们通常都是“胡乱”选择映射的，所以，根本没有必要精确地找出对应于映射的那个核函数，而只需要“胡乱”选择一个核函数即可——我们知道它对应了某个映射，虽然我们不知道这个映射具体是什么。由于我们的计算只需要核函数即可，所以我们也并不关心也没有必要求出所对应的映射的具体形式。 :D</p>
+<p>当然，说是“胡乱”选择，其实是夸张的说法，因为并不是任意的二元函数都可以作为核函数，所以除非某些特殊的应用中可能会构造一些特殊的核（例如用于文本分析的文本核，注意其实使用了 Kernel 进行计算之后，其实完全可以去掉原始空间是一个向量空间的假设了，只要核函数支持，原始数据可以是任意的“对象”——比如文本字符串），通常人们会从一些常用的核函数中选择（根据问题和数据的不同，选择不同的参数，实际上就是得到了不同的核函数）.</p>
+<blockquote>
+<p>书中定理6.1的推论：只要一个对称函数所对应的核矩阵半正定，它就能作为核函数使用。<br>事实上，对于一个半正定核矩阵，总能找到一个与之对应的映射$\phi$.换言之，任何一个核函数都隐式的定义了一个称为“再生核希尔伯特空间”(Reproducing Kernal Hilbert Space,RKHS)的特征空间。</p>
+</blockquote>
+<p>通过前面的讨论可知，我们希望样本在特征空间内线性可分，因此特征空间的好坏对支持向量机的性能至关重要。需要注意的是，在不知道特征映射的形式时候，我们并不知道什么样的核函数是合适的，而核函数也仅是隐式的定义了这个特征空间。于是<code>核函数的选择成为支持向量机最大的变数</code>。若核函数选择不合适，则意味着将样本映射到一个不合适的特征空间，很有可能导致性能不佳。</p>
+<blockquote>
+<p>这里有一些基本经验，如对文本数据通常用线性核，情况不明的时候通常用高斯核。</p>
+</blockquote>
+<h2 id="几种常用的核函数"><a href="#几种常用的核函数" class="headerlink" title="几种常用的核函数"></a>几种常用的核函数</h2><ol>
+<li><p>线性核</p>
+<p> $$\kappa(x_1,x_2) = \langle x_1,x_2\rangle$$</p>
+<p> 这实际上就是原始空间中的内积。这个核存在的主要目的是使得“映射后空间中的问题”和“映射前空间中的问题”两者在形式上统一起来了。</p>
+</li>
+<li><p>多项式核</p>
+<p> $$\kappa(x_1,x_2) = \left(\langle x_1,x_2\rangle + R\right)^d$$</p>
+<p> 显然刚才我们举的例子是这里多项式核的一个特例（R=1,d=2）。虽然比较麻烦，而且没有必要，不过这个核所对应的映射实际上是可以写出来的，该空间的维度是 $\binom{m+d}{d}$ ，其中 m 是原始空间的维度。<br>  注：d = 1时候退化成线性核。</p>
+</li>
+<li><p>高斯核(RBF核)</p>
+<p> $$\kappa(x_1,x_2) = \exp\left(-\frac{|x_1-x_2|^2}<br> {2\sigma^2}\right)$$</p>
+<p> 这个核就是最开始提到过的会将原始空间映射为无穷维空间的那个家伙。不过，如果 σ 选得很大的话，高次特征上的权重实际上衰减得非常快，所以实际上（数值上近似一下）相当于一个低维的子空间；反过来，如果 σ 选得很小，则可以将任意的数据映射为线性可分——当然，这并不一定是好事，因为随之而来的可能是非常严重的过拟合问题。不过，总的来说，通过调控参数 σ ，高斯核实际上具有相当高的灵活性，也是使用<strong>最广泛的核函数之一</strong>。</p>
+</li>
+<li><p>拉普拉斯核</p>
+<p> $$\kappa(x_1,x_2) = \exp\left(-\frac{|x_1-x_2|}{\sigma}\right)$$</p>
+</li>
+<li><p>Sigmoid 核</p>
+<p> $$\kappa(x_1,x_2) = \tanh(\beta x_1 x_2 +\theta)$$</p>
+</li>
+</ol>
+<p>此外，还可以通过函数组合得到,例如：</p>
+<ol>
+<li>若 $\kappa_1$ 和 $\kappa_2$ 为核函数，则对于任意整数$\gamma_1$,$\gamma_2$，其线性组合</li>
+</ol>
+<p>$$\gamma_1 \kappa_1 + \gamma_2 \kappa_2$$</p>
+<p>也是核函数</p>
+<ol>
+<li>若 $\kappa_1$ 和 $\kappa_2$ 为核函数，则核函数的直积</li>
+</ol>
+<p>$$\kappa_1 \otimes  \kappa_2 (x,z)  = \kappa_1(x,z)\kappa_2(x,z)$$</p>
+<p>也是核函数。</p>
+<ol>
+<li>若 $\kappa_1$ 和 $\kappa_2$ 为核函数，则对于任意函数$g(x)$ </li>
+</ol>
+<p>$$\kappa(x,z)  = g(x)\kappa_1(x,z)g(z)$$</p>
+<p>也是核函数。</p>
+<h2 id="核函数小结"><a href="#核函数小结" class="headerlink" title="核函数小结"></a>核函数小结</h2><p>最后，总结一下：对于非线性的情况，SVM 的处理方法是选择一个核函数 κ(⋅,⋅) ，通过将数据映射到高维空间，来解决在原始空间中线性不可分的问题。由于核函数的优良品质，这样的非线性扩展在计算量上并没有比原来复杂多少，这一点是非常难得的。当然，这要归功于核方法——除了 SVM 之外，任何将计算表示为数据点的内积的方法，都可以使用核方法进行非线性扩展。</p>
+<p>此外，略微提一下，也有不少工作试图自动构造专门针对特定数据的分布结构的核函数，感兴趣的同学可以参考，比如 NIPS 2003 的 Cluster Kernels for Semi-Supervised Learning 和 ICML 2005 的 Beyond the point cloud: from transductive to semi-supervised learning 等。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/MachineLearning/">MachineLearning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/MachineLearning/">MachineLearning</a><a href="/tags/Notes/">Notes</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/04/机器学习_周志华_笔记6/" data-title="机器学习（周志华）- 第6章支持向量机(1)笔记 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/05/机器学习_周志华_笔记6_2/" title="机器学习（周志华）- 第6章支持向量机(2)笔记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  机器学习（周志华）- 第6章支持向量机(2)笔记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/04/机器学习_周志华_笔记5/"  title="机器学习（周志华）- 第5章神经网络笔记">
+ <strong>下一篇：</strong><br/> 
+ <span>机器学习（周志华）- 第5章神经网络笔记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/04/机器学习_周志华_笔记6/" data-title="机器学习（周志华）- 第6章支持向量机(1)笔记" data-url="http://yoursite.com/2016/08/04/机器学习_周志华_笔记6/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#间隔与支持向量"><span class="toc-number">1.</span> <span class="toc-text">间隔与支持向量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#对偶问题"><span class="toc-number">2.</span> <span class="toc-text">对偶问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#核函数"><span class="toc-number">3.</span> <span class="toc-text">核函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#几种常用的核函数"><span class="toc-number">3.1.</span> <span class="toc-text">几种常用的核函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#核函数小结"><span class="toc-number">3.2.</span> <span class="toc-text">核函数小结</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

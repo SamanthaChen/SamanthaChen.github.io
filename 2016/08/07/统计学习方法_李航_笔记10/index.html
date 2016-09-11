@@ -1,0 +1,657 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>统计学习方法（李航）- 第10章隐马尔科夫模型笔记 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="隐马尔科夫模型是可用于标注问题的统计学习模型，描述由隐藏的马尔科夫随机链生成观测序列的过程，属于生成模型。
+定义隐马尔科夫模型是关于时序的概率模型，描述一个隐藏的马尔科夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生观测随机序列的过程。隐藏的马尔科夫随机生成的状态的序列，称为状态序列；每个状态生成一个观测，而由此产生的观测的随机序列，称为观测序列，序列的每一个位置又可以看做是一个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="统计学习方法（李航）- 第10章隐马尔科夫模型笔记">
+<meta property="og:url" content="http://yoursite.com/2016/08/07/统计学习方法_李航_笔记10/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="隐马尔科夫模型是可用于标注问题的统计学习模型，描述由隐藏的马尔科夫随机链生成观测序列的过程，属于生成模型。
+定义隐马尔科夫模型是关于时序的概率模型，描述一个隐藏的马尔科夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生观测随机序列的过程。隐藏的马尔科夫随机生成的状态的序列，称为状态序列；每个状态生成一个观测，而由此产生的观测的随机序列，称为观测序列，序列的每一个位置又可以看做是一个">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/%E5%89%8D%E5%90%91%E7%AE%97%E6%B3%951.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/%E5%89%8D%E5%90%91%E7%AE%97%E6%B3%952.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/%E5%90%8E%E5%90%91%E7%AE%97%E6%B3%951.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/%E5%90%8E%E5%90%91%E7%AE%97%E6%B3%9511.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/%E5%90%8E%E5%90%91%E7%AE%97%E6%B3%952.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/hmm1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/hmm2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/hmm3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/viterbi1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/viterbi2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/hmm4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/hmm5.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/hmmbw1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/hmmbw2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/hmmbw3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/hmmbw4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/hmmbw5.png">
+<meta property="og:updated_time" content="2016-08-08T10:11:23.426Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="统计学习方法（李航）- 第10章隐马尔科夫模型笔记">
+<meta name="twitter:description" content="隐马尔科夫模型是可用于标注问题的统计学习模型，描述由隐藏的马尔科夫随机链生成观测序列的过程，属于生成模型。
+定义隐马尔科夫模型是关于时序的概率模型，描述一个隐藏的马尔科夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生观测随机序列的过程。隐藏的马尔科夫随机生成的状态的序列，称为状态序列；每个状态生成一个观测，而由此产生的观测的随机序列，称为观测序列，序列的每一个位置又可以看做是一个">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/%E5%89%8D%E5%90%91%E7%AE%97%E6%B3%951.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/07/统计学习方法_李航_笔记10/" title="统计学习方法（李航）- 第10章隐马尔科夫模型笔记" itemprop="url">统计学习方法（李航）- 第10章隐马尔科夫模型笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-07T12:05:20.019Z" itemprop="datePublished"> Published 2016-08-07</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#定义"><span class="toc-number">1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#观测序列的生成"><span class="toc-number">2.</span> <span class="toc-text">观测序列的生成</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#隐马尔科夫模型的三个基本问题"><span class="toc-number">3.</span> <span class="toc-text">隐马尔科夫模型的三个基本问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题1：概率估算问题"><span class="toc-number">3.1.</span> <span class="toc-text">问题1：概率估算问题</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#概率计算算法"><span class="toc-number">4.</span> <span class="toc-text">概率计算算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#前向算法"><span class="toc-number">4.1.</span> <span class="toc-text">前向算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后向算法"><span class="toc-number">4.2.</span> <span class="toc-text">后向算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些概率和期望值的算法"><span class="toc-number">4.3.</span> <span class="toc-text">一些概率和期望值的算法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#问题2：预测问题"><span class="toc-number">5.</span> <span class="toc-text">问题2：预测问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#近似算法"><span class="toc-number">5.1.</span> <span class="toc-text">近似算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#维特比算法"><span class="toc-number">5.2.</span> <span class="toc-text">维特比算法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#问题3：-学习问题"><span class="toc-number">6.</span> <span class="toc-text">问题3： 学习问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#监督学习方法"><span class="toc-number">6.1.</span> <span class="toc-text">监督学习方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#非监督学习"><span class="toc-number">6.2.</span> <span class="toc-text">非监督学习</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Baum-Welch算法"><span class="toc-number">6.2.1.</span> <span class="toc-text">Baum-Welch算法</span></a></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<p>隐马尔科夫模型是可用于标注问题的统计学习模型，描述由隐藏的马尔科夫随机链生成观测序列的过程，属于生成模型。</p>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>隐马尔科夫模型是关于时序的概率模型，描述一个隐藏的马尔科夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生观测随机序列的过程。隐藏的马尔科夫随机生成的状态的序列，称为状态序列；每个状态生成一个观测，而由此产生的观测的随机序列，称为观测序列，序列的每一个位置又可以看做是一个时刻。</p>
+<p>隐马尔科夫模型由初始概率分布、状态转移概率分布以及观测概率分布确定。<br>形式定义如下：<br>设Q是所有可能的状态集合，V是所有可能的观测集合，其中N是状态数，M是可能的观测数。I是长度为T的状态序列，O是对应的观测序列。A是<code>N*N</code>的状态转移矩阵，是t时刻处于状态i在t+1转移带q的概率。B是<code>N*M</code>的观测概率矩阵。π是初始状态概率向量。</p>
+<p>隐马尔科夫模型由初始状态π、状态转移概率矩阵A和观测矩阵B决定。π和A决定状态序列，B决定观测序列，因此隐马尔科夫模型可以用三元符号表示：<br>λ = （A, B, π）<br>A, B, π 称为隐马尔科夫模型的三要素。</p>
+<p>隐马尔科夫模型做了两个基本假设：</p>
+<ol>
+<li>齐次马尔科夫假设，即假设隐藏的马尔科夫链在任意t时刻状态只依赖于前一时刻状态，与其他时刻的状态以及观测无关，夜雨时间t无关。</li>
+<li>观测独立性假设，即假设任意时刻的观测只依赖于该时刻的马尔科夫链的状态，与其他观测以及状态无关。</li>
+</ol>
+<h1 id="观测序列的生成"><a href="#观测序列的生成" class="headerlink" title="观测序列的生成"></a>观测序列的生成</h1><ol>
+<li>按照初始状态分布 π 产生状态i</li>
+<li>按照状态i_t的观测概率生成观测序列O_t</li>
+<li>按照状态i_t的转移概率分布生成状态i_t+1</li>
+<li>若 t &lt; T，令 t = t + 1，并且转移到算法第2步继续执行，否则结束。</li>
+</ol>
+<h1 id="隐马尔科夫模型的三个基本问题"><a href="#隐马尔科夫模型的三个基本问题" class="headerlink" title="隐马尔科夫模型的三个基本问题"></a>隐马尔科夫模型的三个基本问题</h1><ol>
+<li><p>概率计算问题。给定模型λ = （A,B,π）和观测序列O=(o1, o2, …, oT)，计算在模型λ下观测序列出现的概率P(O|λ)</p>
+</li>
+<li><p>预测\解码问题。给定模型λ = （A,B,π）和观测序列O=(o1, o2, …, oT)，求对给定的关系序列条件概率P(I|O)最大的状态序列I=(i1, i2, …,iT)。即给定观测序列，求最有可能的对应的状态序列。</p>
+</li>
+<li><p>学习问题。已知观测序列O=(o1, o2, …, oT)，估计模型λ = （A,B,π）参数，使得在该模型下观测序列概率P(O|λ)最大。即用极大似然的方法估计参数。</p>
+</li>
+</ol>
+<h2 id="问题1：概率估算问题"><a href="#问题1：概率估算问题" class="headerlink" title="问题1：概率估算问题"></a>问题1：概率估算问题</h2><h1 id="概率计算算法"><a href="#概率计算算法" class="headerlink" title="概率计算算法"></a>概率计算算法</h1><p>理论上，可以通过穷举所有状态转换序列的办法计算观察序列O的概率。<br>实际上，这样做并不现实。<br>直接计P(O|λ)计算量是O(TN^T)阶的。</p>
+<h2 id="前向算法"><a href="#前向算法" class="headerlink" title="前向算法"></a>前向算法</h2><p><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/%E5%89%8D%E5%90%91%E7%AE%97%E6%B3%951.png" alt=""><br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/%E5%89%8D%E5%90%91%E7%AE%97%E6%B3%952.png" alt=""></p>
+<h2 id="后向算法"><a href="#后向算法" class="headerlink" title="后向算法"></a>后向算法</h2><p><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/%E5%90%8E%E5%90%91%E7%AE%97%E6%B3%951.png" alt=""><br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/%E5%90%8E%E5%90%91%E7%AE%97%E6%B3%9511.png" alt=""><br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/%E5%90%8E%E5%90%91%E7%AE%97%E6%B3%952.png" alt=""></p>
+<h2 id="一些概率和期望值的算法"><a href="#一些概率和期望值的算法" class="headerlink" title="一些概率和期望值的算法"></a>一些概率和期望值的算法</h2><ol>
+<li>t时刻处于状态qi的概率可以可利用t时刻前向概率和后向概率计算。</li>
+<li>t时刻处于状态qi, j时刻处于qi+1的概率可以可利用t时刻前向概率、转移概率、输出概率和t+1的后向概率计算。</li>
+<li>可以利用1的单个状态和2的两个状态计算一些期望<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/hmm1.png" alt=""><br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/hmm2.png" alt=""><br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/hmm3.png" alt=""></li>
+</ol>
+<h1 id="问题2：预测问题"><a href="#问题2：预测问题" class="headerlink" title="问题2：预测问题"></a>问题2：预测问题</h1><p>一般有两种解法，近似算法和维特比算法</p>
+<h2 id="近似算法"><a href="#近似算法" class="headerlink" title="近似算法"></a>近似算法</h2><p>思想是在每个时刻t选择该时刻最有可能出现的状态，将它作为一个预测结果。<br>利用前面的前向概率和后向概率计算t时刻处于i的状态的概率，然后从这些状态里面选择概率最大的。这些每个时刻最大的状态合起来就构成了状态序列。</p>
+<p>计算算法的优点是计算简单，缺点是不能保证预测的状态序列整体上是最有可能的状态序列，因为预测的状态序列可能有实际不发生的部分。<br>事实上上述方法得到的状态序列中可能存在转移概率为0的相邻状态。尽管如此近似算法还是有用的（？？个人存疑）</p>
+<h2 id="维特比算法"><a href="#维特比算法" class="headerlink" title="维特比算法"></a>维特比算法</h2><p>维特比算法实际上式用动态规划求解隐马尔科夫模型预测问题，即用动态规划求概率最大的路径，这时一条路径对应着一个状态序列。<br>根据动态规划原理，最优路径应该存在这样特性：最优路径的子路径也一定是最优的。<br>动态规划的转移方程：<br>dp[t+1] = max（dp[t]x状态转移概率）x输出概率<br>其中dp[t]表示t时刻最佳状态转移序列的概率。因此还需要一个数组保存状态转移的路径，最后要对最优路径进行回溯。</p>
+<p><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/viterbi1.png" alt=""><br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/viterbi2.png" alt=""></p>
+<h1 id="问题3：-学习问题"><a href="#问题3：-学习问题" class="headerlink" title="问题3： 学习问题"></a>问题3： 学习问题</h1><p>根据训练数据是包括观测序列和对应的状态，还是只有观测序列，可以分别由监督学习和无监督学习实现。</p>
+<h2 id="监督学习方法"><a href="#监督学习方法" class="headerlink" title="监督学习方法"></a>监督学习方法</h2><p>假定已经给出多个观测序列和对应的状态序列，可以利用极大似然法来估计参数。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/hmm4.png" alt=""><br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/hmm5.png" alt=""></p>
+<p>参数学习十分简单，在训练数据足够强大的前提下，效果不错。<br>缺点：状态信息未知的时候无法使用，或者需要人工标注状态，代价高。<br>但是在无监督学习效果不佳的时候可以采用有监督学习。</p>
+<h2 id="非监督学习"><a href="#非监督学习" class="headerlink" title="非监督学习"></a>非监督学习</h2><p>假设给定的训练数据只包含s个长度为T的观测序列，而没有对应的状态序列，目标是学习隐马尔科夫模型的参数。我们将观测序列数据看做观测状态O，状态序列数据看做不可观测的隐数据I，那么马尔科夫模型实际上是一个含有隐变量的概率模型。它的参数学习可以由EM算法实现。</p>
+<h3 id="Baum-Welch算法"><a href="#Baum-Welch算法" class="headerlink" title="Baum-Welch算法"></a>Baum-Welch算法</h3><p><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/hmmbw1.png" alt=""><br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/hmmbw2.png" alt=""><br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/hmmbw3.png" alt=""><br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/hmmbw4.png" alt=""><br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/hmmbw5.png" alt=""></p>
+<p>Baum等人证明要么估算参数值和估算前的参数值相等，要么估算值比估算前的参数值更好的解释了观察序列O。<br>参数最终的收敛点并不一定是一个全局最优值，但一定是一个局部最优值。（在函数非凸时候可能获得局部最优?）<br>L.R.Rabiner, A Tutorial on Hidden Markov Models and  Selected Applications in Speech recognition, Proc. IEEE, 77(2): 257-286, 1989</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/MachineLearning/">MachineLearning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/MachineLearning/">MachineLearning</a><a href="/tags/Notes/">Notes</a><a href="/tags/统计学习/">统计学习</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/07/统计学习方法_李航_笔记10/" data-title="统计学习方法（李航）- 第10章隐马尔科夫模型笔记 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/08/机器学习_周志华_笔记11/" title="机器学习（周志华）- 第11章特征选择与稀疏学习笔记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  机器学习（周志华）- 第11章特征选择与稀疏学习笔记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/07/统计学习方法_李航_笔记9/"  title="统计学习方法（李航）- 第9章EM算法笔记">
+ <strong>下一篇：</strong><br/> 
+ <span>统计学习方法（李航）- 第9章EM算法笔记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/07/统计学习方法_李航_笔记10/" data-title="统计学习方法（李航）- 第10章隐马尔科夫模型笔记" data-url="http://yoursite.com/2016/08/07/统计学习方法_李航_笔记10/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#定义"><span class="toc-number">1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#观测序列的生成"><span class="toc-number">2.</span> <span class="toc-text">观测序列的生成</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#隐马尔科夫模型的三个基本问题"><span class="toc-number">3.</span> <span class="toc-text">隐马尔科夫模型的三个基本问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题1：概率估算问题"><span class="toc-number">3.1.</span> <span class="toc-text">问题1：概率估算问题</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#概率计算算法"><span class="toc-number">4.</span> <span class="toc-text">概率计算算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#前向算法"><span class="toc-number">4.1.</span> <span class="toc-text">前向算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后向算法"><span class="toc-number">4.2.</span> <span class="toc-text">后向算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些概率和期望值的算法"><span class="toc-number">4.3.</span> <span class="toc-text">一些概率和期望值的算法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#问题2：预测问题"><span class="toc-number">5.</span> <span class="toc-text">问题2：预测问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#近似算法"><span class="toc-number">5.1.</span> <span class="toc-text">近似算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#维特比算法"><span class="toc-number">5.2.</span> <span class="toc-text">维特比算法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#问题3：-学习问题"><span class="toc-number">6.</span> <span class="toc-text">问题3： 学习问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#监督学习方法"><span class="toc-number">6.1.</span> <span class="toc-text">监督学习方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#非监督学习"><span class="toc-number">6.2.</span> <span class="toc-text">非监督学习</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Baum-Welch算法"><span class="toc-number">6.2.1.</span> <span class="toc-text">Baum-Welch算法</span></a></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

@@ -1,0 +1,678 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>机器学习（周志华）- 第8章集成学习笔记 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="个体与集成集成学习通过构建并结合多个学习器来完成学习任务，有时也被称作为多分类系统、基于委员会的学习等。
+集成学习的一般结构：先生成一组“个体学习器”，再用某种策略将他们结合起来。集成学习分为同质（同种类型学习器）和异质（不同类型学习器）。集成学习通过将多个学习器进行结合，常可以获得比单一学习器显著优越的泛化性能，这对“弱学习器”（指泛化性能略优于随机猜测的学习器）尤为明显。要想获得好的集成，个体">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习（周志华）- 第8章集成学习笔记">
+<meta property="og:url" content="http://yoursite.com/2016/08/05/机器学习_周志华_笔记8/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="个体与集成集成学习通过构建并结合多个学习器来完成学习任务，有时也被称作为多分类系统、基于委员会的学习等。
+集成学习的一般结构：先生成一组“个体学习器”，再用某种策略将他们结合起来。集成学习分为同质（同种类型学习器）和异质（不同类型学习器）。集成学习通过将多个学习器进行结合，常可以获得比单一学习器显著优越的泛化性能，这对“弱学习器”（指泛化性能略优于随机猜测的学习器）尤为明显。要想获得好的集成，个体">
+<meta property="og:image" content="https://pic1.zhimg.com/162bbe3ae6c8f46da4f4e05edea2d9fc_b.jpg">
+<meta property="og:updated_time" content="2016-09-09T08:34:29.699Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习（周志华）- 第8章集成学习笔记">
+<meta name="twitter:description" content="个体与集成集成学习通过构建并结合多个学习器来完成学习任务，有时也被称作为多分类系统、基于委员会的学习等。
+集成学习的一般结构：先生成一组“个体学习器”，再用某种策略将他们结合起来。集成学习分为同质（同种类型学习器）和异质（不同类型学习器）。集成学习通过将多个学习器进行结合，常可以获得比单一学习器显著优越的泛化性能，这对“弱学习器”（指泛化性能略优于随机猜测的学习器）尤为明显。要想获得好的集成，个体">
+<meta name="twitter:image" content="https://pic1.zhimg.com/162bbe3ae6c8f46da4f4e05edea2d9fc_b.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/05/机器学习_周志华_笔记8/" title="机器学习（周志华）- 第8章集成学习笔记" itemprop="url">机器学习（周志华）- 第8章集成学习笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-05T12:38:00.461Z" itemprop="datePublished"> Published 2016-08-05</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#个体与集成"><span class="toc-number">1.</span> <span class="toc-text">个体与集成</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Boosting"><span class="toc-number">2.</span> <span class="toc-text">Boosting</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#AdaBoost"><span class="toc-number">2.1.</span> <span class="toc-text">AdaBoost</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Bagging与随机森林"><span class="toc-number">3.</span> <span class="toc-text">Bagging与随机森林</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Bagging"><span class="toc-number">3.1.</span> <span class="toc-text">Bagging</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自助采样的优点"><span class="toc-number">3.2.</span> <span class="toc-text">自助采样的优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#随机森林（Random-Forest，RF）"><span class="toc-number">3.3.</span> <span class="toc-text">随机森林（Random Forest，RF）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#随机森林的优点"><span class="toc-number">3.3.1.</span> <span class="toc-text">随机森林的优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RF小结"><span class="toc-number">3.3.2.</span> <span class="toc-text">RF小结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#结合策略"><span class="toc-number">4.</span> <span class="toc-text">结合策略</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#平均法（数值型）"><span class="toc-number">4.1.</span> <span class="toc-text">平均法（数值型）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#投票法（分类任务）"><span class="toc-number">4.2.</span> <span class="toc-text">投票法（分类任务）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#学习法"><span class="toc-number">4.3.</span> <span class="toc-text">学习法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多样性增强"><span class="toc-number">4.4.</span> <span class="toc-text">多样性增强</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数据样本扰动"><span class="toc-number">4.4.1.</span> <span class="toc-text">数据样本扰动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#输入属性扰动"><span class="toc-number">4.4.2.</span> <span class="toc-text">输入属性扰动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#输出表示扰动"><span class="toc-number">4.4.3.</span> <span class="toc-text">输出表示扰动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#算法参数扰动"><span class="toc-number">4.4.4.</span> <span class="toc-text">算法参数扰动</span></a></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="个体与集成"><a href="#个体与集成" class="headerlink" title="个体与集成"></a>个体与集成</h1><p>集成学习通过构建并结合多个学习器来完成学习任务，有时也被称作为多分类系统、基于委员会的学习等。</p>
+<p>集成学习的一般结构：先生成一组“个体学习器”，再用某种策略将他们结合起来。<br>集成学习分为同质（同种类型学习器）和异质（不同类型学习器）。<br>集成学习通过将多个学习器进行结合，常可以获得比单一学习器显著优越的泛化性能，这对“弱学习器”（指泛化性能略优于随机猜测的学习器）尤为明显。<br>要想获得好的集成，个体学习器应该<strong>“好而不同”</strong>，即个体学习器要有一定的准确性，并且要有多样性。但是准确性与多样性通常会产生冲突，因为个体学习器往往是为解决同一个问题训练出来的，不可能存在相互独立。如何产生好而不同的学习器是学习研究的核心。</p>
+<p>目前集成学习的方法大致可以分为两种：</p>
+<ol>
+<li>个体学习器之间存在强依赖关系、必须串行生成的序列化方法。（Boosting）</li>
+<li>个体学习器之间不存在强依赖关系、可同时生成的并行化方法。（Bagging和RF）</li>
+</ol>
+<h1 id="Boosting"><a href="#Boosting" class="headerlink" title="Boosting"></a>Boosting</h1><p>Boosting是一族将弱学习器提升为强学习器的算法。工作机制如下：<br>先从初始训练集中训练出一个基学习器，再根据基学习器的表现对训练样本进行调整，使得先前基学习器做的的训练样本在后继受到更多的关注，然后基于调整后的样本分布来训练下一个基学习器；如此重复进行，直至基学习器的数目达到实现指定的值T，最终将这T个学习器进行加权结合。</p>
+<h2 id="AdaBoost"><a href="#AdaBoost" class="headerlink" title="AdaBoost"></a>AdaBoost</h2><p>Boosting 族算法最著名的代表是AdaBoost。该算法有多重推导方式，比较容易理解的是“加性模型”，即基学习器的线性组合来最小化指数损失函数。</p>
+<p>算法基本流程如下：</p>
+<ol>
+<li>初始化样本权值分布</li>
+<li>基于分布Dt从数据集中训练出分类器ht</li>
+<li>估计ht的误差，若误差&gt;0.5则重新下一轮训练</li>
+<li>确定分类器ht的权重</li>
+<li>更新样本分布</li>
+<li>若未达到预制的训练轮数，则继续进行训练</li>
+</ol>
+<p>Boosting算法要求基学习器能对特定的数据分布进行学习，这可以通过“重赋权”实施，即在训练的每一轮中，根据样本为每个训练样本重新赋予一个权重。<br>对于无法接受带权样本的基学习算法，可以通过“重采样”来处理，再用重采样的样本集对基学习器进行训练。一般而言这两种算法没有优劣差别。</p>
+<p>需要注意的是Boosting算法在训练的每一轮都要检查当前生成的基学习器是否满足基本条件（检查基分类器是否比随机猜测好），一旦条件不满足，当前基学习器被抛弃掉，学习过程停止。<br>在这种情形下，初始设置的学习轮数T也许还远远未达到，可能导致最终集成中只包含很少的基学习器而导致性能不佳。<br>若采用“重采样”，则可以获得“重启动”机会避免过早停止。即在抛弃不满足条件的当前基学习器之后，根据当前的分布重新对训练样本进行采样，再基于新的采样结果重新训练出基学习器，从而使得学习过程可以持续到预制的T轮。</p>
+<p>从“偏差-方差”分解的角度看，Boosting主要关注<strong>降低偏差</strong>，因此基于泛化性能相当弱学习器能构建出很强的集成。</p>
+<blockquote>
+<p>标准差也叫标准偏差。<br>偏差：描述的是预测值（估计值）的期望与真实值之间的差距。偏差越大，越偏离真实数据，如下图第二行所示。<br>方差：描述的是预测值的变化范围，离散程度，也就是离其期望值的距离。方差越大，数据的分布越分散，如下图右列所示。<br><img src="https://pic1.zhimg.com/162bbe3ae6c8f46da4f4e05edea2d9fc_b.jpg" alt=""><br><a href="https://www.zhihu.com/question/20448464" target="_blank" rel="external">引用来源</a></p>
+</blockquote>
+<h1 id="Bagging与随机森林"><a href="#Bagging与随机森林" class="headerlink" title="Bagging与随机森林"></a>Bagging与随机森林</h1><p>为了训练出独立的学习器，我们可以考虑用不同的样本的子集分别产生学习器，然而这样每个基学习器值用到了一小部分的训练样本，甚至不足以有效学习，无法确保产生较好的基学习器，为解决这个问题，我们考虑使用互相有交叠的采样子集。</p>
+<h2 id="Bagging"><a href="#Bagging" class="headerlink" title="Bagging"></a>Bagging</h2><p>Bagging是“并行式”集成学习方法中最著名的代表，基于我们之前介绍的自主采样法。</p>
+<ul>
+<li>给定包含m个样本的数据集，随机取出一个样本放入采样机，再将样本放回初始数据集，使得下次采样仍有可能被选中，经过m次随机采样，得到m个样本的数据集，初始数据集中约63.2%出现在采样集中。</li>
+<li>我们采样出T个含m个训练样本的采样集，然后基于每个采样集训练出一个基学习器，再将这些基学习器进行结合。</li>
+<li>在对预测输出进行结合的时候，Bagging通常对分类任务采用简单投票法，回归任务采用简单平均法，若遇到相同票数则随机选择一个或者根据投票置信度来选择。</li>
+</ul>
+<p>训练一个Bagging集成与直接使用基学习算法训练一个学习器复杂度同阶，说明是一个高效的集成算法，与标准AdaBoost只适用于二分类任务不同，Bagging可以不经修改的用于多分类、回归等任务。</p>
+<h2 id="自助采样的优点"><a href="#自助采样的优点" class="headerlink" title="自助采样的优点"></a>自助采样的优点</h2><p>由于只用了原始训练集的63.2%样本进行训练，剩下的36.8%可以用作验证集来对泛化性能进行“包外估计”。</p>
+<p>包外估计还可以辅助决策树进行剪枝，或者估计决策树中各节点的后验概率用于辅助对零训练样本节点的处理；还可以辅助神经网络早期停止减小过拟合风险。</p>
+<p>从“偏差-方差”分解的角度看，Bagging主要关注<strong>降低方差</strong>，因此它在不剪枝的决策树、神经网络等易受样本扰动的学习器上效用更为明显。</p>
+<h2 id="随机森林（Random-Forest，RF）"><a href="#随机森林（Random-Forest，RF）" class="headerlink" title="随机森林（Random Forest，RF）"></a>随机森林（Random Forest，RF）</h2><p>随机森林是Bagging的一个扩展变体。<strong>RF在以决策树为基学习器，构建Bagging的基础上，进一步在决策树的训练过程中引入了随机属性选择。</strong><br>具体来说，传统的决策树在选择划分属性的时候是在当前节点的属性集合中选择一个最优属性，而在RF中，对基决策树的每个节点，先从该节点的属性集中随机选择一个包含k个属性的子集，然后再从这个子集中选择一个最优属性用于划分。<br>这里的参数k控制了随机性的引入程度，若令k=d，则基决策树的构建与传统决策树相同；<br>若k=1，则随机选择一个属性进行划分；一般情况下推荐<strong>k=log_2 d</strong></p>
+<p>随机森林简单，容易实现，计算开销小，令人惊奇的是，在很多现实任务中展现出强大的性能，誉为“代表集成学习技术水平的方法”。</p>
+<p>可以看出，随机森林对Bagging只做了微小的改动,但是与Bagging中基学习器的“多样性”仅通过样本扰动（通过对初始训练集采样）而来不同，随机森林中基学习器的多样性不仅来自于<strong>样本扰动</strong>，还来自于<strong>属性扰动</strong>，这就使得最终集成的泛化性能可以通过个体学习器之间的差异度的增加而进一步提升。</p>
+<p>随机森林的收敛性与bagging相似，随机森林其实性能很差，随着个体学习器增加，会收敛到更低泛化性能。<br>随机森林训练效率通常优于bagging，因为在个体决策树的构建过程中，bagging使用的是“确定型”决策树，需要考虑全部属性，但是随机森林使用的是“随机型”只需要考虑一个属性集合。</p>
+<h3 id="随机森林的优点"><a href="#随机森林的优点" class="headerlink" title="随机森林的优点"></a>随机森林的优点</h3><pre><code>0. 在数据集上表现良好
+1. 在当前的很多数据集上，相对其他算法有着很大的优势
+2. 它能够处理很高维度（feature很多）的数据，并且不用做特征选择
+3. 在训练完后，它能够给出哪些feature比较重要
+4. 在创建随机森林的时候，对generlization error使用的是无偏估计
+5. 训练速度快
+6. 在训练过程中，能够检测到feature间的互相影响
+7. 容易做成并行化方法
+8. 实现比较简单
+</code></pre><h3 id="RF小结"><a href="#RF小结" class="headerlink" title="RF小结"></a>RF小结</h3><p>随机森林顾名思义，是用随机的方式建立一个森林，森林里面有很多的决策树组成，随机森林的每一棵决策树之间是没有关联的。在得到森林之后，当有一个新的输入样本进入的时候，就让森林中的每一棵决策树分别进行一下判断，看看这个样本应该属于哪一类（对于分类算法），然后看看哪一类被选择最多，就预测这个样本为那一类。</p>
+<pre><code>在建立每一棵决策树的过程中，有两点需要注意 - 采样与完全分裂。首先是两个随机采样的过程，random forest对输入的数据要进行行、列的采样。对于行采样，采用有放回的方式，也就是在采样得到的样本集合中，可能有重复的样本。假设输入样本为N个，那么采样的样本也为N个。这样使得在训练的时候，每一棵树的输入样本都不是全部的样本，使得相对不容易出现over-fitting。然后进行列采样，从M个feature中，选择m个(m &lt;&lt; M)。之后就是对采样之后的数据使用完全分裂的方式建立出决策树，这样决策树的某一个叶子节点要么是无法继续分裂的，要么里面的所有样本的都是指向的同一个分类。一般很多的决策树算法都一个重要的步骤 - 剪枝，但是这里不这样干，由于之前的两个随机采样的过程保证了随机性，所以就算不剪枝，也不会出现over-fitting。
+
+按这种算法得到的随机森林中的每一棵都是很弱的，但是大家组合起来就很厉害了。我觉得可以这样比喻随机森林算法：每一棵决策树就是一个精通于某一个窄领域的专家（因为我们从M个feature中选择m让每一棵决策树进行学习），这样在随机森林中就有了很多个精通不同领域的专家，对一个新的问题（新的输入数据），可以用不同的角度去看待它，最终由各个专家，投票得到结果。
+</code></pre><h1 id="结合策略"><a href="#结合策略" class="headerlink" title="结合策略"></a>结合策略</h1><p>学习器结合可能会从三个方面带来好处。</p>
+<ol>
+<li>统计方面<br> 由于学习任务的假设空间往往很大，可能有多个假设在训练集上达到同等性能，此时若使用单学习器可能导致泛化性能不佳。结合多个学习器可以减少这一风险。</li>
+<li>计算方面<br> 学习算法会陷入局部极小值，有的局部极小值对应的泛化性能可能很糟，多次运行可以降低陷入糟糕局部极小点的风险</li>
+<li>表示方面<br> 某些学习任务的真实假设可能不在当前学习算法的假设空间中，此时若使用单学习器肯定无效，而应该通过多结合多个学习器，扩大假设空间才能获得更好近似。</li>
+</ol>
+<h2 id="平均法（数值型）"><a href="#平均法（数值型）" class="headerlink" title="平均法（数值型）"></a>平均法（数值型）</h2><ol>
+<li>简单平均法</li>
+<li>加权平均法</li>
+</ol>
+<p>由于加权平均法一般是从训练数据中学习而得，现实任务中训练样本通常不充分或者存在噪声，使得学出来的权值不可靠。同时学习的权重过多会导致过拟合，因此加权平均未必优于简单平均。<br>一般性能相差大学习器加权平均，相近简单平均。</p>
+<h2 id="投票法（分类任务）"><a href="#投票法（分类任务）" class="headerlink" title="投票法（分类任务）"></a>投票法（分类任务）</h2><ol>
+<li>绝对多数投票法<br>超过半数预测为该标记</li>
+<li>相对多数投票法<br>预测得票最多的为该标记</li>
+<li>加权投票法</li>
+</ol>
+<h2 id="学习法"><a href="#学习法" class="headerlink" title="学习法"></a>学习法</h2><p>当训练数据很多的时候，可以通过另一个学习器来进行结合。<br>代表算法Stacking。把个体学习器称作初级学习器，用于结合的学习器称作次级学习器或者元学习器。</p>
+<p>Stacking先从初始数据集中训练出初级学习器，然后生成一个新数据集来训练次级学习器。在这个新数据集里，初级学习器的输出被当成次级学习器的输入，而初始样本的标记仍当做样例标记。</p>
+<h2 id="多样性增强"><a href="#多样性增强" class="headerlink" title="多样性增强"></a>多样性增强</h2><h3 id="数据样本扰动"><a href="#数据样本扰动" class="headerlink" title="数据样本扰动"></a>数据样本扰动</h3><p>通常基于采样法，如Bagging使用自主采样，AdaBoost使用序列采样。<br>数据样本扰动对“不稳定基学习器”有效，如决策树，神经网络等；对另一些不敏感，如线性学习器、支持向量机、朴素贝叶斯、k近邻等“稳定基学习器”。</p>
+<h3 id="输入属性扰动"><a href="#输入属性扰动" class="headerlink" title="输入属性扰动"></a>输入属性扰动</h3><p>适用于大量冗余属性的数据，若只有少量数据或者冗余少不适用。<br>随机子空间法就是随机抽取若干属性自己，分别训练学习器。</p>
+<h3 id="输出表示扰动"><a href="#输出表示扰动" class="headerlink" title="输出表示扰动"></a>输出表示扰动</h3><ol>
+<li>对类标记稍作变得，如“翻转法”</li>
+<li>对输出进行转化“输出调制法”</li>
+<li>将原任务拆解为多个可以同时求解的任务，EOCO法</li>
+</ol>
+<h3 id="算法参数扰动"><a href="#算法参数扰动" class="headerlink" title="算法参数扰动"></a>算法参数扰动</h3><p>神经网络-隐层神经元，初始连接权，“负相关法”显式的通过正则化项强制个体神经网络使用不同参数</p>
+<p>交叉验证可以看做不同参数训练多个学习器，最终选一个，而集成是把这些学习器都利用起来。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/MachineLearning/">MachineLearning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/MachineLearning/">MachineLearning</a><a href="/tags/Notes/">Notes</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/05/机器学习_周志华_笔记8/" data-title="机器学习（周志华）- 第8章集成学习笔记 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/05/机器学习_周志华_笔记9/" title="机器学习（周志华）- 第9章聚类笔记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  机器学习（周志华）- 第9章聚类笔记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/05/机器学习_周志华_笔记7/"  title="机器学习（周志华）- 第7章贝叶斯分类器笔记">
+ <strong>下一篇：</strong><br/> 
+ <span>机器学习（周志华）- 第7章贝叶斯分类器笔记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/05/机器学习_周志华_笔记8/" data-title="机器学习（周志华）- 第8章集成学习笔记" data-url="http://yoursite.com/2016/08/05/机器学习_周志华_笔记8/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#个体与集成"><span class="toc-number">1.</span> <span class="toc-text">个体与集成</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Boosting"><span class="toc-number">2.</span> <span class="toc-text">Boosting</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#AdaBoost"><span class="toc-number">2.1.</span> <span class="toc-text">AdaBoost</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Bagging与随机森林"><span class="toc-number">3.</span> <span class="toc-text">Bagging与随机森林</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Bagging"><span class="toc-number">3.1.</span> <span class="toc-text">Bagging</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自助采样的优点"><span class="toc-number">3.2.</span> <span class="toc-text">自助采样的优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#随机森林（Random-Forest，RF）"><span class="toc-number">3.3.</span> <span class="toc-text">随机森林（Random Forest，RF）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#随机森林的优点"><span class="toc-number">3.3.1.</span> <span class="toc-text">随机森林的优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RF小结"><span class="toc-number">3.3.2.</span> <span class="toc-text">RF小结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#结合策略"><span class="toc-number">4.</span> <span class="toc-text">结合策略</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#平均法（数值型）"><span class="toc-number">4.1.</span> <span class="toc-text">平均法（数值型）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#投票法（分类任务）"><span class="toc-number">4.2.</span> <span class="toc-text">投票法（分类任务）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#学习法"><span class="toc-number">4.3.</span> <span class="toc-text">学习法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多样性增强"><span class="toc-number">4.4.</span> <span class="toc-text">多样性增强</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数据样本扰动"><span class="toc-number">4.4.1.</span> <span class="toc-text">数据样本扰动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#输入属性扰动"><span class="toc-number">4.4.2.</span> <span class="toc-text">输入属性扰动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#输出表示扰动"><span class="toc-number">4.4.3.</span> <span class="toc-text">输出表示扰动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#算法参数扰动"><span class="toc-number">4.4.4.</span> <span class="toc-text">算法参数扰动</span></a></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

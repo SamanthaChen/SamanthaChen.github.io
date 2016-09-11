@@ -1,0 +1,741 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>机器学习（周志华）- 第7章贝叶斯分类器笔记 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="贝叶斯决策论贝叶斯决策论是概率框架下实施觉此的基本方法。对分类任务来说，在所有的相关概率都已知的理想情形下，贝叶斯决策率考虑如何基于这些概率和误判误差来选择最优的类别标记。下面以多分类任务为例解释基本原理。
+假设有N种可能标记， $\lambda_{ij}$是将类cj误分类为ci所产生的损失，基于后验概率 P(ci | x) 可以获得样本x分类为ci所产生的期望损失 ，即在样本x上的条件风险：
+$">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习（周志华）- 第7章贝叶斯分类器笔记">
+<meta property="og:url" content="http://yoursite.com/2016/08/05/机器学习_周志华_笔记7/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="贝叶斯决策论贝叶斯决策论是概率框架下实施觉此的基本方法。对分类任务来说，在所有的相关概率都已知的理想情形下，贝叶斯决策率考虑如何基于这些概率和误判误差来选择最优的类别标记。下面以多分类任务为例解释基本原理。
+假设有N种可能标记， $\lambda_{ij}$是将类cj误分类为ci所产生的损失，基于后验概率 P(ci | x) 可以获得样本x分类为ci所产生的期望损失 ，即在样本x上的条件风险：
+$">
+<meta property="og:updated_time" content="2016-08-06T01:20:04.231Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习（周志华）- 第7章贝叶斯分类器笔记">
+<meta name="twitter:description" content="贝叶斯决策论贝叶斯决策论是概率框架下实施觉此的基本方法。对分类任务来说，在所有的相关概率都已知的理想情形下，贝叶斯决策率考虑如何基于这些概率和误判误差来选择最优的类别标记。下面以多分类任务为例解释基本原理。
+假设有N种可能标记， $\lambda_{ij}$是将类cj误分类为ci所产生的损失，基于后验概率 P(ci | x) 可以获得样本x分类为ci所产生的期望损失 ，即在样本x上的条件风险：
+$">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/05/机器学习_周志华_笔记7/" title="机器学习（周志华）- 第7章贝叶斯分类器笔记" itemprop="url">机器学习（周志华）- 第7章贝叶斯分类器笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-05T04:58:21.389Z" itemprop="datePublished"> Published 2016-08-05</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#贝叶斯决策论"><span class="toc-number">1.</span> <span class="toc-text">贝叶斯决策论</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#极大似然估计"><span class="toc-number">2.</span> <span class="toc-text">极大似然估计</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#朴素贝叶斯分类器"><span class="toc-number">3.</span> <span class="toc-text">朴素贝叶斯分类器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#训练过程"><span class="toc-number">3.1.</span> <span class="toc-text">训练过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#离散属性"><span class="toc-number">3.1.1.</span> <span class="toc-text">离散属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#连续属性"><span class="toc-number">3.1.2.</span> <span class="toc-text">连续属性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#“平滑”修正"><span class="toc-number">3.2.</span> <span class="toc-text">“平滑”修正</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用朴素贝叶斯的多种方式"><span class="toc-number">3.3.</span> <span class="toc-text">使用朴素贝叶斯的多种方式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#半朴素贝叶斯分类器"><span class="toc-number">4.</span> <span class="toc-text">半朴素贝叶斯分类器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#贝叶斯网（信念网）"><span class="toc-number">5.</span> <span class="toc-text">贝叶斯网（信念网）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#结构"><span class="toc-number">5.1.</span> <span class="toc-text">结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#学习"><span class="toc-number">5.2.</span> <span class="toc-text">学习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#推断"><span class="toc-number">5.3.</span> <span class="toc-text">推断</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#吉布斯采样"><span class="toc-number">5.3.1.</span> <span class="toc-text">吉布斯采样</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#EM算法（期望最大化）"><span class="toc-number">6.</span> <span class="toc-text">EM算法（期望最大化）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题提出"><span class="toc-number">6.1.</span> <span class="toc-text">问题提出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EM算法"><span class="toc-number">6.2.</span> <span class="toc-text">EM算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小结"><span class="toc-number">6.3.</span> <span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#课外阅读材料"><span class="toc-number">7.</span> <span class="toc-text">课外阅读材料</span></a></li></ol>
+		
+		</div>
+		
+		<h1 id="贝叶斯决策论"><a href="#贝叶斯决策论" class="headerlink" title="贝叶斯决策论"></a>贝叶斯决策论</h1><p>贝叶斯决策论是概率框架下实施觉此的基本方法。对分类任务来说，在所有的相关概率都已知的理想情形下，贝叶斯决策率考虑如何基于这些<strong>概率</strong>和<strong>误判误差</strong>来选择最优的类别标记。下面以多分类任务为例解释基本原理。</p>
+<p>假设有N种可能标记， $\lambda_{ij}$是将类cj误分类为ci所产生的损失，基于后验概率 P(ci | x) 可以获得样本x分类为ci所产生的期望损失 ，即在样本x上的条件风险：</p>
+<p>$$R(c_i|\mathbf{x}) = \sum_{j=1}^N \lambda_{ij} P(c_j|\mathbf{x})$$</p>
+<p>我们的任务是寻找一个判定准则 $h:\mathcal{X} \to \mathcal{Y}$ 以最小化总体风险</p>
+<p>$$R(h)= \mathbb{E}_x [R(h(\mathbf(x)) | \mathbf(x))]$$</p>
+<p>显然，对每个样本x，若h能最小化条件风险 $R(h(\mathbf(x)) | \mathbf(x))$,则总体风险R(h)也将被最小化。这就产生了贝叶斯判定准则：为最小化总体风险，只需要在每个样本上选择那个能使条件风险R(c|x)最小的类别标记，即：</p>
+<p>$$h^* (x) = argmin_{c\in y} R(c|\mathbf{x})$$</p>
+<p>此时，h<em> 称作贝叶斯最优分类器，与之对应的总体风险R(h </em> )称为贝叶斯风险，1-R(h*)反映了分类器能达到的最好性能，即机器学习所产生的模型精度的上限。</p>
+<p>具体来说，若目标是最小化分类错误率（对应0/1损失），则$\lambda_{ij}$可以用0/1损失改写，得到条件风险和最小化分类错误率的最优分类器分别为：<br>$$R(c|\mathbf{x}) = 1- P(c|\mathbf{x})$$<br>$$h*(x) = argmax_{c\in \mathcal{Y}} P(c|\mathbf{x})$$<br>即对每个样本x，选择能使后验概率P(c|x)最大的类别标识。</p>
+<p><strong>获得后验概率的两种方法：</strong></p>
+<ol>
+<li>给定x，可以通过直接建模P(c|x)来预测c，这样得到的是“判别式模型”</li>
+<li>先对联合分布p(x, c)建模，然后再有此获得P(c|x),这样得到的是“生成模型”。</li>
+</ol>
+<p>显然，前面介绍的决策树、BP神经网络、支持向量机等，都可以纳入判别式模型的范畴。</p>
+<p>对生成模型来说，必然考虑：<br>$$P(c|x) = \frac{P(x,c)}{P(x)} = \frac{P(c) P(x|c)}{P(x)}$$</p>
+<p>其中P(c)是“先验概率”；<br>P(x|c)是样本x对于类标记c的类条件概率，或称为“似然”；<br>P(x)是用于归一化的“证据”因子。</p>
+<p>给定样本x，证据因子P(x)与类标记无关(对所有的类标记均相同)，因此估计P(c|x)的问题就转化为如何基于训练数据D来估计先验概率P(c)和似然P(x|c).</p>
+<p>类先验概率P(c)表达了样本空间中各类样本的所占比例，根据大数定律，当训练结中包含充足的独立同分布样本时，P(c)可以通过各类样本出现的频率来进行估计。（为了便于讨论，这里采用的是离散属性，对于连续属性可以换成概率密度函数）。</p>
+<p>对类条件概率P(x|c)来说，直接根据样本出现的频率来估计将会遇到严重的困难。例如，假设样本的d个属性都是二值的，则样本空间将有$2^d$中可能的取值，在现实应用中，这个值往往远大于训练样本数m，也就是说，很多样本取值在训练集中根本没有出现，直接使用频率来估计显然不可行，因为“未被观测到”不等于“出现概率为0”。</p>
+<h1 id="极大似然估计"><a href="#极大似然估计" class="headerlink" title="极大似然估计"></a>极大似然估计</h1><p>估计类条件概率有一种常用的策略就是先假定其具有某种确定的概率分布形式，再基于训练样本对概率分布的参数进行估计。假设P(x|c)具有某种确定的形式并且被参数$\theta_c$ 唯一确定，则我们的任务就是利用训练结D估计参数 $\theta_c$。为了明确期间，我们将P(x|c)记为$p(x|\theta_c)$.</p>
+<p>事实上，概率模型的训练过程就是<strong>参数估计</strong>过程。对于参数估计有两个解决方案：</p>
+<ol>
+<li>频率主义派认为，参数虽然未知，但是客观存在固定值，因此可以通过优化似然函数等准则来确定参数</li>
+<li>贝叶斯派认为，参数是未观察到的随机变量，其本身也有分布，因此可以假定参数服从一个先验分布，然后基于观测到的数据来估计参数的后验分布。</li>
+</ol>
+<p>本书介绍自然频率派的极大似然估计(Maximum Likelihood Estimation，简称MLE),这是根据数据采样来估计概率分布参数的经典方法。<br>令Dc表示训练集D中第c类样本组成的集合，假设这些集合是独立同分布的，则对参数$\theta_c$对于数据集Dc的似然是:</p>
+<p>$$P(Dc|\theta_c) = \prod P(\mathbf{x}|\theta_c)$$</p>
+<p>对$\theta_c$进行激发似然估计买就是去寻找能最大化似然函数的参数值$\hat{\theta_c}$.直观上，极大似然估计是在试图在$\theta_c$的所有可能的去职中，找到一个能使数据出现最大“可能性”的最大值。</p>
+<p>上面的式子中的连乘操作容易造成下溢，通常使用对数似然：<br>$$LL(\theta_c) = \log P(D_c| \theta_c) = \sum_{x\in D_c} \log P(x|\theta_c)$$<br>此时，参数$\theta_c$的极大似然估计$\hat{\theta_c}$为<br>$$\hat{\theta_c} = argmax_{\theta_c} LL(\theta_c)$$</p>
+<p>例如，在连续属性的情形下，假设概率密度函数$p(x|c) \sim \mathcal{N}(\mu_c , \sigma^2)$,则参数$\mu_c$和$\sigma^2$的极大似然估计为：<br>$$\hat{\mu_c} = \frac{1}{|D_c|} \sum_{x\in D_c} x$$<br>$$\hat{\sigma_c}^2 = \frac{1}{|D_c|} \sum_{x\in D_c} (x-\hat{\mu_c} )(x-\hat{\mu_c} ^T)$$</p>
+<p>也就是说通过极大似然发得到的额正态分布均值就是样本均值，方差就是$(x-\hat{\mu_c} )(x-\hat{\mu_c} ^T)$ 的均值。这显然是一个符合只觉得结果，在离散属性情形下，也可以通过类似的方法来估计类条件概率。</p>
+<p>需要注意的是这种方法虽然能够使类条件概率估计变得简单，但是估计结果准确性<strong>严重依赖于所假设的概率分布形式是否符合潜在的真实数据分布</strong>。在显示生活中往往需要应用任务本身的经验知识，“猜测”则会导致误导性的结果。</p>
+<h1 id="朴素贝叶斯分类器"><a href="#朴素贝叶斯分类器" class="headerlink" title="朴素贝叶斯分类器"></a>朴素贝叶斯分类器</h1><p>基于贝叶斯公式来估计后验概率P(c|x)主要困难在于类条件概率P(x|c)是<strong>所有属性</strong>上的联合概率，难以从有限的训练样本直接估计而得。<br>基于有限训练样本直接计算联合概率，在计算上将会遭遇组合爆炸问题；在数据上将会遭遇样本稀疏问题；属性越多，问题越严重。</p>
+<p>为了避开这个障碍，朴素贝叶斯分类器采用了<code>“属性条件独立性假设”:对已知类别，假设所有属性相互独立</code>。换言之，假设每个属性独立的对分类结果发生影响。</p>
+<p>基于条件独立性假设，对于多个属性的后验概率可以写成：<br>$$P(c|\mathbf{x}) = \frac{P(C)P(\mathbf{x}|c)}{P(\mathbf{x})} = \frac{P(c)}{P(\mathbf{x})}\prod_{i=1}^d P(x_i|c)$$<br>d为属性数目，xi是$\mathbf{x}$在第i个属性上取值。<br>对于所有的类别来说P(x)相同，基于极大似然的贝叶斯判定准则有朴素贝叶斯的表达式：<br>$$h_{nb}(\mathbf{x}) = \arg max_{c\in \mathcal{Y}}P(c)\prod_{i=1}^d P(x_i|c) \quad (1)$$</p>
+<h2 id="训练过程"><a href="#训练过程" class="headerlink" title="训练过程"></a>训练过程</h2><p>显然，朴素贝叶斯分类器的训练过程就是基于训练结D来估计先验概率P(c),并为每个属性估计条件概率P(xi|c).</p>
+<h3 id="离散属性"><a href="#离散属性" class="headerlink" title="离散属性"></a>离散属性</h3><p>$$P(c) = \frac{|D_c|}{|D|} \quad (2)$$<br>$$P(x_i|c) = \frac{|D_{c,x_i}|}{|D_c|}  \quad (2)$$<br>Dc是D中c类样本组成的集合，$D_{c,x_i}$是Dc在第i个属性上取值为xi的样本组成的集合。</p>
+<h3 id="连续属性"><a href="#连续属性" class="headerlink" title="连续属性"></a>连续属性</h3><p>对连续属性克考虑概率密度函数，假定$p(x_i|c) \sim \mathcal{N}(\mu_{c,i} , \sigma_{c,i}^2)$, 其中$\mu_{c,i}$和$\sigma_{c,i}^2$是第c类样本在i个属性上的均值和方差，有：<br>$$p(x_i|c) = \frac{1}{\sqrt{2\pi}  \sigma_{c,i}}\exp(- \frac{(x_i -\mu_{c,i})^2 }{2\sigma_{c,i}^2}) $$</p>
+<h2 id="“平滑”修正"><a href="#“平滑”修正" class="headerlink" title="“平滑”修正"></a>“平滑”修正</h2><p>注意，若某个属性值在训练集中没有与某个类同时出现过，而是直接基于(1)式子进行概率估计，由于连乘会导致计算出的概率为0，而忽略其他属性概率。</p>
+<p>为了避免其他属性携带的信息被训练集中未出现的属性值“抹去”，在估计概率值时候通常需要进行“平滑”。常使用“拉普拉斯修正”。令N和Ni分别表示训练集中可能出现的类别以及第i个属性可能的取值，（2）（3）式可以修正为:<br>$$\hat{P}(c) = \frac{||D_c|+1}{|D|+N}$$<br>$$\hat{P}(x_i|c) = \frac{|D_{c,x_i}|+1}{|D_c|+N_i}$$<br>(实际上式分子分母分别加上1 和N 防止分子出现等于0的情况)</p>
+<p>显然，拉普拉斯修正避免了因训练集不充分而导致概率估值为0的问题，并且在训练集变大的时候，修正过程所引入的先验影响可会逐渐变得可忽略，使得估值趋于实际概率值。</p>
+<p>拉普拉斯修正实质上假设了属性值与类别均匀分布，这是在朴素贝叶斯学习过程中额外引入的关于数据的先验。</p>
+<h2 id="使用朴素贝叶斯的多种方式"><a href="#使用朴素贝叶斯的多种方式" class="headerlink" title="使用朴素贝叶斯的多种方式"></a>使用朴素贝叶斯的多种方式</h2><ol>
+<li>若任务对预测速度要求较高，则给定数据集，可将贝叶斯分类器所涉及的概率估值余弦存储起来，在进行预测的时候只需进行“查表”即可。</li>
+<li>若任务更新频繁，可以采用“懒惰学习”，先不进行任何训练，待收到预测要求的时候再给家当前数据集进行概率估计</li>
+<li>若数据不断增加，则可以在现有估值基础上，仅对新增样本的属性值所涉及的概率估值进行计数修正</li>
+</ol>
+<h1 id="半朴素贝叶斯分类器"><a href="#半朴素贝叶斯分类器" class="headerlink" title="半朴素贝叶斯分类器"></a>半朴素贝叶斯分类器</h1><p>为了降低贝叶斯公式中估计后验概率的困难，朴素贝叶斯分类器采用了属性条件独立性假设，然而现实任务重这种假设往往很难成立。于是人们尝试对属性独立性假设进行一定程度的放松，由此产生了一类“半朴素贝叶斯分类器”。</p>
+<p>基本思想是适当考虑一部分属性之间的相互依赖信息，从而既不需要进行完全联合概率计算，又不至于彻底忽略比较强的属性依赖关系。</p>
+<p>能否考虑属性间的高阶依赖来进一步提高泛化性能？<br>随着阶数增加，准确估计概率所需的训练样本将以指数级增加。因此，若数据非常充分，泛化性能有可能提升，但是有限样本的条件下会陷入估计高阶联合概率的泥沼。</p>
+<h1 id="贝叶斯网（信念网）"><a href="#贝叶斯网（信念网）" class="headerlink" title="贝叶斯网（信念网）"></a>贝叶斯网（信念网）</h1><p>贝叶斯网借助于有向无环图（Directed Acyclic Graph,DAG）来刻画属性之间的依赖关系，并使用条件概率表来描述属性的二联合概率分布。<br>贝叶斯网络有两个主要组成部分：①一个有向无环图，表示变量之间的依赖关系②一个概率表，把各结点和它的直接父节点关联起来。</p>
+<p>贝叶斯网络是一个有向非循环图，其中节点表示变量（可观测变量、潜在变量、未知参数或者假设），边表示条件独立性，每个节点都有个概率表包含指定父母节点下的条件概率。</p>
+<p>（1）如果节点X没有父母节点，则表中值包含先验概率P(X)（2）如果节点X只有一个父母节点Y，则表中包含条件概率P(X|Y)（3）如果节点x有多个父母节点，则表中包含条件概率P（X|Y1，Y2，…,Yn）<br>    贝叶斯网络的一个重要性质（条件独立）：贝叶斯网络中的一个节点，如果它的父母节点已知，则它条件独立与所有非后代节点。</p>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>贝叶斯网结构有效地表达了属性间的条件独立性。给定父节点，贝叶斯网假设每个属性和它的非后裔属性独立，于是$B=\langle G, \Theta \rangle$将属性的二联合概率分布定义为<br>$$P_B(x_1,x_2,\ldots,x_d) = \prod_{i=1}^d P_B(x_i|\pi_i) = \prod_{i=1}^d \theta_{x_i|\pi_i}$$</p>
+<p>$\pi_i$是xi的父节点，$\theta_{x_i|\pi_i}$是条件概率。</p>
+<p>三个变量之间的典型依赖关系有：<br>同父结构、V型结构和顺序结构。<br>同父结构中给定父节点取值，两个子节点条件独立。在顺序结构中，给定中间节点的取值，头尾两个节点条件独立。V型结构中，给定子节点的取值，两个父节点必不独立，但是若子节点的取值完全未知，两个父节点互相独立。</p>
+<p>为了分析有向图中变量间的条件独立，可以采用“有向分离”，把有向图转换为无向图：</p>
+<ul>
+<li>找出有向图中所有V型结构，在V型结构两个父节点之间加上一条无向边</li>
+<li>将所有有向边改为无向边<br>由此产生的图叫做“道德图”（即孩子的父母应该建立牢靠的关系，否则是不道德的）</li>
+</ul>
+<h2 id="学习"><a href="#学习" class="headerlink" title="学习"></a>学习</h2><p>若网络结构已知，则属性之间的依赖关系已知。则贝叶斯网的学习过程相对简单，只需要通过对训练样本进行“计数”，估计出每个节点的条件概率表即可。但是实际往往不知道网络结构，因此学习的收购要任务就是找出结构最“恰当的”贝叶斯网。</p>
+<p>“评分搜索”是常用的方法。先定义一个评分函数，以此来估计贝叶斯网和训练数据的契合程度，然后基于这个评分函数来寻找结构最优的贝叶斯网。评分函数引入了归纳偏好。</p>
+<p>常用的评分函数基于信息论准则，将学习问题看成一个数据压缩任务，学习的目标是找到一个能以最短编码长度描述训练数据的模型，此时编码长度包括了描述模型自身需要的字节长度和该模型描述数据所需的字节长度。<br>对贝叶斯学习而言，模型就是一个贝叶斯网，同时每个贝叶斯网描述了一个在训练数据集上的概率分布，自有一套编码长度使那些经常出现的样本有更短编码，于是我们选择那个综合编码长度最小的贝叶斯网，即符合“最小描述长度”准则。</p>
+<p>给定训练集D和贝叶斯网B，评分函数如下：<br>$$s(B|D) = f(\theta)|B| - LL(B|D)$$<br>|B|是贝叶斯网的参数个数，LL是B的对数似然。<br>显然第一项是计算编码贝叶斯网B所需要字节数，第二项是计算B所对应的概率分布$P_B$需要多少字节数来描述D。于是学习任务就转换成一个优化任务，即寻找一个贝叶斯网使得评分函数最小。</p>
+<ul>
+<li>若$f(\theta) =1$,即每个参数用一个字节描述，得到AIC评分函数。</li>
+<li>若$f(\theta) =1/2 \log m$,得到BIC评分函数。</li>
+<li>若$f(\theta) =0$，即不计算网络进行编码的长度，则评分函数退化成负似然函数，学习任务就退化成极大似然估计。</li>
+</ul>
+<p>不难发现如果网络G固定，则评分函数第一项是常数，最小化评分函数等价于对参数的极大似然估计，而这部分可以直接在训练集上通过经验估计（事件频率）获得，因此只需要对网络结构进行搜索，而候选结构的最有参数可以直接在训练集上得到。</p>
+<p>而从所有可能的额网络结空间搜索最优贝叶斯网是一个NP问题，难以快速求解，有两种策略得到近似解：</p>
+<ol>
+<li>贪心法，从某个网络结构出发，每次调整一条边（增删改方向）直到评分函数不再降低。</li>
+<li>给网络施加结构约束消减搜索空间，例如约束为树形。</li>
+</ol>
+<h2 id="推断"><a href="#推断" class="headerlink" title="推断"></a>推断</h2><p>最理想方法是精确计算，但是节点多、连接稠密情况下难以精确推断（精确推断NP难），因此“近似判断”。</p>
+<h3 id="吉布斯采样"><a href="#吉布斯采样" class="headerlink" title="吉布斯采样"></a>吉布斯采样</h3><ul>
+<li>先随机产生一个与证据一致的样本作为初始点，然后每步从当前样本出发产生下一个样本。</li>
+<li>实际上是在贝叶斯网所有变量联合状态空间与证据一致的子空间中进行“随机漫步”，每一步仅仅依赖前一步的状态，是一个马尔科夫链。</li>
+<li>但是马尔科夫链很长时间才能趋于平稳，因此收敛速度较慢。</li>
+<li>此外若贝叶斯网中存在极端概率0或1，将不能保证马尔科夫链存在平稳分布，此时吉布斯采样会给出错误的估计结果</li>
+</ul>
+<h1 id="EM算法（期望最大化）"><a href="#EM算法（期望最大化）" class="headerlink" title="EM算法（期望最大化）"></a>EM算法（期望最大化）</h1><h2 id="问题提出"><a href="#问题提出" class="headerlink" title="问题提出"></a>问题提出</h2><p>未观测变量下如何对模型参数进行估计？<br>未观测变量“隐变量”。$\mathbf{x}$表示已观测变量，$\mathbf{z}$表示隐变量集 ,$\Theta$表示模型参数，欲对$\Theta$做极大似然估计，应该最大化似然函数：<br>$$LL(\Theta | \mathbf{X},\mathbf{Z}) = \ln P(\mathbf{X},\mathbf{Z}|\Theta )$$<br>由于$\mathbf(Z)$是隐变量无法直接求解，可以通过对z计算期望，来最大化已观测数据的对数“边际似然”：<br>$$LL(\Theta | \mathbf{X}) = \ln P(\mathbf{X}|\Theta) = \ln \sum_{\mathbf{Z}} P(\mathbf{X},\mathbf{Z}|\Theta )$$</p>
+<h2 id="EM算法"><a href="#EM算法" class="headerlink" title="EM算法"></a>EM算法</h2><p>是常用的估计隐变量的利器，它是一种迭代的方法，基本思想是：</p>
+<ul>
+<li>若参数$\Theta$ 已知，则可以根据训练数据推断出最优隐变量Z的值（E步）</li>
+<li>反之，若Z已知，可以方便的对参数$\Theta$做极大似然估计（M步）</li>
+</ul>
+<p>以初始值$\Theta^0$为起点，具体步骤：</p>
+<ul>
+<li>基于$\Theta^t$推断隐变量Z的期望，记为$Z^t$</li>
+<li>基于已观测变量X和$Z^t$对参数$\Theta$做极大似然估计，记为$\Theta^{t+1}$</li>
+</ul>
+<p>进一步，若我们不是取Z的期望，而是基于 $\Theta^{t}$计算隐变量Z的概率分布，则EM算法的两个步骤是：</p>
+<ul>
+<li>E步：以当前$\Theta^t$推断隐变量分布$P(Z|X,\Theta^t)$，并计算对数似然$LL(\Theta | \mathbf{X},\mathbf{Z})$关于Z的期望。<br>$$Q(\Theta|\Theta^t) = \mathbb{E}_{Z|X,\Theta^t} LL(\Theta|X,Z)$$</li>
+<li>M步：寻找参数最大化期望似然<br>$$\Theta^{t+1} = \arg \max Q(\Theta|\Theta^t)$$</li>
+</ul>
+<p>简要来说EM算法使用两个步骤交替计算：<br>第一步是期望步，利用当前估计的参数值来计算对数似然的期望值；<br>第二步是最大化步，使用能使E不产生的似然期望最大化的参数值，然后，新得到的参数值重新用于计算E步<br>直至收敛到局部值。</p>
+<p>实际上，隐变量估计也可以通过梯度下降，但是由于随着隐变量的数目以指数上升，会给梯度下降带来麻烦，而EM算法则可以看做一种非梯度优化。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><table>
+<thead>
+<tr>
+<th>结构</th>
+<th style="text-align:center">观测值</th>
+<th style="text-align:right">方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>已知</td>
+<td style="text-align:center">完整</td>
+<td style="text-align:right">最大似然估计法 (MLE)</td>
+</tr>
+<tr>
+<td>已知</td>
+<td style="text-align:center">部份</td>
+<td style="text-align:right">EM 算法,Greedy Hill-climbing method</td>
+</tr>
+<tr>
+<td>未知</td>
+<td style="text-align:center">完整</td>
+<td style="text-align:right">搜索整个模型空间</td>
+</tr>
+<tr>
+<td>未知</td>
+<td style="text-align:center">部份</td>
+<td style="text-align:right">结构算法,EM 算法,Bound contraction</td>
+</tr>
+</tbody>
+</table>
+<h1 id="课外阅读材料"><a href="#课外阅读材料" class="headerlink" title="课外阅读材料"></a>课外阅读材料</h1><ol>
+<li><p>朴素贝叶斯分类器在很多情形下都能获得相当好的性能：<br> 一种解释是：对分类任务来说，只需各类别的条件概率排序正确、无需精准概率值即可导致正确分类结果。<br> 另一种解释：若属性间依赖对所有类别影响相同，或依赖关系的影响能互相消除，则属性条件独立想假设在降低计算开销的同时不会对性能产生负面影响。<br> 朴素贝叶斯在信息检索尤其是文本分类中常用。</p>
+</li>
+<li><p>根据对属性间的依赖程度，贝叶斯分类器形成一个谱：朴素贝叶斯不考虑属性间依赖性，贝叶斯网能表示任意属性间的依赖性，介于两者之间的就是半朴素贝叶斯分类器。</p>
+</li>
+<li><p>EM算法是最常见的隐变量估计法，在机器学习中有广泛用途，如学习高斯混合模的参数，K均值聚类算法就是一个典型的EM算法。</p>
+</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/MachineLearning/">MachineLearning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/MachineLearning/">MachineLearning</a><a href="/tags/Notes/">Notes</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/05/机器学习_周志华_笔记7/" data-title="机器学习（周志华）- 第7章贝叶斯分类器笔记 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/05/机器学习_周志华_笔记8/" title="机器学习（周志华）- 第8章集成学习笔记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  机器学习（周志华）- 第8章集成学习笔记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/05/机器学习_周志华_笔记6_2/"  title="机器学习（周志华）- 第6章支持向量机(2)笔记">
+ <strong>下一篇：</strong><br/> 
+ <span>机器学习（周志华）- 第6章支持向量机(2)笔记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/05/机器学习_周志华_笔记7/" data-title="机器学习（周志华）- 第7章贝叶斯分类器笔记" data-url="http://yoursite.com/2016/08/05/机器学习_周志华_笔记7/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#贝叶斯决策论"><span class="toc-number">1.</span> <span class="toc-text">贝叶斯决策论</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#极大似然估计"><span class="toc-number">2.</span> <span class="toc-text">极大似然估计</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#朴素贝叶斯分类器"><span class="toc-number">3.</span> <span class="toc-text">朴素贝叶斯分类器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#训练过程"><span class="toc-number">3.1.</span> <span class="toc-text">训练过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#离散属性"><span class="toc-number">3.1.1.</span> <span class="toc-text">离散属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#连续属性"><span class="toc-number">3.1.2.</span> <span class="toc-text">连续属性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#“平滑”修正"><span class="toc-number">3.2.</span> <span class="toc-text">“平滑”修正</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用朴素贝叶斯的多种方式"><span class="toc-number">3.3.</span> <span class="toc-text">使用朴素贝叶斯的多种方式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#半朴素贝叶斯分类器"><span class="toc-number">4.</span> <span class="toc-text">半朴素贝叶斯分类器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#贝叶斯网（信念网）"><span class="toc-number">5.</span> <span class="toc-text">贝叶斯网（信念网）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#结构"><span class="toc-number">5.1.</span> <span class="toc-text">结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#学习"><span class="toc-number">5.2.</span> <span class="toc-text">学习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#推断"><span class="toc-number">5.3.</span> <span class="toc-text">推断</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#吉布斯采样"><span class="toc-number">5.3.1.</span> <span class="toc-text">吉布斯采样</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#EM算法（期望最大化）"><span class="toc-number">6.</span> <span class="toc-text">EM算法（期望最大化）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题提出"><span class="toc-number">6.1.</span> <span class="toc-text">问题提出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EM算法"><span class="toc-number">6.2.</span> <span class="toc-text">EM算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小结"><span class="toc-number">6.3.</span> <span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#课外阅读材料"><span class="toc-number">7.</span> <span class="toc-text">课外阅读材料</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

@@ -1,0 +1,653 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>机器学习（周志华）- 第3章线性模型笔记 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="基本形式由d个属性描述的示例$\textbf{x} = (x_1; x_2;…;x_d))$,线性模型试图通过属性的线性组合来进行预测函数，即$$f(\textbf{x}) = \textbf{w}^T\textbf{x}+b$$$\textbf{w}$和$b$学得后模型就可以确定。由于w直观表达各属性在预测中的重要程度，优点：
+
+形式简单，易于建模。 但是蕴藏着机器学习中一些重要的基本思想。许多">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习（周志华）- 第3章线性模型笔记">
+<meta property="og:url" content="http://yoursite.com/2016/08/03/机器学习_周志华_笔记3/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="基本形式由d个属性描述的示例$\textbf{x} = (x_1; x_2;…;x_d))$,线性模型试图通过属性的线性组合来进行预测函数，即$$f(\textbf{x}) = \textbf{w}^T\textbf{x}+b$$$\textbf{w}$和$b$学得后模型就可以确定。由于w直观表达各属性在预测中的重要程度，优点：
+
+形式简单，易于建模。 但是蕴藏着机器学习中一些重要的基本思想。许多">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/LinearDA.jpg">
+<meta property="og:updated_time" content="2016-08-04T00:26:03.610Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习（周志华）- 第3章线性模型笔记">
+<meta name="twitter:description" content="基本形式由d个属性描述的示例$\textbf{x} = (x_1; x_2;…;x_d))$,线性模型试图通过属性的线性组合来进行预测函数，即$$f(\textbf{x}) = \textbf{w}^T\textbf{x}+b$$$\textbf{w}$和$b$学得后模型就可以确定。由于w直观表达各属性在预测中的重要程度，优点：
+
+形式简单，易于建模。 但是蕴藏着机器学习中一些重要的基本思想。许多">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/LinearDA.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/03/机器学习_周志华_笔记3/" title="机器学习（周志华）- 第3章线性模型笔记" itemprop="url">机器学习（周志华）- 第3章线性模型笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-03T08:20:05.307Z" itemprop="datePublished"> Published 2016-08-03</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#基本形式"><span class="toc-number">1.</span> <span class="toc-text">基本形式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#线性回归"><span class="toc-number">2.</span> <span class="toc-text">线性回归</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#预处理"><span class="toc-number">2.1.</span> <span class="toc-text">预处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一元线性回归"><span class="toc-number">2.2.</span> <span class="toc-text">一元线性回归</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多元线性回归"><span class="toc-number">2.3.</span> <span class="toc-text">多元线性回归</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对数线性回归"><span class="toc-number">2.4.</span> <span class="toc-text">对数线性回归</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#广义线性模型"><span class="toc-number">2.5.</span> <span class="toc-text">广义线性模型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#对数几率回归-逻辑回归"><span class="toc-number">3.</span> <span class="toc-text">对数几率回归(逻辑回归)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#如何求解w和b"><span class="toc-number">3.1.</span> <span class="toc-text">如何求解w和b</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#线性判别分析"><span class="toc-number">4.</span> <span class="toc-text">线性判别分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#多分类学习"><span class="toc-number">5.</span> <span class="toc-text">多分类学习</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一般思路"><span class="toc-number">5.1.</span> <span class="toc-text">一般思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#拆分策略"><span class="toc-number">5.2.</span> <span class="toc-text">拆分策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#OvO"><span class="toc-number">5.2.1.</span> <span class="toc-text">OvO</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OvR"><span class="toc-number">5.2.2.</span> <span class="toc-text">OvR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OvO与OvR"><span class="toc-number">5.2.3.</span> <span class="toc-text">OvO与OvR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MoM"><span class="toc-number">5.2.4.</span> <span class="toc-text">MoM</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#类别不均衡问题"><span class="toc-number">6.</span> <span class="toc-text">类别不均衡问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#注意区别多分类与多标记"><span class="toc-number">7.</span> <span class="toc-text">注意区别多分类与多标记</span></a></li></ol>
+		
+		</div>
+		
+		<h1 id="基本形式"><a href="#基本形式" class="headerlink" title="基本形式"></a>基本形式</h1><p>由d个属性描述的示例$\textbf{x} = (x_1; x_2;…;x_d))$,线性模型试图通过属性的线性组合来进行预测函数，即<br>$$f(\textbf{x}) = \textbf{w}^T\textbf{x}+b$$<br>$\textbf{w}$和$b$学得后模型就可以确定。由于w直观表达各属性在预测中的重要程度，<br>优点：</p>
+<ol>
+<li>形式简单，易于建模。<br> 但是蕴藏着机器学习中一些重要的基本思想。许多功能强大的非线性模型可在线性模型基础上，通过引入层次结构或者高维映射得到。</li>
+<li>w直观表达属性的权值，因此线性模型具有很好的“可解释性”。</li>
+</ol>
+<h1 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h1><p>定义： 线性回归试图学得一个线性模型尽可能准确预测实值输出标记。</p>
+<h2 id="预处理"><a href="#预处理" class="headerlink" title="预处理"></a>预处理</h2><p>离散属性：若属性值之间存在“序”关系，可通过连续化转换为连续值。<br>若属性之间不存在序关系，通常转换为k维向量。</p>
+<h2 id="一元线性回归"><a href="#一元线性回归" class="headerlink" title="一元线性回归"></a>一元线性回归</h2><p>假设只有一个属性 $f(x) = wx+b$.确定w和b可通过最小化<strong>均方误差</strong>求得。求解方法是最小二乘法，即试图找到一条直线使得所有样本到直线上的欧氏距离之和最小。</p>
+<h2 id="多元线性回归"><a href="#多元线性回归" class="headerlink" title="多元线性回归"></a>多元线性回归</h2><p>$$f(\textbf{x}) = \textbf{w}^T\textbf{x}+b$$<br>也可以通过最小二乘法计算w和b，但是设计矩阵逆运算比单变量复杂。<br>然而$\textbf{X}^T\textbf{X}$不一定是满秩矩阵，例如可能会出现很大的变量数目甚至超过样本数。导致x列数多与行数，此时可以解除多个w，使均方误差最小化。选择哪一个作为输出将由学习算法的归纳偏好决定。常见做法是引入<strong>正则化项</strong>。</p>
+<h2 id="对数线性回归"><a href="#对数线性回归" class="headerlink" title="对数线性回归"></a>对数线性回归</h2><p>将输出标记的对数作为线性模型逼近的目标：<br>$$\ln y= \textbf{w}^T\textbf{x}+b$$<br>它实际上实在试图让$e^{w^T+b}$逼近$y$。上式在形式上仍是线性回归，但是实质上已是在再求取输入空间到输出空间的非线性函数映射。这里的对数函数起到了将线性回归模型的预测值与真实标记联系起来的作用。</p>
+<h2 id="广义线性模型"><a href="#广义线性模型" class="headerlink" title="广义线性模型"></a>广义线性模型</h2><p>更一般的考虑单调微调函数$g(\cdot)$(称作“联系函数”)令：<br>$$y = g^{-1}(\textbf{w}^T \textbf{x} +b)$$<br>显然现行回归模型是在$g(\cdot) = \ln (\cdot)$时的特例。</p>
+<h1 id="对数几率回归-逻辑回归"><a href="#对数几率回归-逻辑回归" class="headerlink" title="对数几率回归(逻辑回归)"></a>对数几率回归(逻辑回归)</h1><p>线性模型做分类任务怎么办？答案在上面的广义线性模型中：找到一个可以单调可微函数将真实标记y与线性回归模型的预测值联系起来。由于$z= \textbf{w}^T\textbf{x}+b$是实值，需要将z转换为0,1.最理想的是单位越阶函数。<br>但是单位越界函数不连续。故采用近似的对数几率函数(logistic function):<br>$$y = \frac{1}{1+e^{-z}}$$<br>对数几率函数是一种Sigmod函数，将z值转换成一个接近0或者1的y值，并且输出值在z=0附近很陡。</p>
+<p>带入线性模型中可以得到<br>$$y = \frac{1}{1+e^{-(\textbf{w}^T\textbf{x}+b)}}$$<br>$$\ln \frac{y}{1-y} = \textbf{w}^T\textbf{x}+b$$<br>若将y视为样本x作为正例的可能性，则1-y是器反例的可能性，两者的比值$\frac{y}{1-y}$称为“几率”，反映了x作为正例的可能性。对几率取对数得到“对数几率”（logit）：$\frac{\ln y}{1-y}$.。可以看出上式是用线性回归预测的结果去逼近真实标记的对数几率。</p>
+<p>方法优点：</p>
+<ol>
+<li>直接对分类可能性建模，无需事先假设数据分布。避免了假设数据分布不准确所带来的问题。</li>
+<li>不仅可以预测出“类别”，而是可以得到近似概率预测，这对许多需要利用概率辅助决策的任务很有用。</li>
+<li>对数函数是任意阶可导的凸函数，有很好的数学性质，现有的很多优化算法都可以直接用于求解最优值。</li>
+</ol>
+<h2 id="如何求解w和b"><a href="#如何求解w和b" class="headerlink" title="如何求解w和b"></a>如何求解w和b</h2><p>将y视为后延概率估计$p(y=1|x)$，重写逻辑回归式有<br>$$\ln \frac{p(y=1|x)}{p(y=0|x)} = \textbf{w}^T\textbf{x}+b$$<br>有<br>$$p(y=1|  x) =  \frac{e^{\textbf{w}^T\textbf{x}+b}}{1+e^{\textbf{w}^T\textbf{x}+b}}$$</p>
+<p>$$p(y=0|  x) =  \frac{1}{1+e^{\textbf{w}^T\textbf{x}+b}}$$</p>
+<p>于是可以用极大似然法来估计w和b，令每个样本属于其真实标记的概率越大越好。<br>将（w；b）表示为$\beta$.可以得到最大似然式子是关于$\beta$的高阶可导凸函数。</p>
+<p>根据凸优化理论，经典的数值优化算法如梯度下降法、牛顿法等都可以求得最优解。</p>
+<h1 id="线性判别分析"><a href="#线性判别分析" class="headerlink" title="线性判别分析"></a>线性判别分析</h1><p>LDA是一种经典的线性学习方法。思想非常朴素：给定训练样例集，设法将样例投影到一条直线上，使得同类样例投影点尽可能近，一类样例投影点尽可能远；在对新样本进行分类时，将其投影到同样的这条直线上，再根据投影点的位置来确定新样本的类别。如图：<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/ML/LinearDA.jpg" alt=""><br>若使同类样例投影尽可能接近，可以让同类样例投影点的协方差尽可能小；<br>欲使一类样例的投影点尽可能远离，可以让类中心的距离尽可能大。</p>
+<p>值的注意的是LDA可以从贝叶斯决策理论的角度来阐述，并可证明，当两类数据同先验、满足高斯分布并且协方差相等时候，LDA可以达到最优值。<br>另外LDA也常被视为一种经典的监督降维技术。</p>
+<h1 id="多分类学习"><a href="#多分类学习" class="headerlink" title="多分类学习"></a>多分类学习</h1><h2 id="一般思路"><a href="#一般思路" class="headerlink" title="一般思路"></a>一般思路</h2><p>解决多分类问题的一般思路是“拆解法”，即将多分类任务拆分为若干个二分类任务求解。具体来说就是先对问题进行拆分，然后为拆出的每个二分类任务训练一个分类器；<br>在测试的时候，对这些分类器预测结果进行集成以获得最终的多分类结果。<br>这里的 关键是如何对多分类任务进行拆分，以及如何对多个分类器进行集成。</p>
+<h2 id="拆分策略"><a href="#拆分策略" class="headerlink" title="拆分策略"></a>拆分策略</h2><ol>
+<li>一对一 OvO</li>
+<li>一对其余 OvR</li>
+<li>多对多 MvM</li>
+</ol>
+<h3 id="OvO"><a href="#OvO" class="headerlink" title="OvO"></a>OvO</h3><p>给定数据集，N个类。OvO将N个类进行两两配对产生N(N-1)个二分类任务。在测试阶段，新样本将同时提交给所有分类器，于是得到N(N-1)个分类结果，最终结果可以通过投票产生：即把被预测最多的类别作为最终的结果。</p>
+<h3 id="OvR"><a href="#OvR" class="headerlink" title="OvR"></a>OvR</h3><p>每次将一个类的样例作为正例，其他所有的样例作为反例训练N个分类器，在测试时候若仅有一个分类器预测为正类，则对应的标记作为最终的分类结果；若有多个分类器预测为正类，则通常考虑各种分类器的预置信度，选择置信度最大的类标记作为分类结果。</p>
+<h3 id="OvO与OvR"><a href="#OvO与OvR" class="headerlink" title="OvO与OvR"></a>OvO与OvR</h3><p>可以看出，OvR值需要训练N个分类器，而OvO需要N(N-1)个分类器，因此OvO的存储开销和测试时间开销通常比OvR大。但在训练的时候，OvR的每个分类器均使用全部的训练样例，而OvO的每个分类器只使用两个类的样例。<br>因此，在类别很多的时候，OvO训练时间开销通常比OvR更小，至于预测性能，取决于数据分布，两者大多数情形差不多。</p>
+<h3 id="MoM"><a href="#MoM" class="headerlink" title="MoM"></a>MoM</h3><p>每次将若干个类作为正类，其他类作为反类。显然OvO和OvR是MvM的特例。<br>但是MvM的正反类需要特殊设计，不能随意挑选。常用的技术是：“纠错输出码（EOCO）”。</p>
+<p>EOEC是将编码的思想引入类别拆分，尽可能在解码中具有容错性。主要分为两步：</p>
+<ol>
+<li>编码：对N个类别进行M次划分，每划分一部分类为正类，一部分为反类，形成二分类训练集；这样一共产生M个训练集，可以训练出M个分类器。</li>
+<li>M个分类器分别对测试样本进行预测，这些预测标记组成一个编码，将这个编码与每个类别各自的编码进行比较，返回其中<strong>距离最小</strong>（距离通常用海明距离或者欧氏距离）的类别作为最终的预测结果。</li>
+</ol>
+<p>类别划分通过“编码矩阵”实现：二元码（正类，反类），三元码（正类，反类，停用类）。EOCO编码越长，纠错能力越强，但是需要训练的分类器也越多。</p>
+<h1 id="类别不均衡问题"><a href="#类别不均衡问题" class="headerlink" title="类别不均衡问题"></a>类别不均衡问题</h1><p>前面介绍的分类学习方法都是基于几个基本假设：不同类别训练样例数目相当。然而实际可能会出现类别不均衡。<br><strong>定义：</strong>类别不均衡是指分类任务中不同类别的训练样例数目相差很大的情况。</p>
+<p>在线性分类中，阈值设置为0.5表明分类器认为真实真返利可能性相同，即分类器决策规则：若$\frac{y}{1-y}&gt;1$则预测为正例。然而观测几率应该是$\frac{m^+}{m^-}$（假设训练集是基于样本的无偏估计，这个应该等于真实几率），即只要分类器预测几率高于观测几率就应该判定为正例即:$\frac{y}{1-y}&gt;\frac{m^+}{m^-}$预测为正例。因此应该对预测值进行调整为<br>$$\frac{y’}{1-y’} = \frac{y}{1-y} \times \frac{m^+}{m^-}$$<br>这就是类别不均衡学习的一个基本策略：<strong>再缩放</strong>。<br>这个方法有效但是不平凡，因为我们未必能基于训练集的观测几率来推断出真实几率。现有的三大类做法（假定正类较少，反类样例较多）：</p>
+<ol>
+<li>欠采样：去除反例使得正反例数目接近再进行学习。</li>
+<li>过采样：增加一些正例</li>
+<li>直接基于原始训练集进行学习，但是采用再缩放嵌入到决策过程，称为“阈值移动”。</li>
+</ol>
+<p>欠采样开销远小于过采样。但是可能丢失重要信息。代表算法EasyEnsemb，则是利用继承学习机制将反例划分为若干个不同集合供不同学习器使用。看起来每个学习器都欠采样，但是全局却不会丢失重要信息。</p>
+<p>过采样不能简单地对初始正例样本进行重复采样，否则会导致严重过拟合。<br>过采样代表算法SMOTE：对训练集正例进行插值产生额外正例。</p>
+<h1 id="注意区别多分类与多标记"><a href="#注意区别多分类与多标记" class="headerlink" title="注意区别多分类与多标记"></a>注意区别多分类与多标记</h1><p>多分类中虽然有多个类别，但是每个样本仅仅属于一个类别。<br>如果希望一个样本同时预测出多个类别标记。例如一幅图标记为“蓝天”，“白云”“自然场景”等，这样的任务叫“多标记学习（multi-label learning）”。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/MachineLearning/">MachineLearning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/MachineLearning/">MachineLearning</a><a href="/tags/Notes/">Notes</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/03/机器学习_周志华_笔记3/" data-title="机器学习（周志华）- 第3章线性模型笔记 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/03/机器学习_周志华_笔记4/" title="机器学习（周志华）- 第4章决策树笔记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  机器学习（周志华）- 第4章决策树笔记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/03/test2/"  title="">
+ <strong>下一篇：</strong><br/> 
+ <span>(no title)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/03/机器学习_周志华_笔记3/" data-title="机器学习（周志华）- 第3章线性模型笔记" data-url="http://yoursite.com/2016/08/03/机器学习_周志华_笔记3/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#基本形式"><span class="toc-number">1.</span> <span class="toc-text">基本形式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#线性回归"><span class="toc-number">2.</span> <span class="toc-text">线性回归</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#预处理"><span class="toc-number">2.1.</span> <span class="toc-text">预处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一元线性回归"><span class="toc-number">2.2.</span> <span class="toc-text">一元线性回归</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多元线性回归"><span class="toc-number">2.3.</span> <span class="toc-text">多元线性回归</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对数线性回归"><span class="toc-number">2.4.</span> <span class="toc-text">对数线性回归</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#广义线性模型"><span class="toc-number">2.5.</span> <span class="toc-text">广义线性模型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#对数几率回归-逻辑回归"><span class="toc-number">3.</span> <span class="toc-text">对数几率回归(逻辑回归)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#如何求解w和b"><span class="toc-number">3.1.</span> <span class="toc-text">如何求解w和b</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#线性判别分析"><span class="toc-number">4.</span> <span class="toc-text">线性判别分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#多分类学习"><span class="toc-number">5.</span> <span class="toc-text">多分类学习</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一般思路"><span class="toc-number">5.1.</span> <span class="toc-text">一般思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#拆分策略"><span class="toc-number">5.2.</span> <span class="toc-text">拆分策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#OvO"><span class="toc-number">5.2.1.</span> <span class="toc-text">OvO</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OvR"><span class="toc-number">5.2.2.</span> <span class="toc-text">OvR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OvO与OvR"><span class="toc-number">5.2.3.</span> <span class="toc-text">OvO与OvR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MoM"><span class="toc-number">5.2.4.</span> <span class="toc-text">MoM</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#类别不均衡问题"><span class="toc-number">6.</span> <span class="toc-text">类别不均衡问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#注意区别多分类与多标记"><span class="toc-number">7.</span> <span class="toc-text">注意区别多分类与多标记</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

@@ -1,0 +1,656 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>计算机操作系统--进程同步-笔记 | SamanthaChen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="陈希蔓">
+    
+
+    
+    <meta name="description" content="背景对共享数据的并发访问可能导致数据的不一致性，要保持数据的一致性，就需要一种保证并发进程的正确执行顺序的机制————同步机制来保证多个进程对共享数据的互斥访问.
+进程间的制约关系间接制约：有些资源需要互斥使用，因此各进程竞争使用这些资源－－独占分配到的部分或全部共享资源，进程的这种关系为进程的互斥;直接制约：系统中多个进程中发生的事件存在某种时序关系，需要相互合作，共同完成一项任务。即一个进程运">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机操作系统--进程同步-笔记">
+<meta property="og:url" content="http://yoursite.com/2016/08/13/计算机操作系统_汤小丹_笔记3/index.html">
+<meta property="og:site_name" content="SamanthaChen's Blog">
+<meta property="og:description" content="背景对共享数据的并发访问可能导致数据的不一致性，要保持数据的一致性，就需要一种保证并发进程的正确执行顺序的机制————同步机制来保证多个进程对共享数据的互斥访问.
+进程间的制约关系间接制约：有些资源需要互斥使用，因此各进程竞争使用这些资源－－独占分配到的部分或全部共享资源，进程的这种关系为进程的互斥;直接制约：系统中多个进程中发生的事件存在某种时序关系，需要相互合作，共同完成一项任务。即一个进程运">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS9.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS10.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS11.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS12.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS13.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS14.png">
+<meta property="og:updated_time" content="2016-08-14T01:05:59.500Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计算机操作系统--进程同步-笔记">
+<meta name="twitter:description" content="背景对共享数据的并发访问可能导致数据的不一致性，要保持数据的一致性，就需要一种保证并发进程的正确执行顺序的机制————同步机制来保证多个进程对共享数据的互斥访问.
+进程间的制约关系间接制约：有些资源需要互斥使用，因此各进程竞争使用这些资源－－独占分配到的部分或全部共享资源，进程的这种关系为进程的互斥;直接制约：系统中多个进程中发生的事件存在某种时序关系，需要相互合作，共同完成一项任务。即一个进程运">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS9.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="SamanthaChen&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="SamanthaChen&#39;s Blog" title="SamanthaChen&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="SamanthaChen&#39;s Blog">SamanthaChen&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="https://samanthachen.github.io/" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 2073345143534261000 ><input type="text" name="q" size="30" placeholder="Search"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/13/计算机操作系统_汤小丹_笔记3/" title="计算机操作系统--进程同步-笔记" itemprop="url">计算机操作系统--进程同步-笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="陈希蔓" target="_blank" itemprop="author">陈希蔓</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-13T08:57:48.221Z" itemprop="datePublished"> Published 2016-08-13</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#临界区"><span class="toc-number">2.</span> <span class="toc-text">临界区</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#临界区的三个原则："><span class="toc-number">2.1.</span> <span class="toc-text">临界区的三个原则：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现临界区互斥的解决办法"><span class="toc-number">2.2.</span> <span class="toc-text">实现临界区互斥的解决办法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#软件的办法："><span class="toc-number">2.2.1.</span> <span class="toc-text">软件的办法：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#单标志法"><span class="toc-number">2.2.1.1.</span> <span class="toc-text">单标志法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#双标志法先检查"><span class="toc-number">2.2.1.2.</span> <span class="toc-text">双标志法先检查</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#双标志法后检查"><span class="toc-number">2.2.1.3.</span> <span class="toc-text">双标志法后检查</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Peterson’s-Algorithm。"><span class="toc-number">2.2.1.4.</span> <span class="toc-text">Peterson’s Algorithm。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#硬件方法"><span class="toc-number">2.2.2.</span> <span class="toc-text">硬件方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#信号量"><span class="toc-number">2.2.3.</span> <span class="toc-text">信号量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#整型信号量"><span class="toc-number">2.2.3.1.</span> <span class="toc-text">整型信号量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#记录型信号量"><span class="toc-number">2.2.3.2.</span> <span class="toc-text">记录型信号量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#信号量和PV原语"><span class="toc-number">2.2.3.3.</span> <span class="toc-text">信号量和PV原语</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#And型信号量集"><span class="toc-number">2.2.3.4.</span> <span class="toc-text">And型信号量集</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#一般信号量集"><span class="toc-number">2.2.3.5.</span> <span class="toc-text">一般信号量集</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#生产消费者问题"><span class="toc-number">2.2.3.6.</span> <span class="toc-text">生产消费者问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PV操作讨论"><span class="toc-number">2.2.3.7.</span> <span class="toc-text">PV操作讨论</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#信号量同步的缺点"><span class="toc-number">2.2.3.8.</span> <span class="toc-text">信号量同步的缺点</span></a></li></ol></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>对共享数据的并发访问可能导致数据的不一致性，要保持数据的一致性，就需要一种保证并发进程的正确执行顺序的机制————同步机制来保证多个进程对共享数据的互斥访问.</p>
+<p>进程间的制约关系<br>间接制约：有些资源需要互斥使用，因此各进程竞争使用这些资源－－独占分配到的部分或全部共享资源，进程的这种关系为进程的互斥;<br>直接制约：系统中多个进程中发生的事件存在某种时序关系，需要相互合作，共同完成一项任务。即一个进程运行到某一点时要求另一伙伴进程为它提供消息，在未获得消息之前，该进程处于等待状态，获得消息后被唤醒进入就绪态.进程的这种关系为进程的同步</p>
+<h1 id="临界区"><a href="#临界区" class="headerlink" title="临界区"></a>临界区</h1><p>进程中访问临界资源的一段代码。<br>临界区的执行在时间上是互斥的,进程必须请求进入临界区<br>进入区(entry section)：在进入临界区之前，检查可否进入临界区的一段代码。如果可以进入临界区，通常设置相应“正在访问临界区”标志。<br>退出区(exit section)：用于将”正在访问临界区”标志清除<br>剩余区(remainder section)：代码中的其余部分。</p>
+<h2 id="临界区的三个原则："><a href="#临界区的三个原则：" class="headerlink" title="临界区的三个原则："></a>临界区的三个原则：</h2><ol>
+<li>互斥。假定进程Pi在其临界区内执行，其他任何进程将被排斥在自己的临界区之外</li>
+<li>有空让进。当没有进程在临界区中执行时，需要进入临界区的进程，应能够很快进入</li>
+<li>有限等待。在一个进程提出进入临界区的请求和该请求得到答复的时间内，其他进程进入临界区的次数必须是有限的</li>
+</ol>
+<h2 id="实现临界区互斥的解决办法"><a href="#实现临界区互斥的解决办法" class="headerlink" title="实现临界区互斥的解决办法"></a>实现临界区互斥的解决办法</h2><p>进程互斥的解决有两种做法:<br>由竞争各方平等协商<br>引入进程管理者，由管理者来协调竞争各方对互斥资源的使用<br>具体方法：硬件；软件</p>
+<h3 id="软件的办法："><a href="#软件的办法：" class="headerlink" title="软件的办法："></a>软件的办法：</h3><p>算法1:单标志<br>算法2：双标志、后检查<br>算法3(Peterson’s Algorithm)：先修改、后检查；后修改者等待</p>
+<h4 id="单标志法"><a href="#单标志法" class="headerlink" title="单标志法"></a>单标志法</h4><p>该算法设置一个公用整型变量turn,用于指示被允许进入临界区的进程编号，即若turn=i，则允许Pi进程进入临界区。该算法可确保每次只允许一个进程进入临界区。但两个进程必须交替进入临界区，如果某个进程不再进入临界区了，那么另一个进程也将进入临界区（违背“空闲让进”）这样很容易造成资源利用的不充分。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// P0进程  </span></div><div class="line"><span class="keyword">while</span>(turn!=i);  </div><div class="line">critical section;  </div><div class="line">turn=j;  </div><div class="line">remainder section;</div></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// P1进程  </span></div><div class="line"><span class="keyword">while</span>(turn!=j);  <span class="comment">// 进入区  </span></div><div class="line">critical section;  <span class="comment">// 临界区  </span></div><div class="line">turn = i;  <span class="comment">// 退出区  </span></div><div class="line">remainder section;  <span class="comment">// 剩余区</span></div></pre></td></tr></table></figure>
+<h4 id="双标志法先检查"><a href="#双标志法先检查" class="headerlink" title="双标志法先检查"></a>双标志法先检查</h4><p>该算法的基本思想是在每一个进程访问临界区资源之前，先查看一下临界资源是否正被访问，若正被访问，该进程需等待；否则，进程才进入自己的临界区。为此，设置了一个数据flag[i]，如第i个元素值为FALSE，表示Pi进程未进入临界区，值为TRUE，表示Pi进程进入临界区。(初始值？初值均为FALSE,先修改后检查)</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Pi 进程  </span></div><div class="line"><span class="keyword">while</span>(flag[j]);  <span class="comment">// ①      </span></div><div class="line">flag[i]=TRUE;  <span class="comment">// ③    </span></div><div class="line">critical section;     </div><div class="line">flag[i] = FALSE;   </div><div class="line">remainder section;</div></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Pj 进程  </span></div><div class="line"><span class="keyword">while</span>(flag[i]);  <span class="comment">// ② 进入区  </span></div><div class="line">flag[j] =TRUE;  <span class="comment">// ④ 进入区  </span></div><div class="line">critical section;  <span class="comment">// 临界区  </span></div><div class="line">flag[j] = FALSE;  <span class="comment">// 退出区  </span></div><div class="line">remainder section;  <span class="comment">// 剩余区</span></div></pre></td></tr></table></figure>
+<p>优点：不用交替进入，可连续使用；缺点：Pi和Pj可能同时进入临界区。按序列①②③④ 执行时，会同时进入临界区（违背“忙则等待”)。即在检查对方flag之后和切换自己flag 之前有一段时间，结果都检查通过。这里的问题出在检查和修改操作不能一次进行。</p>
+<h4 id="双标志法后检查"><a href="#双标志法后检查" class="headerlink" title="双标志法后检查"></a>双标志法后检查</h4><p>算法二是先检测对方进程状态标志后，再置自己标志，由于在检测和放置中可插入另一个进程到达时的检测操作，会造成两个进程在分别检测后，同时进入临界区。为此，算法三釆用先设置自己标志为TRUE后,再检测对方状态标志，若对方标志为TURE，则进程等待；否则进入临界区。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Pi进程  </span></div><div class="line">flag[i] =TRUE;  </div><div class="line"><span class="keyword">while</span>(flag[j]);  </div><div class="line">critical section;  </div><div class="line">flag[i] =FLASE;  </div><div class="line">remainder section;</div></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Pj进程  </span></div><div class="line">flag[j] =TRUE;  <span class="comment">// 进入区  </span></div><div class="line"><span class="keyword">while</span>(flag[i]);  <span class="comment">// 进入区  </span></div><div class="line">critical section;  <span class="comment">// 临界区  </span></div><div class="line">flag [j] =FLASE;   <span class="comment">// 退出区  </span></div><div class="line">remainder section;  <span class="comment">// 剩余区</span></div></pre></td></tr></table></figure>
+<p>当两个进程几乎同时都想进入临界区时，它们分别将自己的标志值flag设置为TRUE，并且同时检测对方的状态（执行while语句），发现对方也要进入临界区，于是双方互相谦让，结果谁也进不了临界区，从而导致“饥饿”现象。</p>
+<h4 id="Peterson’s-Algorithm。"><a href="#Peterson’s-Algorithm。" class="headerlink" title="Peterson’s Algorithm。"></a>Peterson’s Algorithm。</h4><p>为了防止两个进程为进入临界区而无限期等待，又设置变量turn，指示不允许进入临界区的进程编号，每个进程在先设置自己标志后再设置turn 标志，不允许另一个进程进入。这时，再同时检测另一个进程状态标志和不允许进入标志，这样可以保证当两个进程同时要求进入临界区，只允许一个进程进入临界区。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Pi进程  </span></div><div class="line">flag[i]=TURE; turn=j;  </div><div class="line"><span class="keyword">while</span>(flag[j]&amp;&amp;turn==j);   </div><div class="line">critical section;  </div><div class="line">flag[i]=FLASE;  </div><div class="line">remainder section;</div></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Pj进程  </span></div><div class="line">flag[j] =TRUE;turn=i;  <span class="comment">// 进入区  </span></div><div class="line"><span class="keyword">while</span>(flag[i]&amp;&amp;turn==i);   <span class="comment">// 进入区  </span></div><div class="line">critical section;  <span class="comment">// 临界区  </span></div><div class="line">flag[j]=FLASE;  <span class="comment">// 退出区  </span></div><div class="line">remainder section;  <span class="comment">// 剩余区</span></div></pre></td></tr></table></figure>
+<p>本算法的基本思想是算法一和算法三的结合。利用flag解决临界资源的互斥访问，而利用turn解决“饥饿”现象</p>
+<h3 id="硬件方法"><a href="#硬件方法" class="headerlink" title="硬件方法"></a>硬件方法</h3><p>计算机提供了特殊的硬件指令，允许对一个字中的内容进行检测和修正，或者是对两个字的内容进行交换等。通过硬件支持实现临界段问题的低级方法或称为元方法。</p>
+<p>1) 中断屏蔽方法</p>
+<p>当一个进程正在使用处理机执行它的临界区代码时，要防止其他进程再进入其临界区访问的最简单方法是禁止一切中断发生，或称之为屏蔽中断、关中断。因为CPU只在发生中断时引起进程切换，这样屏蔽中断就能保证当前运行进程将临界区代码顺利地执行完，从而保证了互斥的正确实现，然后再执行开中断。其典型模式为：…关中断;临界区;开中断;…这种方法限制了处理机交替执行程序的能力，因此执行的效率将会明显降低。对内核来说，当它执行更新变量或列表的几条指令期间关中断是很方便的，但将关中断的权力交给用户则很不明智，若一个进程关中断之后不再开中断，则系统可能会因此终止。</p>
+<p>2) 硬件指令方法<br>原子地执行，因而保证读写操作不被中断:<br>    Test-and-Set (TS)指令<br>    SWAP指令</p>
+<h3 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h3><p>信号量是OS提供的管理公有资源的有效手段<br>1965年，信号量由荷兰学者Dijkstra提出（所以P、V分别是荷兰语的test(proberen)和increment(verhogen)），是一种卓有成效的进程同步机制。</p>
+<h4 id="整型信号量"><a href="#整型信号量" class="headerlink" title="整型信号量"></a>整型信号量</h4><p>信号量S – 整型变量：信号量代表可用资源实体的数量。<br>除了初始化之外，仅能通过两个不可分割的[原子]操作访问：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">P(S):  <span class="keyword">while</span> S <span class="number">0</span> do no-op;</div><div class="line">        S--;</div><div class="line">V(S):   S++;</div></pre></td></tr></table></figure>
+<p>存在忙等——自旋锁:进程在等待锁时自旋</p>
+<h4 id="记录型信号量"><a href="#记录型信号量" class="headerlink" title="记录型信号量"></a>记录型信号量</h4><p>是一个数据结构,􀂄定义如下：<br>Struc semaphore<br>{<br>    int value;<br>    pointer_PCB queue;<br>}</p>
+<p>P（S）: S=S-1<br>            如果S≥0，则该进程继续执行；<br>              S＜0，进程暂停执行，放入信号量的等待队列</p>
+<p>V（S）: S=S+1<br>            如果S＞0，则该进程继续执行；<br>                S≤0， 唤醒等待队列中的一个进程</p>
+<p><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS9.png" alt=""><br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS10.png" alt=""></p>
+<h4 id="信号量和PV原语"><a href="#信号量和PV原语" class="headerlink" title="信号量和PV原语"></a>信号量和PV原语</h4><p>S是与临界区内所使用的公用资源有关的信号量<br>     S≥0  可供并发进程使用的资源数<br>     S&lt;0   正在等待进入临界区的进程数<br>信号量只能通过初始化和两个标准的原语来访问－－作为OS核心代码执行，不受进程调度的打断<br>初始化指定一个非负整数值，表示空闲资源总数。<br>信号量实现互斥<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS11.png" alt=""><br>信号量实现前趋<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS12.png" alt=""><br>前趋图：<br>    若图中存在结点S1指向结点S2的有向边，表示程序段S1应该先执行，而程序段S2后执行。<br>    设置一个信号量s,初值为0，将V(s)放在S1后面，而在S2前面先执行P(s)。<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS13.png" alt=""></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">Struct </div><div class="line">smaphore a,b,c,d,e,f,g,h,I,j=<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span></div><div class="line">cobegin </div><div class="line">    &#123;S1;V(a);V(b);V(c);&#125;</div><div class="line">    &#123;P(a);S2;V(d);&#125;</div><div class="line">    &#123;P(b);S3;V(e);V(f);&#125;</div><div class="line">    &#123;P(c);S4;V(g);&#125;</div><div class="line">    &#123;P(d);P(e);S5;V(h);&#125;</div><div class="line">    &#123;P(f);P(g);S6;V(i)&#125;</div><div class="line">    &#123;P(h);P(i);S7;V(j);&#125;</div><div class="line">    &#123;P(j);S8;&#125;</div><div class="line">coend</div></pre></td></tr></table></figure>
+<h4 id="And型信号量集"><a href="#And型信号量集" class="headerlink" title="And型信号量集"></a>And型信号量集</h4><p>用于同时需要多种资源且每种占用一个进程的信号量操作；<br>    一个进程需要同时获取两个或多个临界资源――可能死锁：各进程分别获得部分临界资源，然后等待其余的临界资源，”各不相让”<br>    基本思想：在一个原语中，将一段代码同时需要的多个临界资源，要么全部分配给它，要么一个都不分配。称为Swait (Simultaneous Wait)。在Swait时，各个信号量的次序并不重要(会影响进程归入哪个阻塞队列)</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">Swait(S1, S2, …, Sn)   <span class="comment">//P原语；</span></div><div class="line">&#123;</div><div class="line"><span class="keyword">while</span> (TRUE)</div><div class="line">&#123;</div><div class="line">     <span class="keyword">if</span> (S1 &gt;=<span class="number">1</span> &amp;&amp; S2 &gt;= <span class="number">1</span> &amp;&amp; … &amp;&amp; Sn &gt;= <span class="number">1</span>)</div><div class="line"> &#123;     <span class="comment">//满足资源要求时的处理；</span></div><div class="line">       <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= n; ++i)  --Si; </div><div class="line">          <span class="comment">//注：与wait的处理不同，这里是在确信可满足</span></div><div class="line">          <span class="comment">//全部资源要求时，才进行减1操作；</span></div><div class="line">       <span class="keyword">break</span>;</div><div class="line">     &#125;</div><div class="line"> <span class="keyword">else</span></div><div class="line"> &#123;    <span class="comment">//某些资源不够时的处理；</span></div><div class="line">       进程进入第一个小于<span class="number">1</span>信号量的等待队列Sj.<span class="built_in">queue</span>;</div><div class="line">       阻塞调用进程;</div><div class="line">     &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">Ssignal(S1, S2, …, Sn)</div><div class="line">&#123;</div><div class="line">  <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= n; ++i)</div><div class="line">  &#123;</div><div class="line">    ++Si;      <span class="comment">//释放占用的资源；</span></div><div class="line">    <span class="keyword">for</span> (each process P waiting in Si.<span class="built_in">queue</span>)</div><div class="line">          <span class="comment">//检查每种资源的等待队列；</span></div><div class="line">    &#123;</div><div class="line">      从等待队列Si.<span class="built_in">queue</span>中取出进程P;</div><div class="line">      <span class="keyword">if</span> (判断进程P是否通过Swait中的测试)</div><div class="line">           <span class="comment">//注：与signal不同，这里要进行重新判断；</span></div><div class="line">          &#123;    <span class="comment">//通过检查（资源够用）时的处理；</span></div><div class="line">   进程P进入就绪队列;</div><div class="line">          &#125;</div><div class="line">      <span class="keyword">else</span></div><div class="line">          &#123;    <span class="comment">//未通过检查（资源不够用）时的处理；</span></div><div class="line">   进程P进入某等待队列；</div><div class="line">          &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="一般信号量集"><a href="#一般信号量集" class="headerlink" title="一般信号量集"></a>一般信号量集</h4><ul>
+<li>一次需要N个某类临界资源时，就要进行N次wait操作－－低效又可能死锁</li>
+<li>一般信号量集用于同时需要多种资源、每种占用的数目不同、且可分配的资源还存在一个临界值时的处理；</li>
+<li>基本思想：进程对信号量Si的测试值为ti（用于信号量的判断，即Si &lt; ti，表示资源数量低于ti时，便不予分配），占用值为di（用于信号量的增减，即Si = Si - di和Si = Si + di）</li>
+<li>Swait(S1, t1, d1; …; Sn, tn, dn);</li>
+<li>Ssignal(S1, d1; …; Sn, dn);</li>
+</ul>
+<h4 id="生产消费者问题"><a href="#生产消费者问题" class="headerlink" title="生产消费者问题"></a>生产消费者问题</h4><p>采用信号量机制：<br>full是”满”数目，初值为0，empty是”空”数目，初值为N。<br>实际上，full + empty == N<br>mutex用于访问缓冲区时的互斥，初值是1<br>每个进程中各个P操作的次序是重要的：先检查资源数目，再检查是否互斥――否则可能死锁<br>采用AND信号量集：Swait(empty, mutex), Ssignal(full, mutex),<br><img src="https://raw.githubusercontent.com/SamanthaChen/GitPicbed/master/OS/OS14.png" alt=""></p>
+<h4 id="PV操作讨论"><a href="#PV操作讨论" class="headerlink" title="PV操作讨论"></a>PV操作讨论</h4><p>P.V操作必须成对出现，有一个P操作就一定有一个V操作<br>当为互斥操作时，它们处于同一进程<br>当为同步操作时，则不在同一进程中出现<br>对于前后相连的两个P(S1)和P(S2) ，顺序是至关重要的:同步P操作应该放在互斥P操作前,而两个V操作顺序则无关紧要</p>
+<h4 id="信号量同步的缺点"><a href="#信号量同步的缺点" class="headerlink" title="信号量同步的缺点"></a>信号量同步的缺点</h4><p>同步操作分散：信号量机制中，同步操作分散在各个进程中，使用不当就可能导致各进程死锁（如P、V操作的次序错误、重复或遗漏）<br>易读性差：要了解对于一组共享变量及信号量的操作是否正确，必须通读整个系统或者并发程序；<br>不利于修改和维护：各模块的独立性差，任一组变量或一段代码的修改都可能影响全局；<br>正确性难以保证：操作系统或并发程序通常很大，很难保证这样一个复杂的系统没有逻辑错误</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/OS/">OS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Interview/">Interview</a><a href="/tags/OS/">OS</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/08/13/计算机操作系统_汤小丹_笔记3/" data-title="计算机操作系统--进程同步-笔记 | SamanthaChen&#39;s Blog" data-tsina="1544950963" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/08/13/计算机操作系统_汤小丹_笔记4/" title="计算机操作系统--死锁-笔记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  计算机操作系统--死锁-笔记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/13/计算机操作系统_汤小丹_笔记2/"  title="计算机操作系统（汤小丹）--处理机调度-笔记">
+ <strong>下一篇：</strong><br/> 
+ <span>计算机操作系统（汤小丹）--处理机调度-笔记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/08/13/计算机操作系统_汤小丹_笔记3/" data-title="计算机操作系统--进程同步-笔记" data-url="http://yoursite.com/2016/08/13/计算机操作系统_汤小丹_笔记3/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#临界区"><span class="toc-number">2.</span> <span class="toc-text">临界区</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#临界区的三个原则："><span class="toc-number">2.1.</span> <span class="toc-text">临界区的三个原则：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现临界区互斥的解决办法"><span class="toc-number">2.2.</span> <span class="toc-text">实现临界区互斥的解决办法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#软件的办法："><span class="toc-number">2.2.1.</span> <span class="toc-text">软件的办法：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#单标志法"><span class="toc-number">2.2.1.1.</span> <span class="toc-text">单标志法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#双标志法先检查"><span class="toc-number">2.2.1.2.</span> <span class="toc-text">双标志法先检查</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#双标志法后检查"><span class="toc-number">2.2.1.3.</span> <span class="toc-text">双标志法后检查</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Peterson’s-Algorithm。"><span class="toc-number">2.2.1.4.</span> <span class="toc-text">Peterson’s Algorithm。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#硬件方法"><span class="toc-number">2.2.2.</span> <span class="toc-text">硬件方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#信号量"><span class="toc-number">2.2.3.</span> <span class="toc-text">信号量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#整型信号量"><span class="toc-number">2.2.3.1.</span> <span class="toc-text">整型信号量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#记录型信号量"><span class="toc-number">2.2.3.2.</span> <span class="toc-text">记录型信号量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#信号量和PV原语"><span class="toc-number">2.2.3.3.</span> <span class="toc-text">信号量和PV原语</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#And型信号量集"><span class="toc-number">2.2.3.4.</span> <span class="toc-text">And型信号量集</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#一般信号量集"><span class="toc-number">2.2.3.5.</span> <span class="toc-text">一般信号量集</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#生产消费者问题"><span class="toc-number">2.2.3.6.</span> <span class="toc-text">生产消费者问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PV操作讨论"><span class="toc-number">2.2.3.7.</span> <span class="toc-text">PV操作讨论</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#信号量同步的缺点"><span class="toc-number">2.2.3.8.</span> <span class="toc-text">信号量同步的缺点</span></a></li></ol></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="SamanthaChen" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Database/" title="Database">Database<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/JVM/" title="JVM">JVM<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>18</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Network/" title="Network">Network<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OS/" title="OS">OS<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Interview/" title="Interview">Interview<sup>40</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MachineLearning/" title="MachineLearning">MachineLearning<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Notes/" title="Notes">Notes<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/统计学习/" title="统计学习">统计学习<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OS/" title="OS">OS<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Network/" title="Network">Network<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Database/" title="Database">Database<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Concurrentcy/" title="Concurrentcy">Concurrentcy<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DesignPattern/" title="DesignPattern">DesignPattern<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Test/" title="Test">Test<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/NLP/" title="NLP">NLP<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1544950963&verifier=4d3c970d&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello World, 我叫陈希蔓. <br/>
+			这是我的个人技术博客.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1544950963" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/SamanthaChen" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/chen-xi-man" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:chenximan@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="陈希蔓">陈希蔓</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"samanthachen"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4389501af9c71ed21cde31c63d94ebfd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1259995191'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1259995191' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>
